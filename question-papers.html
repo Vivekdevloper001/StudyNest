@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question Papers - StudyNest</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#f4f6fb;
+}
+
+/* Sidebar Sections */
+.section{
+    width:220px;
+    padding:20px;
+    border-right:1px solid #ddd;
+    background:white;
+}
+
+.section h3{
+    margin-bottom:15px;
+}
+
+.section button{
+    width:100%;
+    padding:8px;
+    margin-bottom:8px;
+    border:none;
+    background:#f1f5f9;
+    cursor:pointer;
+    border-radius:6px;
+    transition:0.3s;
+}
+
+.section button:hover{
+    background:#2563eb;
+    color:white;
+}
+
+.active{
+    background:#2563eb !important;
+    color:white !important;
+}
+
+/* Paper Display */
+.content{
+    flex:1;
+    padding:30px;
+}
+
+.paper-box{
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    min-height:200px;
+    animation:fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Branch Section -->
+<div class="section">
+    <h3>Branch</h3>
+    <button onclick="loadBranch('cse',this)">CSE</button>
+    <button onclick="loadBranch('mechanical',this)">Mechanical</button>
+    <button onclick="loadBranch('civil',this)">Civil</button>
+    <button onclick="loadBranch('electrical',this)">Electrical</button>
+</div>
+
+<!-- Semester Section -->
+<div class="section">
+    <h3>Semester</h3>
+    <div id="semesterList">Select branch first</div>
+</div>
+
+<!-- Subject Section -->
+<div class="section">
+    <h3>Subject</h3>
+    <div id="subjectList">Select semester</div>
+</div>
+
+<!-- Paper Display -->
+<div class="content">
+    <h2 id="paperTitle">Select Subject</h2>
+    <div class="paper-box" id="paperContent">
+        Question papers will appear here.
+    </div>
+</div>
+
+<script>
+
+/* Data Structure */
+
+const data = {
+    cse:{
+        1:["English","Physics","Mathematics","FOIT"],
+        2:["Advances in IT","Applied Mathematics-II","Applied Physics-II","Analog Electronics"],
+        3:["Operating Systems","Digital Electronics","Programming in C","DBMS"]
+    },
+    mechanical:{
+        1:["Engineering Maths","Workshop","Physics"],
+        2:["Thermodynamics","Engineering Mechanics"]
+    },
+    civil:{
+        1:["Engineering Drawing","Applied Physics"],
+        2:["Surveying","Building Materials"]
+    },
+    electrical:{
+        1:["Basic Electrical","Mathematics"],
+        2:["Power Systems","Electrical Machines"]
+    }
+};
+
+function loadBranch(branch,btn){
+
+    document.querySelectorAll(".section button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const semesterList = document.getElementById("semesterList");
+    semesterList.innerHTML="";
+
+    if(data[branch]){
+        for(let sem in data[branch]){
+            semesterList.innerHTML += 
+            `<button onclick="loadSemester('${branch}',${sem},this)">Semester ${sem}</button>`;
+        }
+    }
+
+    document.getElementById("subjectList").innerHTML="Select semester";
+    document.getElementById("paperContent").innerHTML="Question papers will appear here.";
+    document.getElementById("paperTitle").innerText="Select Subject";
+}
+
+function loadSemester(branch,sem,btn){
+
+    document.querySelectorAll("#semesterList button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const subjectList=document.getElementById("subjectList");
+    subjectList.innerHTML="";
+
+    data[branch][sem].forEach(sub=>{
+        subjectList.innerHTML += 
+        `<button onclick="loadPaper('${branch}','${sem}','${sub}',this)">${sub}</button>`;
+    });
+
+    document.getElementById("paperContent").innerHTML="Select subject";
+}
+
+function loadPaper(branch, sem, subject, btn){
+
+    document.querySelectorAll("#subjectList button")
+    .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    document.getElementById("paperTitle").innerText =
+    subject + " Question Papers";
+
+    const subjectFile = subject.toLowerCase()
+        .replace(/ /g,"_")
+        .replace(/-/g,"");
+
+    document.getElementById("paperContent").innerHTML = `
+        <p><strong>${subject} - Semester ${sem}</strong></p>
+        <br>
+
+        <a href="pdfs/Noun.pdf">
+        <button>2022 Question Paper</button></a><br><br>
+
+        <a href="papers/${branch}/sem${sem}/${subjectFile}_2023.pdf" target="_blank">
+        <button>2023 Question Paper</button></a><br><br>
+
+        <a href="papers/${branch}/sem${sem}/${subjectFile}_2024.pdf" target="_blank">
+        <button>2024 Question Paper</button></a>
+    `;
+}
+
+
+</script>
+
+</body>
+</html>

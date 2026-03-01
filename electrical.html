@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electrical Engineering - StudyNest</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    display:flex;
+    min-height:100vh;
+    background:#f8fafc;
+}
+
+/* Sidebar */
+.sidebar{
+    width:220px;
+    background:#fef3c7;
+    padding:20px;
+    border-right:1px solid #ddd;
+}
+
+.sidebar h3{
+    margin-bottom:15px;
+}
+
+.sidebar button{
+    width:100%;
+    padding:8px;
+    margin-bottom:8px;
+    border:none;
+    background:white;
+    border-radius:5px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.sidebar button:hover{
+    background:#2563EB;
+    color:white;
+}
+
+/* Subjects */
+.subjects{
+    width:240px;
+    padding:20px;
+    border-right:1px solid #ddd;
+    background:#f1f5f9;
+}
+
+.subjects h3{
+    margin-bottom:20px;
+}
+
+.subjects button{
+    width:100%;
+    padding:12px;
+    margin-bottom:12px;
+    border:none;
+    background:#ffffff;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.subjects button:hover{
+    background:#2563EB;
+    color:white;
+}
+
+/* Notes */
+.notes{
+    flex:1;
+    padding:30px;
+}
+
+.note-box{
+    background:white;
+    padding:20px;
+    border-left:5px solid #2563EB;
+    border-radius:6px;
+    min-height:200px;
+}
+/* Collapse Button */
+#toggleBtn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    padding:8px 15px;
+    background:#2563EB;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+/* Smooth Collapse */
+.subjects{
+    width:203px;
+    padding:25px;
+    border-right:1px solid #ddd;
+    background:#f1f5f9;
+    transition:0.3s ease;
+    overflow:hidden;
+}
+
+.collapsed{
+    width:0;
+    padding:0;
+    opacity:0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h3>Semesters</h3>
+    <button onclick="loadSemester(1)">Semester 1</button>
+    <button onclick="loadSemester(2)">Semester 2</button>
+    <button onclick="loadSemester(3)">Semester 3</button>
+    <button onclick="loadSemester(4)">Semester 4</button>
+    <button onclick="loadSemester(5)">Semester 5</button>
+    <button onclick="loadSemester(6)">Semester 6</button>
+</div>
+
+<div class="subjects">
+    <h3 id="semesterTitle">Select Semester</h3>
+    <div id="subjectList"></div>
+</div>
+
+<div class="notes">
+    <h2 id="subjectTitle">Select Subject</h2>
+    <div class="note-box" id="notesContent">
+        Notes will appear here.
+    </div>
+</div>
+<button id="toggleBtn" onclick="toggleSubjects()">Collapse Panel</button>
+<script>
+
+function loadSemester(sem){
+
+    const subjectList = document.getElementById("subjectList");
+    const semesterTitle = document.getElementById("semesterTitle");
+
+    semesterTitle.innerText = "Semester " + sem + " Subjects";
+
+  if(sem === 1){
+    subjectList.innerHTML = `
+        <button onclick="loadSubject('english')">English</button>
+        <button onclick="loadSubject('physics')">Physics</button>
+        <button onclick="loadSubject('math')">Mathematics</button>
+        <button onclick="loadSubject('foit')">FOIT</button>
+    `;
+}
+
+    if(sem === 2){
+        subjectList.innerHTML = `
+            <button onclick="loadSubject('circuit')">Circuit Theory</button>
+            <button onclick="loadSubject('electronics')">Basic Electronics</button>
+            <button onclick="loadSubject('measure')">Electrical Measurements</button>
+        `;
+    }
+
+    if(sem === 3){
+        subjectList.innerHTML = `
+            <button onclick="loadSubject('machines1')">Electrical Machines I</button>
+            <button onclick="loadSubject('power')">Power Systems</button>
+            <button onclick="loadSubject('control')">Control Systems</button>
+        `;
+    }
+
+}
+
+function loadSubject(subject){
+
+    const subjectTitle = document.getElementById("subjectTitle");
+    const notesContent = document.getElementById("notesContent");
+
+   if(subject === "english"){
+        subjectTitle.innerText = "English";
+        notesContent.innerHTML = `
+       <p><b>READING</b></p>
+
+<p><b>What is Reading?</b></p>
+<p>Reading means understanding written words. It helps us learn new things, improve vocabulary, and improve speaking and writing.</p>
+
+<p><b>Techniques of Reading</b></p>
+
+<p><b>1) Skimming</b></p>
+<p>Skimming means reading quickly to get the main idea. We do not read every word. We only understand what the text is about. Example: Reading newspaper headlines.</p>
+
+<p><b>2) Scanning</b></p>
+<p>Scanning means reading quickly to find specific information. We search for names, dates, or numbers and ignore other details. Example: Finding a date in a book.</p>
+
+<p><b>Extensive and Intensive Reading</b></p>
+
+<p><b>1) Extensive Reading</b></p>
+<p>Extensive reading means reading for enjoyment and general understanding. We read long stories or novels and do not need to understand every word. Example: Story books and newspapers.</p>
+
+<p><b>2) Intensive Reading</b></p>
+<p>Intensive reading means reading carefully to understand details. Usually short texts are read carefully to understand each word and meaning. Example: Textbook lessons.</p>
+
+<p><b>Homecoming – Rabindranath Tagore</b></p>
+<p><b>About the Author:</b> Rabindranath Tagore was a great Indian writer and poet.</p>
+<p><b>Main Character:</b> Phatik, a village boy.</p>
+<p><b>Story in Simple Words:</b> Phatik was a naughty boy. He was sent to Kolkata for studies. He missed his mother and village. He felt lonely and sad. He became sick. Before dying, he said he was going home.</p>
+<p><b>Main Idea:</b> Love of mother, homesickness, and sadness of a child.</p>
+
+<p><b>Life Sketch of Sir M. Visvesvaraya</b></p>
+<p><b>Introduction:</b> Born on 15 September 1861. He was a great engineer of India.</p>
+<p><b>Important Works:</b> Built Krishna Raja Sagar Dam and worked as Diwan of Mysore.</p>
+<p><b>Awards:</b> Bharat Ratna in 1955.</p>
+<p><b>Importance:</b> Engineers’ Day (15 September) is celebrated in his honor. He was honest and disciplined.</p>
+
+<p><b>Life Sketch of Dr. A. P. J. Abdul Kalam</b></p>
+<p><b>Introduction:</b> Born on 15 October 1931. Known as the Missile Man of India. He was the 11th President of India.</p>
+<p><b>Achievements:</b> Worked in ISRO and DRDO. Helped in making missiles. Received Bharat Ratna award.</p>
+<p><b>Good Qualities:</b> Simple person, hardworking, and loved students.</p>
+<p><b>Message:</b> Dream big and work hard.</p>
+
+<p><b>Narayan Murthy’s Speech at LBSNA, Dehradun</b></p>
+<p><b>About Him:</b> N. R. Narayana Murthy is the founder of Infosys.</p>
+<p><b>Main Points:</b> Be honest, work hard, serve the nation, and follow discipline.</p>
+<p><b>Message:</b> Success comes with honesty and hard work.</p>
+<p><b>FUNDAMENTALS OF COMMUNICATION</b></p>
+<p>Communication means sharing ideas, information, and feelings between two or more people. It helps in understanding, building relationships, and working together effectively.</p>
+
+<p><b>CONCEPT AND PROCESS OF COMMUNICATION</b></p>
+<p><b>Concept:</b> Communication is the exchange of information between a sender and a receiver to create understanding.</p>
+<p><b>Process:</b> The communication process includes Sender, Message, Encoding, Channel, Receiver, Decoding, and Feedback. Feedback shows whether the message is understood correctly.</p>
+
+<p><b>TYPES OF COMMUNICATION (VERBAL COMMUNICATION)</b></p>
+<p><b>Verbal Communication:</b> Communication through words.</p>
+<p>1) Oral Communication – Spoken words like conversation, speech, phone calls.</p>
+<p>2) Written Communication – Written words like letters, emails, messages.</p>
+
+<p><b>BARRIERS TO COMMUNICATION</b></p>
+<p>Barriers are problems that stop effective communication.</p>
+<p>1) Physical Barriers – Noise, distance.</p>
+<p>2) Language Barriers – Different languages or difficult words.</p>
+<p>3) Psychological Barriers – Fear, stress, anger.</p>
+<p>4) Cultural Barriers – Differences in culture and beliefs.</p>
+
+<p><b>SPEAKING SKILL: SIGNIFICANCE AND ESSENTIALS</b></p>
+<p><b>Significance:</b> Speaking skill helps in expressing ideas clearly and confidently.</p>
+<p><b>Essentials:</b> Clear pronunciation, correct grammar, confidence, good vocabulary, and proper body language.</p>
+
+<p><b>LISTENING SKILL: SIGNIFICANCE AND ESSENTIALS</b></p>
+<p><b>Significance:</b> Listening helps in understanding the message properly and improves relationships.</p>
+<p><b>Essentials:</b> Pay attention, avoid distractions, do not interrupt, and give proper feedback.</p>
+<p><b>GRAMMAR AND USAGE</b></p>
+<p>Grammar means the rules of a language. It helps us speak and write correctly.</p>
+
+<p><b>NOUNS</b></p>
+<p>A noun is the name of a person, place, animal, or thing.</p>
+<p><b>Examples:</b> Rahul, school, dog, book.</p>
+<p><b>Types of Nouns:</b></p>
+<p>1) Proper Noun – Name of a person or place (India, Riya).</p>
+<p>2) Common Noun – General name (city, girl).</p>
+<p>3) Collective Noun – Name of a group (team, family).</p>
+<p>4) Abstract Noun – Name of a feeling or quality (honesty, love).</p>
+
+<p><b>PRONOUNS</b></p>
+<p>A pronoun is a word used instead of a noun.</p>
+<p><b>Examples:</b> He, She, It, They, We.</p>
+<p><b>Example Sentence:</b> Riya is a girl. She is kind.</p>
+
+<p><b>ARTICLES</b></p>
+<p>Articles are small words used before nouns.</p>
+<p>There are three articles: A, An, The.</p>
+<p>1) A – Used before consonant sound (a book).</p>
+<p>2) An – Used before vowel sound (an apple).</p>
+<p>3) The – Used for specific person or thing (the sun).</p>
+
+<p><b>VERBS (MAIN AND AUXILIARY)</b></p>
+<p>A verb is an action word.</p>
+<p><b>Main Verb:</b> Shows the main action (eat, run, write).</p>
+<p><b>Auxiliary Verb:</b> Helping verb (is, am, are, was, were, has, have, had, will).</p>
+<p><b>Example:</b> She is playing. (is = auxiliary, playing = main verb)</p>
+
+<p><b>TENSES</b></p>
+<p>Tense shows the time of action.</p>
+<p>1) Present Tense – Action happening now (She plays).</p>
+<p>2) Past Tense – Action happened before (She played).</p>
+<p>3) Future Tense – Action will happen later (She will play).</p>
+<p><b>WRITING SKILLS</b></p>
+<p>Writing skill means the ability to express ideas clearly in written form. Good writing helps in studies, jobs, and daily communication.</p>
+
+<p><b>Significance of Written Communication:</b></p>
+<p>Written communication is important because it keeps a record, gives clear information, and avoids misunderstanding.</p>
+
+<p><b>Essentials of Effective Written Communication:</b></p>
+<p>1) Use simple and clear language.</p>
+<p>2) Write correct grammar and spelling.</p>
+<p>3) Be brief and to the point.</p>
+<p>4) Organize ideas properly.</p>
+
+<p><b>NOTICE WRITING</b></p>
+<p>A notice is a short and clear information given to a group of people.</p>
+<p><b>Features of Notice:</b></p>
+<p>1) Name of the organization.</p>
+<p>2) Date.</p>
+<p>3) Title (Notice).</p>
+<p>4) Clear message with details (what, when, where).</p>
+<p>5) Signature and name.</p>
+
+<p><b>OFFICIAL LETTERS AND E-MAILS</b></p>
+<p>Official letters and emails are used for formal communication in offices and institutions.</p>
+<p><b>Parts of an Official Letter:</b></p>
+<p>1) Sender’s address.</p>
+<p>2) Date.</p>
+<p>3) Receiver’s address.</p>
+<p>4) Subject.</p>
+<p>5) Salutation (Sir/Madam).</p>
+<p>6) Body of the letter.</p>
+<p>7) Closing (Yours sincerely).</p>
+<p>8) Signature.</p>
+
+<p><b>Frequently-used Abbreviations in Letter Writing:</b></p>
+<p>1) ASAP – As Soon As Possible.</p>
+<p>2) FYI – For Your Information.</p>
+<p>3) etc. – And so on.</p>
+<p>4) i.e. – That is.</p>
+<p>5) e.g. – For example.</p>
+
+<p><b>PARAGRAPH WRITING</b></p>
+<p>A paragraph is a group of sentences about one main idea.</p>
+<p><b>Steps to Write a Good Paragraph:</b></p>
+<p>1) Start with a topic sentence.</p>
+<p>2) Add supporting sentences.</p>
+<p>3) End with a concluding sentence.</p>
+
+<p><b>NETIQUETTES</b></p>
+<p>Netiquettes are rules for polite behavior on the internet.</p>
+<p>1) Use respectful language.</p>
+<p>2) Do not use all capital letters.</p>
+<p>3) Check spelling before sending emails.</p>
+<p>4) Do not share personal information.</p>
+<p>5) Reply politely and clearly.</p>
+
+
+        `;
+    }
+
+    if(subject === "physics"){
+        subjectTitle.innerText = "Physics ";
+        notesContent.innerHTML = `
+            <p><b>UNIT AND DIMENSIONS</b></p>
+
+<p><b>Definition of Physics:</b></p>
+<p>Physics is the branch of science that studies matter, energy, and their interaction.</p>
+
+<p><b>Physical Quantities:</b></p>
+<p>A physical quantity is a quantity that can be measured.</p>
+
+<p><b>Fundamental Quantities:</b></p>
+<p>Basic quantities that do not depend on other quantities.</p>
+<p>Examples: Length, Mass, Time.</p>
+
+<p><b>Derived Quantities:</b></p>
+<p>Quantities formed from fundamental quantities.</p>
+<p>Examples: Velocity, Force, Work, Energy.</p>
+
+<p><b>Units:</b></p>
+<p>A unit is a standard used to measure a physical quantity.</p>
+
+<p><b>Fundamental Units:</b></p>
+<p>Units of fundamental quantities.</p>
+<p>Examples: Meter (m), Kilogram (kg), Second (s).</p>
+
+<p><b>Derived Units:</b></p>
+<p>Units formed from fundamental units.</p>
+<p>Examples: m/s (velocity), Newton (N), Joule (J).</p>
+
+<p><b>System of Units:</b></p>
+<p>1) CGS – Centimeter, Gram, Second.</p>
+<p>2) FPS – Foot, Pound, Second.</p>
+<p>3) MKS – Meter, Kilogram, Second.</p>
+<p>4) SI – International System of Units (used worldwide).</p>
+
+<p><b>Dimension:</b></p>
+<p>Dimension shows how a physical quantity depends on fundamental quantities like length (L), mass (M), and time (T).</p>
+
+<p><b>Dimensional Formulae and SI Units:</b></p>
+<p>Distance – [L], Unit: meter (m).</p>
+<p>Displacement – [L], Unit: meter (m).</p>
+<p>Area – [L²], Unit: m².</p>
+<p>Volume – [L³], Unit: m³.</p>
+<p>Density – [M L⁻³], Unit: kg/m³.</p>
+<p>Velocity – [L T⁻¹], Unit: m/s.</p>
+<p>Acceleration – [L T⁻²], Unit: m/s².</p>
+<p>Linear Momentum – [M L T⁻¹], Unit: kg·m/s.</p>
+<p>Force – [M L T⁻²], Unit: Newton (N).</p>
+<p>Impulse – [M L T⁻¹], Unit: N·s.</p>
+<p>Work – [M L² T⁻²], Unit: Joule (J).</p>
+<p>Power – [M L² T⁻³], Unit: Watt (W).</p>
+<p>Energy – [M L² T⁻²], Unit: Joule (J).</p>
+<p>Pressure – [M L⁻¹ T⁻²], Unit: Pascal (Pa).</p>
+<p>Surface Tension – [M T⁻²], Unit: N/m.</p>
+<p>Stress – [M L⁻¹ T⁻²], Unit: Pascal (Pa).</p>
+<p>Strain – [1], Unit: No unit (dimensionless).</p>
+
+<p><b>Dimensional Equation:</b></p>
+<p>An equation written in terms of dimensions is called a dimensional equation.</p>
+
+<p><b>Principle of Homogeneity:</b></p>
+<p>In a correct physical equation, the dimensions on both sides must be the same.</p>
+
+<p><b>Applications of Dimensional Analysis:</b></p>
+<p>1) To check the correctness of a physical equation.</p>
+<p>2) To convert one system of units into another.</p>
+<p>Examples: Conversion of units of Force, Work, and Acceleration.</p>
+<p><b>FORCE AND MOTION</b></p>
+
+<p><b>Scalar and Vector Quantities:</b></p>
+<p><b>Scalar Quantity:</b> A quantity which has only magnitude (size).</p>
+<p>Examples: Mass, Time, Temperature, Distance.</p>
+<p><b>Vector Quantity:</b> A quantity which has both magnitude and direction.</p>
+<p>Examples: Displacement, Velocity, Acceleration, Force.</p>
+
+<p><b>Representation of a Vector:</b></p>
+<p>A vector is represented by an arrow. The length shows magnitude and the arrow shows direction.</p>
+
+<p><b>Types of Vectors:</b></p>
+<p>1) <b>Unit Vector:</b> A vector with magnitude 1.</p>
+<p>2) <b>Position Vector:</b> A vector that shows the position of a point from origin.</p>
+<p>3) <b>Co-initial Vectors:</b> Vectors having the same starting point.</p>
+<p>4) <b>Collinear Vectors:</b> Vectors lying on the same straight line.</p>
+<p>5) <b>Co-planar Vectors:</b> Vectors lying in the same plane.</p>
+
+<p><b>Vector Algebra:</b></p>
+
+<p><b>Addition of Vectors:</b> Vectors are added by triangle law or parallelogram law.</p>
+
+<p><b>Triangle Law (Statement):</b> If two vectors are represented by two sides of a triangle taken in order, then the third side represents their resultant.</p>
+<p><b>Formula:</b> R = √(A² + B² + 2AB cosθ)</p>
+
+<p><b>Parallelogram Law (Statement):</b> If two vectors are represented by two adjacent sides of a parallelogram, then the diagonal represents their resultant.</p>
+<p><b>Formula:</b> R = √(A² + B² + 2AB cosθ)</p>
+
+<p><b>Scalar Product (Dot Product):</b></p>
+<p><b>Statement:</b> The scalar product of two vectors is equal to the product of their magnitudes and the cosine of the angle between them.</p>
+<p><b>Formula:</b> A · B = AB cosθ</p>
+
+<p><b>Vector Product (Cross Product):</b></p>
+<p><b>Statement:</b> The vector product of two vectors is equal to the product of their magnitudes and the sine of the angle between them.</p>
+<p><b>Formula:</b> A × B = AB sinθ</p>
+
+<p><b>Force and Its Units:</b></p>
+<p>Force is a push or pull that can change the state of motion of a body.</p>
+<p>SI Unit of force is Newton (N).</p>
+<p>1 Newton = 1 kg m/s².</p>
+
+<p><b>Resolution of Force:</b></p>
+<p><b>Statement:</b> A single force can be resolved into two or more components.</p>
+<p><b>Formula:</b> Fx = F cosθ, Fy = F sinθ</p>
+
+<p><b>Newton’s Laws of Motion:</b></p>
+
+<p><b>First Law:</b> A body remains at rest or in uniform motion unless acted upon by an external force.</p>
+<p><b>Example:</b> A book remains on the table until pushed.</p>
+
+<p><b>Second Law:</b> Force is equal to the rate of change of momentum.</p>
+<p><b>Formula:</b> F = ma</p>
+<p><b>Example:</b> A heavier object needs more force to move.</p>
+
+<p><b>Third Law:</b> For every action, there is an equal and opposite reaction.</p>
+<p><b>Example:</b> Recoil of a gun.</p>
+
+<p><b>Linear Momentum:</b></p>
+<p>Momentum is the product of mass and velocity.</p>
+<p><b>Formula:</b> p = mv</p>
+
+<p><b>Law of Conservation of Linear Momentum:</b></p>
+<p><b>Statement:</b> Total momentum before collision equals total momentum after collision.</p>
+<p><b>Example:</b> Collision of two balls.</p>
+
+<p><b>Impulse:</b></p>
+<p>Impulse is the product of force and time.</p>
+<p><b>Formula:</b> Impulse = F × t</p>
+
+<p><b>Circular Motion:</b></p>
+<p><b>Angular Displacement:</b> Angle covered by a body moving in a circle.</p>
+<p><b>Angular Velocity:</b> Rate of change of angular displacement.</p>
+<p><b>Angular Acceleration:</b> Rate of change of angular velocity.</p>
+<p><b>Frequency:</b> Number of rotations per second.</p>
+<p><b>Time Period:</b> Time taken to complete one rotation.</p>
+
+<p><b>Relation Between Linear and Angular Velocity:</b></p>
+<p>v = rω</p>
+
+<p><b>Centripetal Force:</b></p>
+<p>Force acting towards the center in circular motion.</p>
+<p><b>Formula:</b> F = mv²/r</p>
+
+<p><b>Centrifugal Force:</b></p>
+<p>Apparent outward force in circular motion.</p>
+
+<p><b>Banking of Roads:</b></p>
+<p>Roads are tilted at curves so that centripetal force helps vehicles turn safely.</p>
+<p><b>ROTATIONAL MOTION</b></p>
+
+<p><b>Definition:</b></p>
+<p>Rotational motion is the motion of a body when it rotates or turns about a fixed axis.</p>
+
+<p><b>Examples:</b></p>
+<p>1) A ceiling fan rotating.</p>
+<p>2) A wheel of a bicycle moving.</p>
+<p>3) Earth rotating about its axis.</p>
+
+<p><b>Torque:</b></p>
+<p>Torque is the turning effect of a force.</p>
+<p><b>Formula:</b> Torque = Force × Perpendicular distance from axis.</p>
+<p><b>Symbol:</b> τ</p>
+<p><b>SI Unit:</b> Newton-meter (N·m).</p>
+
+<p><b>Angular Momentum:</b></p>
+<p>Angular momentum is the rotational form of linear momentum.</p>
+<p><b>Formula:</b> L = Iω</p>
+<p>Where I = moment of inertia and ω = angular velocity.</p>
+<p><b>SI Unit:</b> kg·m²/s.</p>
+
+<p><b>Moment of Inertia:</b></p>
+<p>Moment of inertia is the measure of resistance of a body to change its rotational motion.</p>
+<p><b>Formula:</b> I = mr² (for a point mass).</p>
+<p><b>SI Unit:</b> kg·m².</p>
+
+<p><b>Physical Significance of Moment of Inertia:</b></p>
+<p>1) It tells how difficult it is to rotate a body.</p>
+<p>2) Larger moment of inertia means more force is needed to rotate.</p>
+<p>3) Mass farther from the axis increases moment of inertia.</p>
+<p><b>WORK, POWER AND ENERGY</b></p>
+
+<p><b>WORK</b></p>
+<p><b>Definition:</b> Work is said to be done when a force causes displacement in a body.</p>
+<p><b>Symbol:</b> W</p>
+<p><b>Formula:</b> W = F × s (Force × displacement)</p>
+<p><b>SI Unit:</b> Joule (J)</p>
+
+<p><b>Types of Work:</b></p>
+<p>1) <b>Positive Work:</b> When force and displacement are in the same direction. Example: Pushing a box forward.</p>
+<p>2) <b>Negative Work:</b> When force and displacement are in opposite directions. Example: Applying brakes on a bicycle.</p>
+<p>3) <b>Zero Work:</b> When there is no displacement. Example: Pushing a wall that does not move.</p>
+
+<p><b>FRICTION</b></p>
+<p><b>Definition:</b> Friction is the force that opposes motion between two surfaces in contact.</p>
+<p><b>Daily Life Applications:</b></p>
+<p>1) Walking on the road.</p>
+<p>2) Writing with a pen on paper.</p>
+<p>3) Braking a vehicle.</p>
+
+<p><b>POWER</b></p>
+<p><b>Definition:</b> Power is the rate of doing work.</p>
+<p><b>Formula:</b> Power = Work / Time (P = W/t)</p>
+<p><b>SI Unit:</b> Watt (W)</p>
+
+<p><b>ENERGY</b></p>
+<p><b>Definition:</b> Energy is the ability to do work.</p>
+<p><b>SI Unit:</b> Joule (J)</p>
+
+<p><b>Examples of Transformation of Energy:</b></p>
+<p>1) Electrical energy → Light energy (Electric bulb).</p>
+<p>2) Chemical energy → Mechanical energy (Petrol engine).</p>
+<p>3) Potential energy → Kinetic energy (Falling object).</p>
+
+<p><b>KINETIC ENERGY</b></p>
+<p><b>Definition:</b> Kinetic energy is the energy possessed by a body due to its motion.</p>
+<p><b>Examples:</b> Moving car, running person.</p>
+<p><b>Formula:</b> KE = ½mv²</p>
+
+<p><b>Derivation of Kinetic Energy:</b></p>
+<p>Work done = Force × distance</p>
+<p>F = ma</p>
+<p>Using equations of motion, v² = 2as</p>
+<p>So, Work done = m a s = ½ m v²</p>
+<p>Therefore, KE = ½mv²</p>
+
+<p><b>POTENTIAL ENERGY</b></p>
+<p><b>Definition:</b> Potential energy is the energy possessed by a body due to its position or height.</p>
+<p><b>Examples:</b> Water stored in a dam, stretched rubber band.</p>
+<p><b>Formula:</b> PE = mgh</p>
+
+<p><b>Derivation of Potential Energy:</b></p>
+<p>Work done against gravity = Force × height</p>
+<p>Force = mg</p>
+<p>So, Work done = mgh</p>
+<p>Therefore, PE = mgh</p>
+<p><b>LAW OF CONSERVATION OF MECHANICAL ENERGY (FOR FREELY FALLING BODY)</b></p>
+
+<p><b>Statement:</b></p>
+<p>When a body falls freely under gravity (no air resistance), the total mechanical energy 
+(Kinetic Energy + Potential Energy) remains constant.</p>
+
+<p><b>Derivation:</b></p>
+<p>Let a body of mass m be at height h.</p>
+
+<p>At the top:</p>
+<p>Potential Energy (PE) = mgh</p>
+<p>Kinetic Energy (KE) = 0 (because initial velocity u = 0)</p>
+<p>Total Energy = mgh</p>
+
+<p>After falling through height h, just before reaching ground:</p>
+<p>Velocity v² = 2gh</p>
+<p>Kinetic Energy = ½mv²</p>
+<p>KE = ½m(2gh)</p>
+<p>KE = mgh</p>
+<p>Potential Energy = 0 (at ground)</p>
+<p>Total Energy = mgh</p>
+
+<p>Since total energy at top = total energy at bottom,</p>
+<p><b>Mechanical Energy remains constant.</b></p>
+
+<p><b>SIMPLE NUMERICAL PROBLEMS</b></p>
+
+<p><b>1) Power Problem:</b></p>
+<p>A machine does 1000 J of work in 10 seconds. Find power.</p>
+<p>Power = Work / Time</p>
+<p>P = 1000 / 10</p>
+<p>P = 100 Watt</p>
+
+<p><b>2) Kinetic Energy Problem:</b></p>
+<p>Find kinetic energy of a 2 kg body moving with velocity 5 m/s.</p>
+<p>KE = ½mv²</p>
+<p>KE = ½ × 2 × 5²</p>
+<p>KE = 1 × 25</p>
+<p>KE = 25 Joule</p>
+
+<p><b>3) Potential Energy Problem:</b></p>
+<p>Find potential energy of a 3 kg object at height 10 m (g = 10 m/s²).</p>
+<p>PE = mgh</p>
+<p>PE = 3 × 10 × 10</p>
+<p>PE = 300 Joule</p>
+<p><b>PROPERTIES OF MATTER</b></p>
+
+<p><b>Definition:</b></p>
+<p>Properties of matter are the characteristics that describe the nature and behavior of a substance.</p>
+
+<p><b>1) Mass:</b></p>
+<p>Mass is the amount of matter in a body. SI unit is kilogram (kg).</p>
+
+<p><b>2) Volume:</b></p>
+<p>Volume is the space occupied by a body. SI unit is cubic meter (m³).</p>
+
+<p><b>3) Density:</b></p>
+<p>Density is mass per unit volume.</p>
+<p>Formula: Density = Mass / Volume</p>
+<p>SI unit: kg/m³.</p>
+
+<p><b>4) Elasticity:</b></p>
+<p>Elasticity is the property by which a body returns to its original shape after removing the force.</p>
+<p>Example: Rubber band.</p>
+
+<p><b>5) Plasticity:</b></p>
+<p>Plasticity is the property by which a body does not return to its original shape after removing the force.</p>
+<p>Example: Clay.</p>
+
+<p><b>6) Inertia:</b></p>
+<p>Inertia is the property of a body to resist any change in its state of rest or motion.</p>
+
+<p><b>7) Compressibility:</b></p>
+<p>Compressibility is the property of reducing volume under pressure. Gases are highly compressible.</p>
+
+<p><b>8) Rigidity:</b></p>
+<p>Rigidity is the property of resisting change in shape. Solids are rigid.</p>
+
+<p><b>9) Surface Tension:</b></p>
+<p>Surface tension is the property of liquid surface to behave like a stretched elastic membrane.</p>
+
+<p><b>10) Viscosity:</b></p>
+<p>Viscosity is the resistance offered by a liquid to flow. Example: Honey has high viscosity.</p>
+<p><b>HEAT AND TEMPERATURE</b></p>
+
+<p><b>Definition of Heat (Kinetic Theory):</b></p>
+<p>Heat is a form of energy that is transferred from one body to another due to difference in temperature. 
+According to kinetic theory, heat increases the kinetic energy of molecules.</p>
+
+<p><b>Definition of Temperature (Kinetic Theory):</b></p>
+<p>Temperature is the measure of average kinetic energy of the molecules of a body.</p>
+
+<p><b>Difference Between Heat and Temperature:</b></p>
+<p>1) Heat is energy, temperature is the measure of hotness or coldness.</p>
+<p>2) Heat depends on mass of substance, temperature does not depend on mass.</p>
+<p>3) Heat is measured in Joule (J), temperature is measured in Kelvin (K), °C or °F.</p>
+
+<p><b>Mercury Thermometer</b></p>
+
+<p><b>Principle:</b></p>
+<p>It works on the principle of thermal expansion of mercury.</p>
+
+<p><b>Working:</b></p>
+<p>When temperature increases, mercury expands and rises in the capillary tube. 
+When temperature decreases, mercury contracts and falls. 
+The scale marked on the tube shows the temperature.</p>
+
+<p><b>Modes of Transfer of Heat:</b></p>
+
+<p><b>1) Conduction:</b></p>
+<p>Heat transfer through solids without movement of particles.</p>
+<p>Example: Heating one end of an iron rod.</p>
+
+<p><b>2) Convection:</b></p>
+<p>Heat transfer through liquids and gases by actual movement of particles.</p>
+<p>Example: Boiling of water.</p>
+
+<p><b>3) Radiation:</b></p>
+<p>Heat transfer through electromagnetic waves without any medium.</p>
+<p>Example: Heat from the Sun.</p>
+
+<p><b>Properties of Heat Radiation:</b></p>
+<p>1) Does not require any medium.</p>
+<p>2) Travels in straight line.</p>
+<p>3) Travels with speed of light.</p>
+<p>4) Can be reflected and absorbed.</p>
+
+<p><b>Temperature Scales and Their Relationship:</b></p>
+<p>Common scales: Celsius (°C), Fahrenheit (°F), Kelvin (K).</p>
+
+<p>Relationship:</p>
+<p>°F = (9/5)°C + 32</p>
+<p>K = °C + 273</p>
+<p>(°F - 32)/9 = °C/5 = (K - 273)/5</p>
+
+        `;
+    }
+
+    if(subject === "math"){
+        subjectTitle.innerText = "Mathematics - Calculus";
+        notesContent.innerHTML = `
+            <h3>Calculus</h3>
+            <p>Calculus studies change and motion.</p>
+            <ul>
+                <li>Limits</li>
+                <li>Derivatives</li>
+                <li>Integrals</li>
+            </ul>
+        `;
+    }
+
+    if(subject === "foit"){
+        subjectTitle.innerText = "FOIT - Fundamentals of IT";
+        notesContent.innerHTML = `
+           <p><b>BASICS OF COMPUTER</b></p>
+
+<p><b>Brief History of Development of Computers:</b></p>
+<p>Early computers were mechanical devices like Abacus. Later came electronic computers such as ENIAC. 
+Computers developed through generations using vacuum tubes, transistors, integrated circuits, and microprocessors. 
+Today we use fast and small modern computers.</p>
+
+<p><b>Definition of Computer:</b></p>
+<p>A computer is an electronic machine that accepts data as input, processes it, stores it, and gives output as information.</p>
+
+<p><b>Block Diagram of a Computer:</b></p>
+<p>A computer has three main parts:</p>
+<p>1) Input Unit</p>
+<p>2) Central Processing Unit (CPU)</p>
+<p>3) Output Unit</p>
+<p>Memory unit is connected with CPU.</p>
+
+<p><b>Hardware:</b></p>
+<p>Hardware means physical parts of a computer that we can see and touch. 
+Examples: Keyboard, Mouse, Monitor, CPU cabinet.</p>
+
+<p><b>Software:</b></p>
+<p>Software means programs or instructions that tell the computer what to do. 
+Examples: Windows, MS Word, Browser.</p>
+
+<p><b>Booting:</b></p>
+<p><b>Cold Booting:</b> Starting the computer when it is switched off.</p>
+<p><b>Hot Booting:</b> Restarting the computer without turning off the power.</p>
+
+<p><b>Interaction Between CPU, Memory and Input/Output Devices:</b></p>
+<p>Input devices send data to CPU. CPU processes the data using memory. 
+After processing, the result is sent to output devices.</p>
+
+<p><b>Function of CPU:</b></p>
+<p>CPU is the brain of the computer. It controls all operations and processes data.</p>
+
+<p><b>Major Functional Parts of CPU:</b></p>
+<p>1) ALU (Arithmetic Logic Unit) – Performs calculations and logical operations.</p>
+<p>2) Control Unit (CU) – Controls and directs all operations.</p>
+<p>3) Registers – Small memory units inside CPU.</p>
+
+<p><b>Memory:</b></p>
+<p>Memory stores data and instructions.</p>
+
+<p><b>Bit:</b> Smallest unit of data (0 or 1).</p>
+<p><b>Nibble:</b> 4 bits.</p>
+<p><b>Byte:</b> 8 bits.</p>
+<p><b>KB:</b> 1024 Bytes.</p>
+<p><b>MB:</b> 1024 KB.</p>
+<p><b>GB:</b> 1024 MB.</p>
+<p><b>TB:</b> 1024 GB.</p>
+<p><b>PB:</b> 1024 TB.</p>
+
+<p><b>Functions of Memory:</b></p>
+<p>1) Stores data.</p>
+<p>2) Stores instructions.</p>
+<p>3) Stores results after processing.</p>
+
+<p><b>Storage Devices:</b></p>
+<p>Devices used to store data permanently. Examples: Hard Disk, Pen Drive, CD/DVD.</p>
+
+<p><b>Types of Memory:</b></p>
+<p>1) Primary Memory – RAM, ROM, Cache.</p>
+<p>2) Secondary Memory – Hard Disk, SSD, Pen Drive.</p>
+
+<p><b>Importance of Cache Memory:</b></p>
+<p>Cache memory is very fast memory inside CPU. It stores frequently used data and increases computer speed.</p>
+
+<p><b>CPU Speed:</b></p>
+<p>CPU speed shows how fast a processor works. It is measured in Hertz (Hz), GHz.</p>
+
+<p><b>CPU Word Length:</b></p>
+<p>Word length is the number of bits a CPU can process at one time (like 32-bit or 64-bit). 
+Higher word length means better performance.</p>
+<p><b>BASIC INTERNET SKILLS</b></p>
+
+<p><b>Understanding Browser:</b></p>
+<p>A browser is a software used to access websites on the internet.</p>
+<p>Examples: Google Chrome, Microsoft Edge, Mozilla Firefox.</p>
+
+<p><b>Introduction to WWW (World Wide Web):</b></p>
+<p>WWW is a collection of websites and web pages available on the internet. 
+It helps users to get information, images, videos, and services online.</p>
+
+<p><b>Efficient Use of Search Engines:</b></p>
+<p>Search engines help to find information on the internet.</p>
+<p>Examples: Google, Bing, Yahoo.</p>
+<p>Tips for efficient search:</p>
+<p>1) Use simple and clear keywords.</p>
+<p>2) Use quotation marks for exact phrases.</p>
+<p>3) Check reliable websites.</p>
+
+<p><b>Awareness about Digital India Portals:</b></p>
+<p>Digital India provides online services by the government.</p>
+<p>National Portals: india.gov.in, digilocker.gov.in.</p>
+<p>State Portals: State government official websites.</p>
+<p>College Portals: Used for admission, results, attendance, fees, etc.</p>
+
+<p><b>Email</b></p>
+
+<p><b>Advantages of Email:</b></p>
+<p>1) Fast communication.</p>
+<p>2) Low cost.</p>
+<p>3) Can send documents and files.</p>
+<p>4) Easy to store messages.</p>
+
+<p><b>Various Email Service Providers:</b></p>
+<p>Gmail, Yahoo Mail, Outlook.</p>
+
+<p><b>Creation of Email ID:</b></p>
+<p>1) Go to email website (like gmail.com).</p>
+<p>2) Click on "Create account".</p>
+<p>3) Fill name, username, password.</p>
+<p>4) Verify mobile number and submit.</p>
+
+<p><b>Sending and Receiving Emails:</b></p>
+<p>To send: Click compose → Enter email address → Write subject → Write message → Click send.</p>
+<p>To receive: Check inbox and open received mail.</p>
+
+<p><b>Attaching Documents:</b></p>
+<p>Click attachment icon → Select file → Upload → Send.</p>
+<p>Files can also be shared through Google Drive link.</p>
+
+<p><b>Effective Use of Google Tools:</b></p>
+
+<p><b>Gmail:</b> Used for sending and receiving emails.</p>
+<p><b>Google Drive:</b> Used to store files online.</p>
+<p><b>Google Calendar:</b> Used to set reminders and schedule events.</p>
+<p><b>Google Sites:</b> Used to create simple websites.</p>
+<p><b>Google Sheets:</b> Used to create online spreadsheets.</p>
+
+<p><b>Online Communication Tools:</b></p>
+<p><b>Google Meet:</b> Used for online meetings and video calls.</p>
+<p><b>WebEx:</b> Used for online classes, meetings, and webinars.</p>
+<p><b>BASIC LOGIC BUILDING</b></p>
+
+<p><b>Introduction to Programming:</b></p>
+<p>Programming means writing instructions for a computer to perform a task. 
+It helps in solving problems step by step using logic.</p>
+
+<p><b>Steps Involved in Problem Solving:</b></p>
+<p>1) Understand the problem.</p>
+<p>2) Analyze the input and output.</p>
+<p>3) Develop an algorithm.</p>
+<p>4) Draw a flowchart.</p>
+<p>5) Write the program.</p>
+<p>6) Test and debug the program.</p>
+
+<p><b>Definition of Algorithm:</b></p>
+<p>An algorithm is a step-by-step procedure to solve a problem.</p>
+
+<p><b>Definition of Flowchart:</b></p>
+<p>A flowchart is a diagram that shows the steps of a solution using symbols.</p>
+
+<p><b>Steps in Algorithm Development:</b></p>
+<p>1) Start</p>
+<p>2) Take input</p>
+<p>3) Process the data</p>
+<p>4) Display output</p>
+<p>5) Stop</p>
+
+<p><b>Difference Between Algorithm and Flowchart:</b></p>
+<p>Algorithm – Written in simple steps using words.</p>
+<p>Flowchart – Drawn using symbols and diagrams.</p>
+
+<p><b>Symbols Used in Flowcharts:</b></p>
+<p>1) Oval – Start/Stop</p>
+<p>2) Rectangle – Process</p>
+<p>3) Parallelogram – Input/Output</p>
+<p>4) Diamond – Decision (Yes/No)</p>
+<p>5) Arrow – Direction of flow</p>
+
+<p><b>Algorithm for Simple Problem (Add Two Numbers):</b></p>
+<p>1) Start</p>
+<p>2) Input two numbers A and B</p>
+<p>3) C = A + B</p>
+<p>4) Display C</p>
+<p>5) Stop</p>
+
+<p><b>Flowchart Steps for Adding Two Numbers:</b></p>
+<p>Start → Input A, B → Process C = A + B → Display C → Stop</p>
+
+<p><b>Practice Logic Building Example (Check Even or Odd):</b></p>
+<p><b>Algorithm:</b></p>
+<p>1) Start</p>
+<p>2) Input number N</p>
+<p>3) If N % 2 = 0, print "Even"</p>
+<p>4) Else print "Odd"</p>
+<p>5) Stop</p>
+
+<p><b>Flowchart Steps:</b></p>
+<p>Start → Input N → Decision (N % 2 = 0?) → Yes: Print Even → No: Print Odd → Stop</p>
+<p><b>OFFICE TOOLS</b></p>
+
+<p><b>Office Tools:</b></p>
+<p>Office tools are software used to create documents, spreadsheets, and presentations.</p>
+<p>Examples: LibreOffice, OpenOffice, MS Office.</p>
+
+<p><b>OpenOffice Writer</b></p>
+
+<p><b>Typesetting and Basic Formatting:</b></p>
+<p>Writer is used to create documents like letters and reports.</p>
+<p>Basic formatting includes changing font style, size, color, bold, italic, underline, alignment, and spacing.</p>
+
+<p><b>Inserting Images:</b></p>
+<p>Go to Insert → Picture → Select image → Insert.</p>
+
+<p><b>Hyperlinks:</b></p>
+<p>Used to connect text to a website or another document.</p>
+<p>Insert → Hyperlink → Enter web address.</p>
+
+<p><b>Bookmarks:</b></p>
+<p>Bookmarks help to quickly move to a specific part of the document.</p>
+
+<p><b>Tables and Table Properties:</b></p>
+<p>Insert → Table → Select number of rows and columns.</p>
+<p>Table properties allow changing border, size, alignment, and background color.</p>
+
+<p><b>LibreOffice/OpenOffice Calc</b></p>
+
+<p><b>Introduction:</b></p>
+<p>Calc is used to create spreadsheets for calculations and data management.</p>
+
+<p><b>Working with Cells and Sheets:</b></p>
+<p>Data is entered in cells. Many cells form a worksheet (sheet).</p>
+
+<p><b>Using Formulae and Functions:</b></p>
+<p>Formulas start with = sign.</p>
+<p>Example: =A1+B1</p>
+<p>Functions: SUM(), AVERAGE(), MAX(), MIN().</p>
+
+<p><b>Using Charts and Graphics:</b></p>
+<p>Charts are used to represent data visually (Bar chart, Pie chart, Line chart).</p>
+
+<p><b>OpenOffice Impress</b></p>
+
+<p><b>Creating and Viewing Presentations:</b></p>
+<p>Impress is used to create slide presentations.</p>
+
+<p><b>Inserting Pictures and Tables:</b></p>
+<p>Insert → Picture or Table → Choose file or set rows and columns.</p>
+
+<p><b>Slide Master and Slide Design:</b></p>
+<p>Slide Master is used to apply same design to all slides.</p>
+<p>Slide Design changes background, theme, and layout.</p>
+
+<p><b>Custom Animation:</b></p>
+<p>Used to add animation effects to text and objects in slides.</p>
+<p>Animations make presentation more attractive.</p>
+<p><b>USE OF SOCIAL MEDIA</b></p>
+
+<p><b>Introduction to Digital Marketing:</b></p>
+<p>Digital marketing means promoting products or services using the internet and digital platforms.</p>
+
+<p><b>Why Digital Marketing?</b></p>
+<p>1) Low cost compared to traditional marketing.</p>
+<p>2) Reaches large number of people.</p>
+<p>3) Fast communication.</p>
+<p>4) Easy to measure results.</p>
+
+<p><b>Characteristics of Digital Marketing:</b></p>
+<p>1) Online based.</p>
+<p>2) Target specific audience.</p>
+<p>3) Interactive communication.</p>
+<p>4) Quick feedback from customers.</p>
+
+<p><b>Tools for Digital Marketing:</b></p>
+<p>1) Social Media Marketing.</p>
+<p>2) Email Marketing.</p>
+<p>3) Search Engine Optimization (SEO).</p>
+<p>4) Content Marketing.</p>
+<p>5) Online Advertisements (Google Ads).</p>
+
+<p><b>Effective Use of Social Media:</b></p>
+
+<p><b>LinkedIn:</b> Used for professional networking and job opportunities.</p>
+<p><b>Google+:</b> Social networking platform (now discontinued).</p>
+<p><b>Facebook:</b> Used for sharing posts, photos, videos and business promotion.</p>
+<p><b>Twitter:</b> Used for short messages and updates.</p>
+
+<p><b>Features of Social Media:</b></p>
+<p>1) Create profiles and pages.</p>
+<p>2) Share text, images, videos.</p>
+<p>3) Like, comment and share posts.</p>
+<p>4) Connect with people worldwide.</p>
+
+<p><b>Advantages of Social Media:</b></p>
+<p>1) Easy communication.</p>
+<p>2) Business promotion.</p>
+<p>3) Knowledge sharing.</p>
+<p>4) Entertainment.</p>
+
+<p><b>Disadvantages of Social Media:</b></p>
+<p>1) Addiction.</p>
+<p>2) Privacy issues.</p>
+<p>3) Fake news.</p>
+<p>4) Time wasting.</p>
+
+        `;
+    }
+}
+function toggleSubjects(){
+
+    const panel = document.querySelector(".subjects");
+    const btn = document.getElementById("toggleBtn");
+
+    panel.classList.toggle("collapsed");
+
+    if(panel.classList.contains("collapsed")){
+        btn.innerText = "Expand Panel";
+    } else {
+        btn.innerText = "Collapse Panel";
+    }
+}
+
+</script>
+
+</body>
+</html>

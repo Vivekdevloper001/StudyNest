@@ -1,0 +1,5300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE - StudyNest</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background: #F1F5F9;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h3 {
+    margin-bottom: 15px;
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: none;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.sidebar button:hover {
+    background: #2563EB;
+    color: white;
+}
+
+/* Subjects Panel */
+.subjects {
+    width: 250px;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    transition: 0.3s;
+}
+
+.subjects h3 {
+    margin-bottom: 15px;
+}
+
+.subjects button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: none;
+    background: #F8FAFC;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.subjects button:hover {
+    background: #2563EB;
+    color: white;
+}
+
+/* Notes */
+.notes {
+    flex: 1;
+    padding: 30px;
+}
+
+.note-box {
+    background: #F8FAFC;
+    padding: 20px;
+    border-left: 5px solid #2563EB;
+    border-radius: 6px;
+    min-height: 200px;
+}
+
+/* Active Highlight */
+.active-btn {
+    background: #2563EB !important;
+    color: white !important;
+}
+
+/* Animation */
+.fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Collapse */
+.collapsed {
+    display: none;
+}
+
+/* Toggle Button */
+#toggleBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 8px 15px;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar,
+    .subjects {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Semester Sidebar -->
+<div class="sidebar">
+    <h3>Semesters</h3>
+    <button onclick="loadSemester(1, this)">Semester 1</button>
+    <button onclick="loadSemester(2, this)">Semester 2</button>
+    <button onclick="loadSemester(3, this)">Semester 3</button>
+    <button onclick="loadSemester(4, this)">Semester 4</button>
+    <button onclick="loadSemester(5, this)">Semester 5</button>
+    <button onclick="loadSemester(6, this)">Semester 6</button>
+</div>
+
+<!-- Subjects Panel -->
+<div class="subjects" id="subjectPanel">
+    <h3 id="semesterTitle">Select Semester</h3>
+    <div id="subjectList">
+        Choose a semester to view subjects.
+    </div>
+</div>
+
+<!-- Notes Panel -->
+<div class="notes">
+    <h2 id="subjectTitle">Select Subject</h2>
+    <div class="note-box" id="notesContent">
+        Notes will appear here.
+    </div>
+</div>
+
+<!-- Toggle Button (Always Visible) -->
+<button id="toggleBtn" onclick="toggleSubjects()">Collapse Panel</button>
+
+<script>
+
+function loadSemester(sem, btn) {
+
+    const subjectList = document.getElementById("subjectList");
+    const semesterTitle = document.getElementById("semesterTitle");
+
+    // Highlight active semester
+    document.querySelectorAll(".sidebar button").forEach(b => b.classList.remove("active-btn"));
+    btn.classList.add("active-btn");
+
+    semesterTitle.innerText = "Semester " + sem + " Subjects";
+    subjectList.classList.add("fade-in");
+
+    if (sem === 1) {
+        subjectList.innerHTML = `
+            <button onclick="loadSubject('english', this)">English</button>
+            <button onclick="loadSubject('physics', this)">Physics</button>
+            <button onclick="loadSubject('math', this)">Mathematics</button>
+            <button onclick="loadSubject('foit', this)">FOIT</button>
+        `;
+    }
+
+else if (sem === 2) {
+    subjectList.innerHTML = `
+        <button onclick="loadSubject('ait', this)">Advances in IT</button>
+        <button onclick="loadSubject('math2', this)">Applied Mathematics-II</button>
+        <button onclick="loadSubject('physics2', this)">Applied Physics - II</button>
+        <button onclick="loadSubject('analog', this)">Analog Electronics</button>
+        <button onclick="loadSubject('graphics', this)">Engineering Graphics</button>
+        <button onclick="loadSubject('multimedia', this)">Multimedia Applications</button>
+        <button onclick="loadSubject('evs', this)">Environmental Studies & Disaster Management</button>
+    `;
+}
+
+
+if (sem === 3) {
+    subjectList.innerHTML = `
+        <button onclick="loadSubject('os', this)">Operating Systems</button>
+        <button onclick="loadSubject('de', this)">Digital Electronics</button>
+        <button onclick="loadSubject('cprog', this)">Programming in C</button>
+        <button onclick="loadSubject('dbms', this)">Data Base Management System</button>
+    `;
+}
+
+
+   if (sem === 4) {
+    subjectList.innerHTML = `
+        <button onclick="loadSubject('eng2', this)">English and Communication Skills - II</button>
+        <button onclick="loadSubject('coa', this)">Computer Organization & Architecture</button>
+        <button onclick="loadSubject('ds_c', this)">Data Structures using C</button>
+        <button onclick="loadSubject('java', this)">Object Oriented Programming using Java</button>
+    `;
+}
+
+ if (sem === 5) {
+    subjectList.innerHTML = `
+        <button onclick="loadSubject('web', this)">Web Technologies</button>
+        <button onclick="loadSubject('python', this)">Python Programming</button>
+        <button onclick="loadSubject('cn', this)">Computer Networks</button>
+        <button onclick="loadSubject('elective1', this)">Programme Elective - I</button>
+    `;
+}
+
+
+if (sem === 6) {
+    subjectList.innerHTML = `
+        <button onclick="loadSubject('webapp', this)">Application Development using Web Framework</button>
+        <button onclick="loadSubject('edm', this)">Entrepreneurship Development & Management</button>
+        <button onclick="loadSubject('se', this)">Software Engineering</button>
+        <button onclick="loadSubject('elective2', this)">Programme Elective - II</button>
+    `;
+}
+
+}
+
+function loadSubject(subject, btn) {
+
+    const subjectTitle = document.getElementById("subjectTitle");
+    const notesContent = document.getElementById("notesContent");
+
+    // Highlight active subject
+    document.querySelectorAll(".subjects button").forEach(b => b.classList.remove("active-btn"));
+    btn.classList.add("active-btn");
+
+    notesContent.classList.add("fade-in");
+
+    if(subject === "english"){
+        subjectTitle.innerText = "English";
+        notesContent.innerHTML = `
+       <p><b>READING</b></p>
+
+<p><b>What is Reading?</b></p>
+<p>Reading means understanding written words. It helps us learn new things, improve vocabulary, and improve speaking and writing.</p>
+
+<p><b>Techniques of Reading</b></p>
+
+<p><b>1) Skimming</b></p>
+<p>Skimming means reading quickly to get the main idea. We do not read every word. We only understand what the text is about. Example: Reading newspaper headlines.</p>
+
+<p><b>2) Scanning</b></p>
+<p>Scanning means reading quickly to find specific information. We search for names, dates, or numbers and ignore other details. Example: Finding a date in a book.</p>
+
+<p><b>Extensive and Intensive Reading</b></p>
+
+<p><b>1) Extensive Reading</b></p>
+<p>Extensive reading means reading for enjoyment and general understanding. We read long stories or novels and do not need to understand every word. Example: Story books and newspapers.</p>
+
+<p><b>2) Intensive Reading</b></p>
+<p>Intensive reading means reading carefully to understand details. Usually short texts are read carefully to understand each word and meaning. Example: Textbook lessons.</p>
+
+<p><b>Homecoming – Rabindranath Tagore</b></p>
+<p><b>About the Author:</b> Rabindranath Tagore was a great Indian writer and poet.</p>
+<p><b>Main Character:</b> Phatik, a village boy.</p>
+<p><b>Story in Simple Words:</b> Phatik was a naughty boy. He was sent to Kolkata for studies. He missed his mother and village. He felt lonely and sad. He became sick. Before dying, he said he was going home.</p>
+<p><b>Main Idea:</b> Love of mother, homesickness, and sadness of a child.</p>
+
+<p><b>Life Sketch of Sir M. Visvesvaraya</b></p>
+<p><b>Introduction:</b> Born on 15 September 1861. He was a great engineer of India.</p>
+<p><b>Important Works:</b> Built Krishna Raja Sagar Dam and worked as Diwan of Mysore.</p>
+<p><b>Awards:</b> Bharat Ratna in 1955.</p>
+<p><b>Importance:</b> Engineers’ Day (15 September) is celebrated in his honor. He was honest and disciplined.</p>
+
+<p><b>Life Sketch of Dr. A. P. J. Abdul Kalam</b></p>
+<p><b>Introduction:</b> Born on 15 October 1931. Known as the Missile Man of India. He was the 11th President of India.</p>
+<p><b>Achievements:</b> Worked in ISRO and DRDO. Helped in making missiles. Received Bharat Ratna award.</p>
+<p><b>Good Qualities:</b> Simple person, hardworking, and loved students.</p>
+<p><b>Message:</b> Dream big and work hard.</p>
+
+<p><b>Narayan Murthy’s Speech at LBSNA, Dehradun</b></p>
+<p><b>About Him:</b> N. R. Narayana Murthy is the founder of Infosys.</p>
+<p><b>Main Points:</b> Be honest, work hard, serve the nation, and follow discipline.</p>
+<p><b>Message:</b> Success comes with honesty and hard work.</p>
+<p><b>FUNDAMENTALS OF COMMUNICATION</b></p>
+<p>Communication means sharing ideas, information, and feelings between two or more people. It helps in understanding, building relationships, and working together effectively.</p>
+
+<p><b>CONCEPT AND PROCESS OF COMMUNICATION</b></p>
+<p><b>Concept:</b> Communication is the exchange of information between a sender and a receiver to create understanding.</p>
+<p><b>Process:</b> The communication process includes Sender, Message, Encoding, Channel, Receiver, Decoding, and Feedback. Feedback shows whether the message is understood correctly.</p>
+
+<p><b>TYPES OF COMMUNICATION (VERBAL COMMUNICATION)</b></p>
+<p><b>Verbal Communication:</b> Communication through words.</p>
+<p>1) Oral Communication – Spoken words like conversation, speech, phone calls.</p>
+<p>2) Written Communication – Written words like letters, emails, messages.</p>
+
+<p><b>BARRIERS TO COMMUNICATION</b></p>
+<p>Barriers are problems that stop effective communication.</p>
+<p>1) Physical Barriers – Noise, distance.</p>
+<p>2) Language Barriers – Different languages or difficult words.</p>
+<p>3) Psychological Barriers – Fear, stress, anger.</p>
+<p>4) Cultural Barriers – Differences in culture and beliefs.</p>
+
+<p><b>SPEAKING SKILL: SIGNIFICANCE AND ESSENTIALS</b></p>
+<p><b>Significance:</b> Speaking skill helps in expressing ideas clearly and confidently.</p>
+<p><b>Essentials:</b> Clear pronunciation, correct grammar, confidence, good vocabulary, and proper body language.</p>
+
+<p><b>LISTENING SKILL: SIGNIFICANCE AND ESSENTIALS</b></p>
+<p><b>Significance:</b> Listening helps in understanding the message properly and improves relationships.</p>
+<p><b>Essentials:</b> Pay attention, avoid distractions, do not interrupt, and give proper feedback.</p>
+<p><b>GRAMMAR AND USAGE</b></p>
+<p>Grammar means the rules of a language. It helps us speak and write correctly.</p>
+
+<p><b>NOUNS</b></p>
+<p>A noun is the name of a person, place, animal, or thing.</p>
+<p><b>Examples:</b> Rahul, school, dog, book.</p>
+<p><b>Types of Nouns:</b></p>
+<p>1) Proper Noun – Name of a person or place (India, Riya).</p>
+<p>2) Common Noun – General name (city, girl).</p>
+<p>3) Collective Noun – Name of a group (team, family).</p>
+<p>4) Abstract Noun – Name of a feeling or quality (honesty, love).</p>
+
+<p><b>PRONOUNS</b></p>
+<p>A pronoun is a word used instead of a noun.</p>
+<p><b>Examples:</b> He, She, It, They, We.</p>
+<p><b>Example Sentence:</b> Riya is a girl. She is kind.</p>
+
+<p><b>ARTICLES</b></p>
+<p>Articles are small words used before nouns.</p>
+<p>There are three articles: A, An, The.</p>
+<p>1) A – Used before consonant sound (a book).</p>
+<p>2) An – Used before vowel sound (an apple).</p>
+<p>3) The – Used for specific person or thing (the sun).</p>
+
+<p><b>VERBS (MAIN AND AUXILIARY)</b></p>
+<p>A verb is an action word.</p>
+<p><b>Main Verb:</b> Shows the main action (eat, run, write).</p>
+<p><b>Auxiliary Verb:</b> Helping verb (is, am, are, was, were, has, have, had, will).</p>
+<p><b>Example:</b> She is playing. (is = auxiliary, playing = main verb)</p>
+
+<p><b>TENSES</b></p>
+<p>Tense shows the time of action.</p>
+<p>1) Present Tense – Action happening now (She plays).</p>
+<p>2) Past Tense – Action happened before (She played).</p>
+<p>3) Future Tense – Action will happen later (She will play).</p>
+<p><b>WRITING SKILLS</b></p>
+<p>Writing skill means the ability to express ideas clearly in written form. Good writing helps in studies, jobs, and daily communication.</p>
+
+<p><b>Significance of Written Communication:</b></p>
+<p>Written communication is important because it keeps a record, gives clear information, and avoids misunderstanding.</p>
+
+<p><b>Essentials of Effective Written Communication:</b></p>
+<p>1) Use simple and clear language.</p>
+<p>2) Write correct grammar and spelling.</p>
+<p>3) Be brief and to the point.</p>
+<p>4) Organize ideas properly.</p>
+
+<p><b>NOTICE WRITING</b></p>
+<p>A notice is a short and clear information given to a group of people.</p>
+<p><b>Features of Notice:</b></p>
+<p>1) Name of the organization.</p>
+<p>2) Date.</p>
+<p>3) Title (Notice).</p>
+<p>4) Clear message with details (what, when, where).</p>
+<p>5) Signature and name.</p>
+
+<p><b>OFFICIAL LETTERS AND E-MAILS</b></p>
+<p>Official letters and emails are used for formal communication in offices and institutions.</p>
+<p><b>Parts of an Official Letter:</b></p>
+<p>1) Sender’s address.</p>
+<p>2) Date.</p>
+<p>3) Receiver’s address.</p>
+<p>4) Subject.</p>
+<p>5) Salutation (Sir/Madam).</p>
+<p>6) Body of the letter.</p>
+<p>7) Closing (Yours sincerely).</p>
+<p>8) Signature.</p>
+
+<p><b>Frequently-used Abbreviations in Letter Writing:</b></p>
+<p>1) ASAP – As Soon As Possible.</p>
+<p>2) FYI – For Your Information.</p>
+<p>3) etc. – And so on.</p>
+<p>4) i.e. – That is.</p>
+<p>5) e.g. – For example.</p>
+
+<p><b>PARAGRAPH WRITING</b></p>
+<p>A paragraph is a group of sentences about one main idea.</p>
+<p><b>Steps to Write a Good Paragraph:</b></p>
+<p>1) Start with a topic sentence.</p>
+<p>2) Add supporting sentences.</p>
+<p>3) End with a concluding sentence.</p>
+
+<p><b>NETIQUETTES</b></p>
+<p>Netiquettes are rules for polite behavior on the internet.</p>
+<p>1) Use respectful language.</p>
+<p>2) Do not use all capital letters.</p>
+<p>3) Check spelling before sending emails.</p>
+<p>4) Do not share personal information.</p>
+<p>5) Reply politely and clearly.</p>
+
+
+        `;
+    }
+
+    if(subject === "physics"){
+        subjectTitle.innerText = "Physics ";
+        notesContent.innerHTML = `
+            <p><b>UNIT AND DIMENSIONS</b></p>
+
+<p><b>Definition of Physics:</b></p>
+<p>Physics is the branch of science that studies matter, energy, and their interaction.</p>
+
+<p><b>Physical Quantities:</b></p>
+<p>A physical quantity is a quantity that can be measured.</p>
+
+<p><b>Fundamental Quantities:</b></p>
+<p>Basic quantities that do not depend on other quantities.</p>
+<p>Examples: Length, Mass, Time.</p>
+
+<p><b>Derived Quantities:</b></p>
+<p>Quantities formed from fundamental quantities.</p>
+<p>Examples: Velocity, Force, Work, Energy.</p>
+
+<p><b>Units:</b></p>
+<p>A unit is a standard used to measure a physical quantity.</p>
+
+<p><b>Fundamental Units:</b></p>
+<p>Units of fundamental quantities.</p>
+<p>Examples: Meter (m), Kilogram (kg), Second (s).</p>
+
+<p><b>Derived Units:</b></p>
+<p>Units formed from fundamental units.</p>
+<p>Examples: m/s (velocity), Newton (N), Joule (J).</p>
+
+<p><b>System of Units:</b></p>
+<p>1) CGS – Centimeter, Gram, Second.</p>
+<p>2) FPS – Foot, Pound, Second.</p>
+<p>3) MKS – Meter, Kilogram, Second.</p>
+<p>4) SI – International System of Units (used worldwide).</p>
+
+<p><b>Dimension:</b></p>
+<p>Dimension shows how a physical quantity depends on fundamental quantities like length (L), mass (M), and time (T).</p>
+
+<p><b>Dimensional Formulae and SI Units:</b></p>
+<p>Distance – [L], Unit: meter (m).</p>
+<p>Displacement – [L], Unit: meter (m).</p>
+<p>Area – [L²], Unit: m².</p>
+<p>Volume – [L³], Unit: m³.</p>
+<p>Density – [M L⁻³], Unit: kg/m³.</p>
+<p>Velocity – [L T⁻¹], Unit: m/s.</p>
+<p>Acceleration – [L T⁻²], Unit: m/s².</p>
+<p>Linear Momentum – [M L T⁻¹], Unit: kg·m/s.</p>
+<p>Force – [M L T⁻²], Unit: Newton (N).</p>
+<p>Impulse – [M L T⁻¹], Unit: N·s.</p>
+<p>Work – [M L² T⁻²], Unit: Joule (J).</p>
+<p>Power – [M L² T⁻³], Unit: Watt (W).</p>
+<p>Energy – [M L² T⁻²], Unit: Joule (J).</p>
+<p>Pressure – [M L⁻¹ T⁻²], Unit: Pascal (Pa).</p>
+<p>Surface Tension – [M T⁻²], Unit: N/m.</p>
+<p>Stress – [M L⁻¹ T⁻²], Unit: Pascal (Pa).</p>
+<p>Strain – [1], Unit: No unit (dimensionless).</p>
+
+<p><b>Dimensional Equation:</b></p>
+<p>An equation written in terms of dimensions is called a dimensional equation.</p>
+
+<p><b>Principle of Homogeneity:</b></p>
+<p>In a correct physical equation, the dimensions on both sides must be the same.</p>
+
+<p><b>Applications of Dimensional Analysis:</b></p>
+<p>1) To check the correctness of a physical equation.</p>
+<p>2) To convert one system of units into another.</p>
+<p>Examples: Conversion of units of Force, Work, and Acceleration.</p>
+<p><b>FORCE AND MOTION</b></p>
+
+<p><b>Scalar and Vector Quantities:</b></p>
+<p><b>Scalar Quantity:</b> A quantity which has only magnitude (size).</p>
+<p>Examples: Mass, Time, Temperature, Distance.</p>
+<p><b>Vector Quantity:</b> A quantity which has both magnitude and direction.</p>
+<p>Examples: Displacement, Velocity, Acceleration, Force.</p>
+
+<p><b>Representation of a Vector:</b></p>
+<p>A vector is represented by an arrow. The length shows magnitude and the arrow shows direction.</p>
+
+<p><b>Types of Vectors:</b></p>
+<p>1) <b>Unit Vector:</b> A vector with magnitude 1.</p>
+<p>2) <b>Position Vector:</b> A vector that shows the position of a point from origin.</p>
+<p>3) <b>Co-initial Vectors:</b> Vectors having the same starting point.</p>
+<p>4) <b>Collinear Vectors:</b> Vectors lying on the same straight line.</p>
+<p>5) <b>Co-planar Vectors:</b> Vectors lying in the same plane.</p>
+
+<p><b>Vector Algebra:</b></p>
+
+<p><b>Addition of Vectors:</b> Vectors are added by triangle law or parallelogram law.</p>
+
+<p><b>Triangle Law (Statement):</b> If two vectors are represented by two sides of a triangle taken in order, then the third side represents their resultant.</p>
+<p><b>Formula:</b> R = √(A² + B² + 2AB cosθ)</p>
+
+<p><b>Parallelogram Law (Statement):</b> If two vectors are represented by two adjacent sides of a parallelogram, then the diagonal represents their resultant.</p>
+<p><b>Formula:</b> R = √(A² + B² + 2AB cosθ)</p>
+
+<p><b>Scalar Product (Dot Product):</b></p>
+<p><b>Statement:</b> The scalar product of two vectors is equal to the product of their magnitudes and the cosine of the angle between them.</p>
+<p><b>Formula:</b> A · B = AB cosθ</p>
+
+<p><b>Vector Product (Cross Product):</b></p>
+<p><b>Statement:</b> The vector product of two vectors is equal to the product of their magnitudes and the sine of the angle between them.</p>
+<p><b>Formula:</b> A × B = AB sinθ</p>
+
+<p><b>Force and Its Units:</b></p>
+<p>Force is a push or pull that can change the state of motion of a body.</p>
+<p>SI Unit of force is Newton (N).</p>
+<p>1 Newton = 1 kg m/s².</p>
+
+<p><b>Resolution of Force:</b></p>
+<p><b>Statement:</b> A single force can be resolved into two or more components.</p>
+<p><b>Formula:</b> Fx = F cosθ, Fy = F sinθ</p>
+
+<p><b>Newton’s Laws of Motion:</b></p>
+
+<p><b>First Law:</b> A body remains at rest or in uniform motion unless acted upon by an external force.</p>
+<p><b>Example:</b> A book remains on the table until pushed.</p>
+
+<p><b>Second Law:</b> Force is equal to the rate of change of momentum.</p>
+<p><b>Formula:</b> F = ma</p>
+<p><b>Example:</b> A heavier object needs more force to move.</p>
+
+<p><b>Third Law:</b> For every action, there is an equal and opposite reaction.</p>
+<p><b>Example:</b> Recoil of a gun.</p>
+
+<p><b>Linear Momentum:</b></p>
+<p>Momentum is the product of mass and velocity.</p>
+<p><b>Formula:</b> p = mv</p>
+
+<p><b>Law of Conservation of Linear Momentum:</b></p>
+<p><b>Statement:</b> Total momentum before collision equals total momentum after collision.</p>
+<p><b>Example:</b> Collision of two balls.</p>
+
+<p><b>Impulse:</b></p>
+<p>Impulse is the product of force and time.</p>
+<p><b>Formula:</b> Impulse = F × t</p>
+
+<p><b>Circular Motion:</b></p>
+<p><b>Angular Displacement:</b> Angle covered by a body moving in a circle.</p>
+<p><b>Angular Velocity:</b> Rate of change of angular displacement.</p>
+<p><b>Angular Acceleration:</b> Rate of change of angular velocity.</p>
+<p><b>Frequency:</b> Number of rotations per second.</p>
+<p><b>Time Period:</b> Time taken to complete one rotation.</p>
+
+<p><b>Relation Between Linear and Angular Velocity:</b></p>
+<p>v = rω</p>
+
+<p><b>Centripetal Force:</b></p>
+<p>Force acting towards the center in circular motion.</p>
+<p><b>Formula:</b> F = mv²/r</p>
+
+<p><b>Centrifugal Force:</b></p>
+<p>Apparent outward force in circular motion.</p>
+
+<p><b>Banking of Roads:</b></p>
+<p>Roads are tilted at curves so that centripetal force helps vehicles turn safely.</p>
+<p><b>ROTATIONAL MOTION</b></p>
+
+<p><b>Definition:</b></p>
+<p>Rotational motion is the motion of a body when it rotates or turns about a fixed axis.</p>
+
+<p><b>Examples:</b></p>
+<p>1) A ceiling fan rotating.</p>
+<p>2) A wheel of a bicycle moving.</p>
+<p>3) Earth rotating about its axis.</p>
+
+<p><b>Torque:</b></p>
+<p>Torque is the turning effect of a force.</p>
+<p><b>Formula:</b> Torque = Force × Perpendicular distance from axis.</p>
+<p><b>Symbol:</b> τ</p>
+<p><b>SI Unit:</b> Newton-meter (N·m).</p>
+
+<p><b>Angular Momentum:</b></p>
+<p>Angular momentum is the rotational form of linear momentum.</p>
+<p><b>Formula:</b> L = Iω</p>
+<p>Where I = moment of inertia and ω = angular velocity.</p>
+<p><b>SI Unit:</b> kg·m²/s.</p>
+
+<p><b>Moment of Inertia:</b></p>
+<p>Moment of inertia is the measure of resistance of a body to change its rotational motion.</p>
+<p><b>Formula:</b> I = mr² (for a point mass).</p>
+<p><b>SI Unit:</b> kg·m².</p>
+
+<p><b>Physical Significance of Moment of Inertia:</b></p>
+<p>1) It tells how difficult it is to rotate a body.</p>
+<p>2) Larger moment of inertia means more force is needed to rotate.</p>
+<p>3) Mass farther from the axis increases moment of inertia.</p>
+<p><b>WORK, POWER AND ENERGY</b></p>
+
+<p><b>WORK</b></p>
+<p><b>Definition:</b> Work is said to be done when a force causes displacement in a body.</p>
+<p><b>Symbol:</b> W</p>
+<p><b>Formula:</b> W = F × s (Force × displacement)</p>
+<p><b>SI Unit:</b> Joule (J)</p>
+
+<p><b>Types of Work:</b></p>
+<p>1) <b>Positive Work:</b> When force and displacement are in the same direction. Example: Pushing a box forward.</p>
+<p>2) <b>Negative Work:</b> When force and displacement are in opposite directions. Example: Applying brakes on a bicycle.</p>
+<p>3) <b>Zero Work:</b> When there is no displacement. Example: Pushing a wall that does not move.</p>
+
+<p><b>FRICTION</b></p>
+<p><b>Definition:</b> Friction is the force that opposes motion between two surfaces in contact.</p>
+<p><b>Daily Life Applications:</b></p>
+<p>1) Walking on the road.</p>
+<p>2) Writing with a pen on paper.</p>
+<p>3) Braking a vehicle.</p>
+
+<p><b>POWER</b></p>
+<p><b>Definition:</b> Power is the rate of doing work.</p>
+<p><b>Formula:</b> Power = Work / Time (P = W/t)</p>
+<p><b>SI Unit:</b> Watt (W)</p>
+
+<p><b>ENERGY</b></p>
+<p><b>Definition:</b> Energy is the ability to do work.</p>
+<p><b>SI Unit:</b> Joule (J)</p>
+
+<p><b>Examples of Transformation of Energy:</b></p>
+<p>1) Electrical energy → Light energy (Electric bulb).</p>
+<p>2) Chemical energy → Mechanical energy (Petrol engine).</p>
+<p>3) Potential energy → Kinetic energy (Falling object).</p>
+
+<p><b>KINETIC ENERGY</b></p>
+<p><b>Definition:</b> Kinetic energy is the energy possessed by a body due to its motion.</p>
+<p><b>Examples:</b> Moving car, running person.</p>
+<p><b>Formula:</b> KE = ½mv²</p>
+
+<p><b>Derivation of Kinetic Energy:</b></p>
+<p>Work done = Force × distance</p>
+<p>F = ma</p>
+<p>Using equations of motion, v² = 2as</p>
+<p>So, Work done = m a s = ½ m v²</p>
+<p>Therefore, KE = ½mv²</p>
+
+<p><b>POTENTIAL ENERGY</b></p>
+<p><b>Definition:</b> Potential energy is the energy possessed by a body due to its position or height.</p>
+<p><b>Examples:</b> Water stored in a dam, stretched rubber band.</p>
+<p><b>Formula:</b> PE = mgh</p>
+
+<p><b>Derivation of Potential Energy:</b></p>
+<p>Work done against gravity = Force × height</p>
+<p>Force = mg</p>
+<p>So, Work done = mgh</p>
+<p>Therefore, PE = mgh</p>
+<p><b>LAW OF CONSERVATION OF MECHANICAL ENERGY (FOR FREELY FALLING BODY)</b></p>
+
+<p><b>Statement:</b></p>
+<p>When a body falls freely under gravity (no air resistance), the total mechanical energy 
+(Kinetic Energy + Potential Energy) remains constant.</p>
+
+<p><b>Derivation:</b></p>
+<p>Let a body of mass m be at height h.</p>
+
+<p>At the top:</p>
+<p>Potential Energy (PE) = mgh</p>
+<p>Kinetic Energy (KE) = 0 (because initial velocity u = 0)</p>
+<p>Total Energy = mgh</p>
+
+<p>After falling through height h, just before reaching ground:</p>
+<p>Velocity v² = 2gh</p>
+<p>Kinetic Energy = ½mv²</p>
+<p>KE = ½m(2gh)</p>
+<p>KE = mgh</p>
+<p>Potential Energy = 0 (at ground)</p>
+<p>Total Energy = mgh</p>
+
+<p>Since total energy at top = total energy at bottom,</p>
+<p><b>Mechanical Energy remains constant.</b></p>
+
+<p><b>SIMPLE NUMERICAL PROBLEMS</b></p>
+
+<p><b>1) Power Problem:</b></p>
+<p>A machine does 1000 J of work in 10 seconds. Find power.</p>
+<p>Power = Work / Time</p>
+<p>P = 1000 / 10</p>
+<p>P = 100 Watt</p>
+
+<p><b>2) Kinetic Energy Problem:</b></p>
+<p>Find kinetic energy of a 2 kg body moving with velocity 5 m/s.</p>
+<p>KE = ½mv²</p>
+<p>KE = ½ × 2 × 5²</p>
+<p>KE = 1 × 25</p>
+<p>KE = 25 Joule</p>
+
+<p><b>3) Potential Energy Problem:</b></p>
+<p>Find potential energy of a 3 kg object at height 10 m (g = 10 m/s²).</p>
+<p>PE = mgh</p>
+<p>PE = 3 × 10 × 10</p>
+<p>PE = 300 Joule</p>
+<p><b>PROPERTIES OF MATTER</b></p>
+
+<p><b>Definition:</b></p>
+<p>Properties of matter are the characteristics that describe the nature and behavior of a substance.</p>
+
+<p><b>1) Mass:</b></p>
+<p>Mass is the amount of matter in a body. SI unit is kilogram (kg).</p>
+
+<p><b>2) Volume:</b></p>
+<p>Volume is the space occupied by a body. SI unit is cubic meter (m³).</p>
+
+<p><b>3) Density:</b></p>
+<p>Density is mass per unit volume.</p>
+<p>Formula: Density = Mass / Volume</p>
+<p>SI unit: kg/m³.</p>
+
+<p><b>4) Elasticity:</b></p>
+<p>Elasticity is the property by which a body returns to its original shape after removing the force.</p>
+<p>Example: Rubber band.</p>
+
+<p><b>5) Plasticity:</b></p>
+<p>Plasticity is the property by which a body does not return to its original shape after removing the force.</p>
+<p>Example: Clay.</p>
+
+<p><b>6) Inertia:</b></p>
+<p>Inertia is the property of a body to resist any change in its state of rest or motion.</p>
+
+<p><b>7) Compressibility:</b></p>
+<p>Compressibility is the property of reducing volume under pressure. Gases are highly compressible.</p>
+
+<p><b>8) Rigidity:</b></p>
+<p>Rigidity is the property of resisting change in shape. Solids are rigid.</p>
+
+<p><b>9) Surface Tension:</b></p>
+<p>Surface tension is the property of liquid surface to behave like a stretched elastic membrane.</p>
+
+<p><b>10) Viscosity:</b></p>
+<p>Viscosity is the resistance offered by a liquid to flow. Example: Honey has high viscosity.</p>
+<p><b>HEAT AND TEMPERATURE</b></p>
+
+<p><b>Definition of Heat (Kinetic Theory):</b></p>
+<p>Heat is a form of energy that is transferred from one body to another due to difference in temperature. 
+According to kinetic theory, heat increases the kinetic energy of molecules.</p>
+
+<p><b>Definition of Temperature (Kinetic Theory):</b></p>
+<p>Temperature is the measure of average kinetic energy of the molecules of a body.</p>
+
+<p><b>Difference Between Heat and Temperature:</b></p>
+<p>1) Heat is energy, temperature is the measure of hotness or coldness.</p>
+<p>2) Heat depends on mass of substance, temperature does not depend on mass.</p>
+<p>3) Heat is measured in Joule (J), temperature is measured in Kelvin (K), °C or °F.</p>
+
+<p><b>Mercury Thermometer</b></p>
+
+<p><b>Principle:</b></p>
+<p>It works on the principle of thermal expansion of mercury.</p>
+
+<p><b>Working:</b></p>
+<p>When temperature increases, mercury expands and rises in the capillary tube. 
+When temperature decreases, mercury contracts and falls. 
+The scale marked on the tube shows the temperature.</p>
+
+<p><b>Modes of Transfer of Heat:</b></p>
+
+<p><b>1) Conduction:</b></p>
+<p>Heat transfer through solids without movement of particles.</p>
+<p>Example: Heating one end of an iron rod.</p>
+
+<p><b>2) Convection:</b></p>
+<p>Heat transfer through liquids and gases by actual movement of particles.</p>
+<p>Example: Boiling of water.</p>
+
+<p><b>3) Radiation:</b></p>
+<p>Heat transfer through electromagnetic waves without any medium.</p>
+<p>Example: Heat from the Sun.</p>
+
+<p><b>Properties of Heat Radiation:</b></p>
+<p>1) Does not require any medium.</p>
+<p>2) Travels in straight line.</p>
+<p>3) Travels with speed of light.</p>
+<p>4) Can be reflected and absorbed.</p>
+
+<p><b>Temperature Scales and Their Relationship:</b></p>
+<p>Common scales: Celsius (°C), Fahrenheit (°F), Kelvin (K).</p>
+
+<p>Relationship:</p>
+<p>°F = (9/5)°C + 32</p>
+<p>K = °C + 273</p>
+<p>(°F - 32)/9 = °C/5 = (K - 273)/5</p>
+
+        `;
+    }
+
+    if(subject === "math"){
+        subjectTitle.innerText = "Mathematics - Calculus";
+        notesContent.innerHTML = `
+            <h3>Calculus</h3>
+            <p>Calculus studies change and motion.</p>
+            <ul>
+                <li>Limits</li>
+                <li>Derivatives</li>
+                <li>Integrals</li>
+            </ul>
+        `;
+    }
+
+    if(subject === "foit"){
+        subjectTitle.innerText = "FOIT - Fundamentals of IT";
+        notesContent.innerHTML = `
+           <p><b>BASICS OF COMPUTER</b></p>
+
+<p><b>Brief History of Development of Computers:</b></p>
+<p>Early computers were mechanical devices like Abacus. Later came electronic computers such as ENIAC. 
+Computers developed through generations using vacuum tubes, transistors, integrated circuits, and microprocessors. 
+Today we use fast and small modern computers.</p>
+
+<p><b>Definition of Computer:</b></p>
+<p>A computer is an electronic machine that accepts data as input, processes it, stores it, and gives output as information.</p>
+
+<p><b>Block Diagram of a Computer:</b></p>
+<p>A computer has three main parts:</p>
+<p>1) Input Unit</p>
+<p>2) Central Processing Unit (CPU)</p>
+<p>3) Output Unit</p>
+<p>Memory unit is connected with CPU.</p>
+
+<p><b>Hardware:</b></p>
+<p>Hardware means physical parts of a computer that we can see and touch. 
+Examples: Keyboard, Mouse, Monitor, CPU cabinet.</p>
+
+<p><b>Software:</b></p>
+<p>Software means programs or instructions that tell the computer what to do. 
+Examples: Windows, MS Word, Browser.</p>
+
+<p><b>Booting:</b></p>
+<p><b>Cold Booting:</b> Starting the computer when it is switched off.</p>
+<p><b>Hot Booting:</b> Restarting the computer without turning off the power.</p>
+
+<p><b>Interaction Between CPU, Memory and Input/Output Devices:</b></p>
+<p>Input devices send data to CPU. CPU processes the data using memory. 
+After processing, the result is sent to output devices.</p>
+
+<p><b>Function of CPU:</b></p>
+<p>CPU is the brain of the computer. It controls all operations and processes data.</p>
+
+<p><b>Major Functional Parts of CPU:</b></p>
+<p>1) ALU (Arithmetic Logic Unit) – Performs calculations and logical operations.</p>
+<p>2) Control Unit (CU) – Controls and directs all operations.</p>
+<p>3) Registers – Small memory units inside CPU.</p>
+
+<p><b>Memory:</b></p>
+<p>Memory stores data and instructions.</p>
+
+<p><b>Bit:</b> Smallest unit of data (0 or 1).</p>
+<p><b>Nibble:</b> 4 bits.</p>
+<p><b>Byte:</b> 8 bits.</p>
+<p><b>KB:</b> 1024 Bytes.</p>
+<p><b>MB:</b> 1024 KB.</p>
+<p><b>GB:</b> 1024 MB.</p>
+<p><b>TB:</b> 1024 GB.</p>
+<p><b>PB:</b> 1024 TB.</p>
+
+<p><b>Functions of Memory:</b></p>
+<p>1) Stores data.</p>
+<p>2) Stores instructions.</p>
+<p>3) Stores results after processing.</p>
+
+<p><b>Storage Devices:</b></p>
+<p>Devices used to store data permanently. Examples: Hard Disk, Pen Drive, CD/DVD.</p>
+
+<p><b>Types of Memory:</b></p>
+<p>1) Primary Memory – RAM, ROM, Cache.</p>
+<p>2) Secondary Memory – Hard Disk, SSD, Pen Drive.</p>
+
+<p><b>Importance of Cache Memory:</b></p>
+<p>Cache memory is very fast memory inside CPU. It stores frequently used data and increases computer speed.</p>
+
+<p><b>CPU Speed:</b></p>
+<p>CPU speed shows how fast a processor works. It is measured in Hertz (Hz), GHz.</p>
+
+<p><b>CPU Word Length:</b></p>
+<p>Word length is the number of bits a CPU can process at one time (like 32-bit or 64-bit). 
+Higher word length means better performance.</p>
+<p><b>BASIC INTERNET SKILLS</b></p>
+
+<p><b>Understanding Browser:</b></p>
+<p>A browser is a software used to access websites on the internet.</p>
+<p>Examples: Google Chrome, Microsoft Edge, Mozilla Firefox.</p>
+
+<p><b>Introduction to WWW (World Wide Web):</b></p>
+<p>WWW is a collection of websites and web pages available on the internet. 
+It helps users to get information, images, videos, and services online.</p>
+
+<p><b>Efficient Use of Search Engines:</b></p>
+<p>Search engines help to find information on the internet.</p>
+<p>Examples: Google, Bing, Yahoo.</p>
+<p>Tips for efficient search:</p>
+<p>1) Use simple and clear keywords.</p>
+<p>2) Use quotation marks for exact phrases.</p>
+<p>3) Check reliable websites.</p>
+
+<p><b>Awareness about Digital India Portals:</b></p>
+<p>Digital India provides online services by the government.</p>
+<p>National Portals: india.gov.in, digilocker.gov.in.</p>
+<p>State Portals: State government official websites.</p>
+<p>College Portals: Used for admission, results, attendance, fees, etc.</p>
+
+<p><b>Email</b></p>
+
+<p><b>Advantages of Email:</b></p>
+<p>1) Fast communication.</p>
+<p>2) Low cost.</p>
+<p>3) Can send documents and files.</p>
+<p>4) Easy to store messages.</p>
+
+<p><b>Various Email Service Providers:</b></p>
+<p>Gmail, Yahoo Mail, Outlook.</p>
+
+<p><b>Creation of Email ID:</b></p>
+<p>1) Go to email website (like gmail.com).</p>
+<p>2) Click on "Create account".</p>
+<p>3) Fill name, username, password.</p>
+<p>4) Verify mobile number and submit.</p>
+
+<p><b>Sending and Receiving Emails:</b></p>
+<p>To send: Click compose → Enter email address → Write subject → Write message → Click send.</p>
+<p>To receive: Check inbox and open received mail.</p>
+
+<p><b>Attaching Documents:</b></p>
+<p>Click attachment icon → Select file → Upload → Send.</p>
+<p>Files can also be shared through Google Drive link.</p>
+
+<p><b>Effective Use of Google Tools:</b></p>
+
+<p><b>Gmail:</b> Used for sending and receiving emails.</p>
+<p><b>Google Drive:</b> Used to store files online.</p>
+<p><b>Google Calendar:</b> Used to set reminders and schedule events.</p>
+<p><b>Google Sites:</b> Used to create simple websites.</p>
+<p><b>Google Sheets:</b> Used to create online spreadsheets.</p>
+
+<p><b>Online Communication Tools:</b></p>
+<p><b>Google Meet:</b> Used for online meetings and video calls.</p>
+<p><b>WebEx:</b> Used for online classes, meetings, and webinars.</p>
+<p><b>BASIC LOGIC BUILDING</b></p>
+
+<p><b>Introduction to Programming:</b></p>
+<p>Programming means writing instructions for a computer to perform a task. 
+It helps in solving problems step by step using logic.</p>
+
+<p><b>Steps Involved in Problem Solving:</b></p>
+<p>1) Understand the problem.</p>
+<p>2) Analyze the input and output.</p>
+<p>3) Develop an algorithm.</p>
+<p>4) Draw a flowchart.</p>
+<p>5) Write the program.</p>
+<p>6) Test and debug the program.</p>
+
+<p><b>Definition of Algorithm:</b></p>
+<p>An algorithm is a step-by-step procedure to solve a problem.</p>
+
+<p><b>Definition of Flowchart:</b></p>
+<p>A flowchart is a diagram that shows the steps of a solution using symbols.</p>
+
+<p><b>Steps in Algorithm Development:</b></p>
+<p>1) Start</p>
+<p>2) Take input</p>
+<p>3) Process the data</p>
+<p>4) Display output</p>
+<p>5) Stop</p>
+
+<p><b>Difference Between Algorithm and Flowchart:</b></p>
+<p>Algorithm – Written in simple steps using words.</p>
+<p>Flowchart – Drawn using symbols and diagrams.</p>
+
+<p><b>Symbols Used in Flowcharts:</b></p>
+<p>1) Oval – Start/Stop</p>
+<p>2) Rectangle – Process</p>
+<p>3) Parallelogram – Input/Output</p>
+<p>4) Diamond – Decision (Yes/No)</p>
+<p>5) Arrow – Direction of flow</p>
+
+<p><b>Algorithm for Simple Problem (Add Two Numbers):</b></p>
+<p>1) Start</p>
+<p>2) Input two numbers A and B</p>
+<p>3) C = A + B</p>
+<p>4) Display C</p>
+<p>5) Stop</p>
+
+<p><b>Flowchart Steps for Adding Two Numbers:</b></p>
+<p>Start → Input A, B → Process C = A + B → Display C → Stop</p>
+
+<p><b>Practice Logic Building Example (Check Even or Odd):</b></p>
+<p><b>Algorithm:</b></p>
+<p>1) Start</p>
+<p>2) Input number N</p>
+<p>3) If N % 2 = 0, print "Even"</p>
+<p>4) Else print "Odd"</p>
+<p>5) Stop</p>
+
+<p><b>Flowchart Steps:</b></p>
+<p>Start → Input N → Decision (N % 2 = 0?) → Yes: Print Even → No: Print Odd → Stop</p>
+<p><b>OFFICE TOOLS</b></p>
+
+<p><b>Office Tools:</b></p>
+<p>Office tools are software used to create documents, spreadsheets, and presentations.</p>
+<p>Examples: LibreOffice, OpenOffice, MS Office.</p>
+
+<p><b>OpenOffice Writer</b></p>
+
+<p><b>Typesetting and Basic Formatting:</b></p>
+<p>Writer is used to create documents like letters and reports.</p>
+<p>Basic formatting includes changing font style, size, color, bold, italic, underline, alignment, and spacing.</p>
+
+<p><b>Inserting Images:</b></p>
+<p>Go to Insert → Picture → Select image → Insert.</p>
+
+<p><b>Hyperlinks:</b></p>
+<p>Used to connect text to a website or another document.</p>
+<p>Insert → Hyperlink → Enter web address.</p>
+
+<p><b>Bookmarks:</b></p>
+<p>Bookmarks help to quickly move to a specific part of the document.</p>
+
+<p><b>Tables and Table Properties:</b></p>
+<p>Insert → Table → Select number of rows and columns.</p>
+<p>Table properties allow changing border, size, alignment, and background color.</p>
+
+<p><b>LibreOffice/OpenOffice Calc</b></p>
+
+<p><b>Introduction:</b></p>
+<p>Calc is used to create spreadsheets for calculations and data management.</p>
+
+<p><b>Working with Cells and Sheets:</b></p>
+<p>Data is entered in cells. Many cells form a worksheet (sheet).</p>
+
+<p><b>Using Formulae and Functions:</b></p>
+<p>Formulas start with = sign.</p>
+<p>Example: =A1+B1</p>
+<p>Functions: SUM(), AVERAGE(), MAX(), MIN().</p>
+
+<p><b>Using Charts and Graphics:</b></p>
+<p>Charts are used to represent data visually (Bar chart, Pie chart, Line chart).</p>
+
+<p><b>OpenOffice Impress</b></p>
+
+<p><b>Creating and Viewing Presentations:</b></p>
+<p>Impress is used to create slide presentations.</p>
+
+<p><b>Inserting Pictures and Tables:</b></p>
+<p>Insert → Picture or Table → Choose file or set rows and columns.</p>
+
+<p><b>Slide Master and Slide Design:</b></p>
+<p>Slide Master is used to apply same design to all slides.</p>
+<p>Slide Design changes background, theme, and layout.</p>
+
+<p><b>Custom Animation:</b></p>
+<p>Used to add animation effects to text and objects in slides.</p>
+<p>Animations make presentation more attractive.</p>
+<p><b>USE OF SOCIAL MEDIA</b></p>
+
+<p><b>Introduction to Digital Marketing:</b></p>
+<p>Digital marketing means promoting products or services using the internet and digital platforms.</p>
+
+<p><b>Why Digital Marketing?</b></p>
+<p>1) Low cost compared to traditional marketing.</p>
+<p>2) Reaches large number of people.</p>
+<p>3) Fast communication.</p>
+<p>4) Easy to measure results.</p>
+
+<p><b>Characteristics of Digital Marketing:</b></p>
+<p>1) Online based.</p>
+<p>2) Target specific audience.</p>
+<p>3) Interactive communication.</p>
+<p>4) Quick feedback from customers.</p>
+
+<p><b>Tools for Digital Marketing:</b></p>
+<p>1) Social Media Marketing.</p>
+<p>2) Email Marketing.</p>
+<p>3) Search Engine Optimization (SEO).</p>
+<p>4) Content Marketing.</p>
+<p>5) Online Advertisements (Google Ads).</p>
+
+<p><b>Effective Use of Social Media:</b></p>
+
+<p><b>LinkedIn:</b> Used for professional networking and job opportunities.</p>
+<p><b>Google+:</b> Social networking platform (now discontinued).</p>
+<p><b>Facebook:</b> Used for sharing posts, photos, videos and business promotion.</p>
+<p><b>Twitter:</b> Used for short messages and updates.</p>
+
+<p><b>Features of Social Media:</b></p>
+<p>1) Create profiles and pages.</p>
+<p>2) Share text, images, videos.</p>
+<p>3) Like, comment and share posts.</p>
+<p>4) Connect with people worldwide.</p>
+
+<p><b>Advantages of Social Media:</b></p>
+<p>1) Easy communication.</p>
+<p>2) Business promotion.</p>
+<p>3) Knowledge sharing.</p>
+<p>4) Entertainment.</p>
+
+<p><b>Disadvantages of Social Media:</b></p>
+<p>1) Addiction.</p>
+<p>2) Privacy issues.</p>
+<p>3) Fake news.</p>
+<p>4) Time wasting.</p>
+
+        `;
+    }
+  if(subject === "ait"){
+        subjectTitle.innerText = "Advances in IT";
+        notesContent.innerHTML = `
+           <p><b>HTML FUNDAMENTALS</b></p>
+
+<p><b>Introduction to HTML:</b></p>
+<p>HTML stands for HyperText Markup Language. It is used to create web pages.</p>
+
+<p><b>Characteristics of HTML:</b></p>
+<p>1) Simple and easy to learn.</p>
+<p>2) Uses tags to define elements.</p>
+<p>3) Platform independent (works on any browser).</p>
+<p>4) Used to design structure of web pages.</p>
+
+<p><b>Structure of an HTML Page:</b></p>
+<p>&lt;html&gt;</p>
+<p>&lt;head&gt;</p>
+<p>&lt;title&gt;Page Title&lt;/title&gt;</p>
+<p>&lt;/head&gt;</p>
+<p>&lt;body&gt;</p>
+<p>Content of page</p>
+<p>&lt;/body&gt;</p>
+<p>&lt;/html&gt;</p>
+
+<p><b>Describing Tags:</b></p>
+<p>Tags are keywords enclosed in angle brackets &lt; &gt;.</p>
+<p>Most tags have opening and closing tags.</p>
+<p>Example: &lt;p&gt;Paragraph&lt;/p&gt;</p>
+
+<p><b>How to Create an HTML Document?</b></p>
+<p>1) Open Notepad.</p>
+<p>2) Write HTML code.</p>
+<p>3) Save file with .html extension.</p>
+<p>4) Open file in web browser.</p>
+
+<p><b>Viewing HTML Document:</b></p>
+<p>Open the saved .html file in browser like Chrome or Edge.</p>
+
+<p><b>Commonly Used Web Browsers:</b></p>
+<p>Google Chrome, Microsoft Edge, Mozilla Firefox.</p>
+
+<p><b>HTML4 – List of Important Tags:</b></p>
+<p>&lt;html&gt;, &lt;head&gt;, &lt;title&gt;, &lt;body&gt;, &lt;p&gt;, &lt;h1&gt; to &lt;h6&gt;, &lt;br&gt;, &lt;hr&gt;, &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;font&gt;, &lt;center&gt;</p>
+
+<p><b>Container Elements:</b></p>
+<p>Tags that have opening and closing tags.</p>
+<p>Example: &lt;p&gt;Text&lt;/p&gt;</p>
+
+<p><b>Empty Elements:</b></p>
+<p>Tags that do not have closing tag.</p>
+<p>Example: &lt;br&gt;, &lt;hr&gt;</p>
+
+<p><b>Using Basic Tags:</b></p>
+
+<p><b>Heading Tag:</b></p>
+<p>&lt;h1&gt; to &lt;h6&gt; are used for headings.</p>
+
+<p><b>Paragraph Tag:</b></p>
+<p>&lt;p&gt; is used to write paragraph.</p>
+
+<p><b>Changing Appearance of Text:</b></p>
+<p>&lt;b&gt;Bold&lt;/b&gt;</p>
+<p>&lt;i&gt;Italic&lt;/i&gt;</p>
+<p>&lt;u&gt;Underline&lt;/u&gt;</p>
+<p>&lt;sub&gt;Subscript&lt;/sub&gt;</p>
+<p>&lt;sup&gt;Superscript&lt;/sup&gt;</p>
+
+<p><b>Center Tag:</b></p>
+<p>&lt;center&gt;Text&lt;/center&gt;</p>
+
+<p><b>Title Tag:</b></p>
+<p>&lt;title&gt;Page Title&lt;/title&gt; (Displayed on browser tab)</p>
+
+<p><b>Changing Font Size and Color:</b></p>
+<p>&lt;font size="4" color="red"&gt;Text&lt;/font&gt;</p>
+
+<p><b>Changing Background Color:</b></p>
+<p>&lt;body bgcolor="yellow"&gt;</p>
+
+<p><b>Background Image:</b></p>
+<p>&lt;body background="image.jpg"&gt;</p>
+
+<p><b>Top Margin and Left Margin:</b></p>
+<p>&lt;body topmargin="50" leftmargin="50"&gt;</p>
+
+<p><b>&amp;nbsp:</b></p>
+<p>&amp;nbsp; is used to give extra space between words.</p>
+
+<p><b>&lt;hr&gt; Tag:</b></p>
+<p>&lt;hr&gt; is used to draw a horizontal line.</p>
+<p>Attributes: size, width, color.</p>
+<p>Example: &lt;hr size="3" width="50%" color="blue"&gt;</p>
+<p><b>WORKING WITH HTML</b></p>
+
+<p><b>Using Lists</b></p>
+
+<p><b>Unordered List:</b></p>
+<p>Used to display items with bullets.</p>
+<p>Tag: &lt;ul&gt;</p>
+<p>Type attribute values: disc, circle, square</p>
+<p>Example:</p>
+<p>&lt;ul type="circle"&gt;</p>
+<p>&lt;li&gt;Apple&lt;/li&gt;</p>
+<p>&lt;li&gt;Banana&lt;/li&gt;</p>
+<p>&lt;/ul&gt;</p>
+
+<p><b>Ordered List:</b></p>
+<p>Used to display items with numbers or letters.</p>
+<p>Tag: &lt;ol&gt;</p>
+<p>Attributes:</p>
+<p>type="1" (numbers), type="A", type="a", type="I", type="i"</p>
+<p>start="5" (starts list from 5)</p>
+<p>value="3" (sets specific number for list item)</p>
+
+<p>Example:</p>
+<p>&lt;ol type="A" start="2"&gt;</p>
+<p>&lt;li&gt;Item 1&lt;/li&gt;</p>
+<p>&lt;li value="5"&gt;Item 2&lt;/li&gt;</p>
+<p>&lt;/ol&gt;</p>
+
+<p><b>Nested List:</b></p>
+<p>A list inside another list.</p>
+<p>Example:</p>
+<p>&lt;ul&gt;</p>
+<p>&lt;li&gt;Fruits</p>
+<p>&lt;ul&gt;</p>
+<p>&lt;li&gt;Apple&lt;/li&gt;</p>
+<p>&lt;li&gt;Mango&lt;/li&gt;</p>
+<p>&lt;/ul&gt;</p>
+<p>&lt;/li&gt;</p>
+<p>&lt;/ul&gt;</p>
+
+<p><b>Working with Images</b></p>
+
+<p><b>Inserting Image:</b></p>
+<p>&lt;img src="image.jpg"&gt;</p>
+
+<p><b>Alternate Text:</b></p>
+<p>&lt;img src="image.jpg" alt="Sample Image"&gt;</p>
+
+<p><b>Setting Height and Width:</b></p>
+<p>&lt;img src="image.jpg" height="200" width="300"&gt;</p>
+
+<p><b>Aligning Image:</b></p>
+<p>&lt;img src="image.jpg" align="left"&gt;</p>
+
+<p><b>Centering Image:</b></p>
+<p>&lt;center&gt;&lt;img src="image.jpg"&gt;&lt;/center&gt;</p>
+
+<p><b>Adding Border:</b></p>
+<p>&lt;img src="image.jpg" border="2"&gt;</p>
+
+<p><b>Adding Space Around Image:</b></p>
+<p>&lt;img src="image.jpg" hspace="10" vspace="10"&gt;</p>
+
+<p><b>Working with Links</b></p>
+
+<p><b>Anchor Element:</b></p>
+<p>Tag: &lt;a&gt;</p>
+
+<p><b>Creating Hyperlink to a Document:</b></p>
+<p>&lt;a href="file.html"&gt;Click Here&lt;/a&gt;</p>
+
+<p><b>External Linking:</b></p>
+<p>Link to another website.</p>
+<p>&lt;a href="https://www.google.com"&gt;Google&lt;/a&gt;</p>
+
+<p><b>Internal Linking:</b></p>
+<p>Link within the same page.</p>
+<p>&lt;a href="#section1"&gt;Go to Section 1&lt;/a&gt;</p>
+<p>&lt;h2 id="section1"&gt;Section 1&lt;/h2&gt;</p>
+<p><b>DESIGNING WITH HTML</b></p>
+
+<p><b>Creating Tables:</b></p>
+<p>A table is used to arrange data in rows and columns.</p>
+
+<p><b>Basic Structure of Table:</b></p>
+<p>&lt;table&gt;</p>
+<p>&lt;tr&gt;</p>
+<p>&lt;td&gt;Data&lt;/td&gt;</p>
+<p>&lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+
+<p><b>Attributes of &lt;table&gt; Tag:</b></p>
+<p>BORDER – Sets border thickness.</p>
+<p>BORDERCOLOR – Sets border color.</p>
+<p>BGCOLOR – Sets background color.</p>
+<p>ALIGN – Aligns table (left, center, right).</p>
+<p>CELLSPACING – Space between cells.</p>
+<p>CELLPADDING – Space inside cells.</p>
+<p>WIDTH – Sets width of table.</p>
+
+<p><b>Example:</b></p>
+<p>&lt;table border="1" bgcolor="yellow" align="center" width="50%"&gt;</p>
+
+<p><b>Attributes of &lt;tr&gt; (Table Row):</b></p>
+<p>BGCOLOR – Row background color.</p>
+<p>ALIGN – Horizontal alignment.</p>
+<p>VALIGN – Vertical alignment.</p>
+<p>HEIGHT – Row height.</p>
+
+<p><b>Attributes of &lt;td&gt; (Table Data):</b></p>
+<p>BORDERCOLOR – Cell border color.</p>
+<p>BGCOLOR – Cell background color.</p>
+<p>ALIGN – Horizontal alignment.</p>
+<p>VALIGN – Vertical alignment.</p>
+<p>HEIGHT – Cell height.</p>
+
+<p><b>Rowspan and Colspan:</b></p>
+<p>ROWSPAN – Merges rows.</p>
+<p>COLSPAN – Merges columns.</p>
+
+<p><b>Example:</b></p>
+<p>&lt;td rowspan="2"&gt;Merged Rows&lt;/td&gt;</p>
+<p>&lt;td colspan="2"&gt;Merged Columns&lt;/td&gt;</p>
+
+<p><b>Working with Frames:</b></p>
+<p>Frames divide a browser window into multiple sections.</p>
+
+<p><b>Creating Frames:</b></p>
+<p>&lt;frameset cols="50%,50%"&gt;</p>
+<p>&lt;frame src="page1.html"&gt;</p>
+<p>&lt;frame src="page2.html"&gt;</p>
+<p>&lt;/frameset&gt;</p>
+
+<p><b>Use of Frames:</b></p>
+<p>1) Show multiple pages in one window.</p>
+<p>2) Keep menu fixed and change content page.</p>
+
+<p><b>Introduction to Forms:</b></p>
+<p>Forms are used to collect user input.</p>
+
+<p><b>Basic Form Example:</b></p>
+<p>&lt;form&gt;</p>
+<p>Name: &lt;input type="text"&gt;</p>
+<p>&lt;input type="submit"&gt;</p>
+<p>&lt;/form&gt;</p>
+
+<p><b>Steps for Developing a Website:</b></p>
+<p>1) Plan the website (purpose and content).</p>
+<p>2) Design layout and structure.</p>
+<p>3) Create web pages using HTML.</p>
+<p>4) Add images, links, tables, forms.</p>
+<p>5) Test website in browser.</p>
+<p>6) Upload to web server (hosting).</p>
+<p><b>JAVASCRIPT OVERVIEW AND CORE LANGUAGE FEATURES</b></p>
+
+<p><b>Introduction to Scripting Languages:</b></p>
+<p>Scripting languages are programming languages used to make web pages interactive. 
+They run inside a web browser. Example: JavaScript.</p>
+
+<p><b>JavaScript Implementation:</b></p>
+<p><b>ECMAScript:</b> Standard version of JavaScript that defines rules and syntax.</p>
+<p><b>DOM (Document Object Model):</b> Allows JavaScript to access and modify HTML elements.</p>
+<p><b>BOM (Browser Object Model):</b> Allows JavaScript to interact with browser (alert, window, history).</p>
+
+<p><b>Values:</b></p>
+<p>Values are data like numbers, text, true/false.</p>
+
+<p><b>Variables:</b></p>
+<p>Variables store data values.</p>
+<p>Example: var x = 10;</p>
+
+<p><b>Literals:</b></p>
+<p>Fixed values written directly in code.</p>
+<p>Example: 5, "Hello", true.</p>
+
+<p><b>Constants:</b></p>
+<p>Values that cannot be changed.</p>
+<p>Example: const pi = 3.14;</p>
+
+<p><b>Operators:</b></p>
+<p>Used to perform operations.</p>
+<p>Arithmetic: +, -, *, /</p>
+<p>Comparison: ==, !=, &gt;, &lt;</p>
+<p>Logical: &amp;&amp;, ||</p>
+
+<p><b>Expressions:</b></p>
+<p>Combination of variables, values and operators.</p>
+<p>Example: x + y</p>
+
+<p><b>Regular Expressions:</b></p>
+<p>Used to check patterns in text (like email validation).</p>
+
+<p><b>Conditional Branching Statements:</b></p>
+<p>if, if-else, switch</p>
+<p>Example:</p>
+<p>if (x &gt; 10) { alert("Greater"); }</p>
+
+<p><b>Conditional Looping Statements:</b></p>
+<p>for loop, while loop, do-while loop</p>
+<p>Example:</p>
+<p>for (var i = 0; i &lt; 5; i++) { console.log(i); }</p>
+
+<p><b>Functions:</b></p>
+<p>A block of code used to perform a task.</p>
+<p>Example:</p>
+<p>function greet() { alert("Hello"); }</p>
+
+<p><b>Creating Simple JavaScript Page:</b></p>
+<p>&lt;script&gt;</p>
+<p>alert("Welcome to JavaScript");</p>
+<p>&lt;/script&gt;</p>
+
+<p><b>Adding JavaScript into HTML:</b></p>
+<p>Method 1: Inside HTML file using &lt;script&gt; tag.</p>
+<p>Method 2: External JavaScript file.</p>
+<p>&lt;script src="script.js"&gt;&lt;/script&gt;</p>
+<p><b>DOCUMENT ACCESS</b></p>
+
+<p><b>Document Object Model (DOM):</b></p>
+<p>DOM is a tree structure that represents an HTML document. 
+It allows JavaScript to access and change HTML elements.</p>
+
+<p><b>Mapping Your HTML:</b></p>
+<p>In DOM, every HTML element is treated as an object (node). 
+These nodes are arranged in a tree format.</p>
+
+<p><b>Text Nodes:</b></p>
+<p>Text inside an HTML element is called a text node.</p>
+<p>Example: &lt;p&gt;Hello&lt;/p&gt; → "Hello" is text node.</p>
+
+<p><b>Attribute Nodes:</b></p>
+<p>Attributes of elements are attribute nodes.</p>
+<p>Example: &lt;p id="para1"&gt; → id is an attribute node.</p>
+
+<p><b>Accessing the Nodes:</b></p>
+
+<p><b>Finding Element by ID:</b></p>
+<p>document.getElementById("idname");</p>
+
+<p><b>Finding Elements by Tag Name:</b></p>
+<p>document.getElementsByTagName("p");</p>
+
+<p><b>Finding Elements by Class Name:</b></p>
+<p>document.getElementsByClassName("classname");</p>
+
+<p><b>Navigating the DOM Tree:</b></p>
+<p>parentNode – Access parent element.</p>
+<p>childNodes – Access child elements.</p>
+<p>nextSibling – Access next element.</p>
+<p>previousSibling – Access previous element.</p>
+
+<p><b>Interacting with Attributes:</b></p>
+<p>getAttribute("attribute") – Get attribute value.</p>
+<p>setAttribute("attribute", "value") – Change attribute value.</p>
+
+<p><b>Changing Styles:</b></p>
+
+<p><b>Changing Style with ID:</b></p>
+<p>document.getElementById("idname").style.color = "red";</p>
+
+<p><b>Changing Style with Class:</b></p>
+<p>document.getElementsByClassName("classname")[0].style.backgroundColor = "yellow";</p>
+
+<p><b>Font Properties:</b></p>
+<p>font-size, font-family, font-weight.</p>
+
+<p><b>Table Layout:</b></p>
+<p>border, width, text-align, border-collapse.</p>
+
+<p><b>Text Properties:</b></p>
+<p>color, text-align, text-decoration, line-height.</p>
+
+<p><b>Padding, Borders and Margins:</b></p>
+<p>padding – Space inside element.</p>
+<p>border – Line around element.</p>
+<p>margin – Space outside element.</p>
+
+        `;
+    }
+
+    if(subject === "math2"){
+        subjectTitle.innerText = "Applied Mathematics-II";
+        notesContent.innerHTML = `
+            <h3>Main Topics</h3>
+            <ul>
+                <li>Laplace Transform</li>
+                <li>Fourier Series</li>
+                <li>Differential Equations</li>
+                <li>Vector Calculus</li>
+            </ul>
+        `;
+    }
+
+    if(subject === "physics2"){
+        subjectTitle.innerText = "Applied Physics - II";
+        notesContent.innerHTML = `
+        <p><b>WAVE MOTION AND ITS APPLICATIONS</b></p>
+
+<p><b>Waves:</b></p>
+<p><b>Definition:</b> A wave is a disturbance that transfers energy from one place to another without transfer of matter.</p>
+
+<p><b>Types of Waves:</b></p>
+<p>1) <b>Mechanical Waves:</b> Need a material medium to travel. Example: Sound waves.</p>
+<p>2) <b>Electromagnetic Waves:</b> Do not need any medium. Example: Light waves.</p>
+
+<p><b>Wave Motion:</b></p>
+
+<p><b>Transverse Waves:</b></p>
+<p>Particles vibrate perpendicular to the direction of wave motion.</p>
+<p>Example: Water waves, light waves.</p>
+
+<p><b>Longitudinal Waves:</b></p>
+<p>Particles vibrate parallel to the direction of wave motion.</p>
+<p>Example: Sound waves.</p>
+
+<p><b>Important Terms in Wave Motion:</b></p>
+<p><b>Displacement:</b> Distance of particle from its mean position.</p>
+<p><b>Amplitude (A):</b> Maximum displacement of a particle.</p>
+<p><b>Time Period (T):</b> Time taken to complete one vibration.</p>
+<p><b>Frequency (f):</b> Number of vibrations per second.</p>
+<p><b>Wavelength (λ):</b> Distance between two similar points (crest to crest).</p>
+<p><b>Wave Velocity (v):</b> Speed of wave.</p>
+
+<p><b>Relation:</b></p>
+<p>v = fλ</p>
+
+<p><b>Simple Harmonic Motion (SHM):</b></p>
+<p><b>Definition:</b> A motion in which restoring force is directly proportional to displacement and acts towards mean position.</p>
+<p><b>Examples:</b> Motion of pendulum, vibration of spring.</p>
+
+<p><b>Cantilever:</b></p>
+<p><b>Definition:</b> A beam fixed at one end and free at the other end.</p>
+<p><b>Time Period Formula:</b> T = 2π √(m/k)</p>
+
+<p><b>Vibrations:</b></p>
+<p><b>Free Vibrations:</b> Vibrations without external force. Example: Tuning fork.</p>
+<p><b>Forced Vibrations:</b> Vibrations under external periodic force. Example: Window glass vibrating due to loud music.</p>
+<p><b>Resonant Vibrations:</b> When frequency of external force equals natural frequency. Example: Breaking of glass by sound.</p>
+
+<p><b>Sound Waves:</b></p>
+<p>Sound is a mechanical longitudinal wave.</p>
+
+<p><b>Types of Sound Based on Frequency:</b></p>
+<p>1) <b>Infrasonic:</b> Frequency less than 20 Hz.</p>
+<p>2) <b>Audible:</b> Frequency between 20 Hz to 20,000 Hz.</p>
+<p>3) <b>Ultrasonic:</b> Frequency greater than 20,000 Hz.</p>
+
+<p><b>Noise:</b></p>
+<p>Unwanted or unpleasant sound.</p>
+
+<p><b>Coefficient of Absorption of Sound:</b></p>
+<p>It is the fraction of sound energy absorbed by a surface.</p>
+
+<p><b>Echo:</b></p>
+<p>Reflection of sound heard again after some time.</p>
+<p>Minimum distance to hear echo is about 17 meters.</p>
+<p><b>OPTICS</b></p>
+
+<p><b>Reflection of Light:</b></p>
+<p>Reflection is the bouncing back of light from a surface.</p>
+<p><b>Laws of Reflection:</b></p>
+<p>1) Angle of incidence = Angle of reflection.</p>
+<p>2) Incident ray, reflected ray and normal lie in the same plane.</p>
+
+<p><b>Refraction of Light:</b></p>
+<p>Refraction is the bending of light when it passes from one medium to another.</p>
+<p><b>Laws of Refraction (Snell’s Law):</b></p>
+<p>1) Incident ray, refracted ray and normal lie in the same plane.</p>
+<p>2) n = sin i / sin r</p>
+
+<p><b>Refractive Index (n):</b></p>
+<p>Refractive index is the ratio of speed of light in vacuum to speed of light in medium.</p>
+<p>n = c / v</p>
+
+<p><b>Lens:</b></p>
+<p>A lens is a transparent curved surface that refracts light.</p>
+<p>Types: Convex lens and Concave lens.</p>
+
+<p><b>Lens Formula:</b></p>
+<p>1/f = 1/v - 1/u</p>
+<p>Where f = focal length, v = image distance, u = object distance.</p>
+
+<p><b>Power of Lens:</b></p>
+<p>Power (P) = 1/f (f in meter)</p>
+<p>SI Unit: Dioptre (D)</p>
+
+<p><b>Simple Numerical Example:</b></p>
+<p>If focal length = 0.5 m,</p>
+<p>P = 1 / 0.5 = 2 D</p>
+
+<p><b>Total Internal Reflection (TIR):</b></p>
+<p>When light travels from denser to rarer medium and angle of incidence is greater than critical angle, light reflects back completely.</p>
+
+<p><b>Critical Angle:</b></p>
+<p>The angle of incidence in denser medium for which angle of refraction is 90°.</p>
+
+<p><b>Conditions for TIR:</b></p>
+<p>1) Light must travel from denser to rarer medium.</p>
+<p>2) Angle of incidence must be greater than critical angle.</p>
+
+<p><b>Applications of TIR:</b></p>
+<p>1) Optical fiber.</p>
+<p>2) Diamond sparkle.</p>
+<p>3) Periscope.</p>
+
+<p><b>Superposition of Waves:</b></p>
+<p>When two or more waves meet, the resultant displacement is the sum of individual displacements.</p>
+
+<p><b>Interference:</b></p>
+<p>Interference is the formation of bright and dark fringes due to superposition of waves.</p>
+
+<p><b>Diffraction:</b></p>
+<p>Diffraction is bending of waves around obstacles.</p>
+
+<p><b>Polarization:</b></p>
+<p>Polarization is the restriction of vibrations of light waves in one direction.</p>
+
+<p><b>Microscope:</b></p>
+<p>An instrument used to see very small objects.</p>
+<p>Application: Used in laboratories and medical field.</p>
+
+<p><b>Telescope:</b></p>
+<p>An instrument used to see distant objects clearly.</p>
+<p>Application: Used in astronomy.</p>
+<p><b>ELECTROSTATICS AND ELECTRICITY</b></p>
+
+<p><b>Electric Charge:</b></p>
+<p>Electric charge is a basic property of matter due to which it experiences electric force.</p>
+<p>Two types: Positive charge and Negative charge.</p>
+<p><b>SI Unit:</b> Coulomb (C)</p>
+
+<p><b>Conservation of Charge:</b></p>
+<p>Electric charge can neither be created nor destroyed. It can only be transferred.</p>
+
+<p><b>Coulomb’s Law:</b></p>
+<p>The force between two charges is directly proportional to the product of charges and inversely proportional to the square of the distance between them.</p>
+<p><b>Formula:</b> F = k(q₁q₂ / r²)</p>
+
+<p><b>Electric Field:</b></p>
+<p>The region around a charge where it experiences force is called electric field.</p>
+
+<p><b>Electric Lines of Force:</b></p>
+<p>Imaginary lines that show direction of electric field.</p>
+<p><b>Properties:</b></p>
+<p>1) They start from positive and end at negative charge.</p>
+<p>2) They never intersect.</p>
+<p>3) Closer lines mean stronger field.</p>
+
+<p><b>Electric Field Intensity:</b></p>
+<p>Force per unit charge.</p>
+<p><b>Formula:</b> E = F/q</p>
+<p>For point charge: E = kQ / r²</p>
+
+<p><b>Electric Flux:</b></p>
+<p>Total number of electric field lines passing through a surface.</p>
+
+<p><b>Gauss Law:</b></p>
+<p>The total electric flux through a closed surface is equal to 1/ε₀ times the charge enclosed.</p>
+<p><b>Formula:</b> Φ = Q / ε₀</p>
+
+<p><b>Capacitor:</b></p>
+<p>A device used to store electric charge.</p>
+
+<p><b>Capacitance:</b></p>
+<p>Capacitance is the ability of a capacitor to store charge.</p>
+<p><b>Formula:</b> C = Q/V</p>
+<p><b>SI Unit:</b> Farad (F)</p>
+
+<p><b>Electric Current:</b></p>
+<p>Flow of electric charge.</p>
+<p><b>Formula:</b> I = Q/t</p>
+<p><b>SI Unit:</b> Ampere (A)</p>
+
+<p><b>Direct Current (DC):</b></p>
+<p>Current flowing in one direction only.</p>
+
+<p><b>Alternating Current (AC):</b></p>
+<p>Current that changes direction periodically.</p>
+
+<p><b>Resistance:</b></p>
+<p>Opposition offered to flow of current.</p>
+<p><b>SI Unit:</b> Ohm (Ω)</p>
+
+<p><b>Conductance:</b></p>
+<p>Ability to conduct electricity.</p>
+<p><b>Formula:</b> G = 1/R</p>
+<p><b>SI Unit:</b> Siemens (S)</p>
+
+<p><b>Series Combination of Resistances:</b></p>
+<p>Total Resistance: R = R₁ + R₂ + R₃</p>
+
+<p><b>Parallel Combination of Resistances:</b></p>
+<p>1/R = 1/R₁ + 1/R₂ + 1/R₃</p>
+
+<p><b>Ohm’s Law:</b></p>
+<p>The current through a conductor is directly proportional to the potential difference across it at constant temperature.</p>
+<p><b>Formula:</b> V = IR</p>
+<p><b>CLASSIFICATION OF MATERIALS AND THEIR PROPERTIES</b></p>
+
+<p><b>Energy Level:</b></p>
+<p>An energy level is a fixed amount of energy that an electron can have in an atom.</p>
+
+<p><b>Energy Bands:</b></p>
+<p>In solids, energy levels combine to form energy bands.</p>
+<p>Main energy bands:</p>
+<p>1) Valence Band – Outer band containing electrons.</p>
+<p>2) Conduction Band – Band where electrons are free to move.</p>
+<p>3) Energy Gap – Gap between valence and conduction band.</p>
+
+<p><b>Types of Materials:</b></p>
+
+<p><b>1) Conductor:</b></p>
+<p>Materials that allow electric current to pass easily.</p>
+<p>Example: Copper, Aluminum.</p>
+
+<p><b>2) Semiconductor:</b></p>
+<p>Materials that have conductivity between conductor and insulator.</p>
+<p>Example: Silicon, Germanium.</p>
+
+<p><b>3) Insulator:</b></p>
+<p>Materials that do not allow electric current to pass.</p>
+<p>Example: Rubber, Glass.</p>
+
+<p><b>4) Dielectric:</b></p>
+<p>Insulating material that can store electric energy when placed in electric field.</p>
+<p>Example: Mica, Plastic.</p>
+
+<p><b>Intrinsic Semiconductor:</b></p>
+<p>Pure semiconductor without any impurity.</p>
+
+<p><b>Extrinsic Semiconductor:</b></p>
+<p>Semiconductor with small amount of impurity added to increase conductivity.</p>
+
+<p><b>Introduction to Magnetism:</b></p>
+<p>Magnetism is the property of a material to attract iron or produce magnetic field.</p>
+
+<p><b>Types of Magnetic Materials:</b></p>
+
+<p><b>1) Diamagnetic:</b></p>
+<p>Weakly repelled by magnetic field.</p>
+<p>Example: Bismuth, Copper.</p>
+
+<p><b>2) Paramagnetic:</b></p>
+<p>Weakly attracted by magnetic field.</p>
+<p>Example: Aluminum, Platinum.</p>
+
+<p><b>3) Ferromagnetic:</b></p>
+<p>Strongly attracted by magnetic field.</p>
+<p>Example: Iron, Nickel, Cobalt.</p>
+
+<p><b>Magnetic Field:</b></p>
+<p>The region around a magnet where magnetic force is experienced.</p>
+
+<p><b>Magnetic Lines of Force:</b></p>
+<p>Imaginary lines that show direction of magnetic field.</p>
+<p>They go from North pole to South pole outside the magnet.</p>
+
+<p><b>Magnetic Flux:</b></p>
+<p>Total number of magnetic field lines passing through a surface.</p>
+
+<p><b>Electromagnetic Induction:</b></p>
+<p>It is the process of producing electric current by changing magnetic field.</p>
+<p><b>MODERN PHYSICS</b></p>
+
+<p><b>LASER</b></p>
+
+<p><b>Introduction:</b></p>
+<p>LASER stands for Light Amplification by Stimulated Emission of Radiation. 
+It produces a highly intense, monochromatic and coherent beam of light.</p>
+
+<p><b>Principle of Laser:</b></p>
+<p>Laser works on the principle of stimulated emission and population inversion.</p>
+
+<p><b>Absorption:</b></p>
+<p>When an electron absorbs energy, it moves from lower energy level to higher energy level.</p>
+
+<p><b>Spontaneous Emission:</b></p>
+<p>When an excited electron returns to lower energy level on its own and emits light.</p>
+
+<p><b>Stimulated Emission:</b></p>
+<p>When an incoming photon forces an excited electron to emit a photon of same energy.</p>
+
+<p><b>Population Inversion:</b></p>
+<p>Condition in which number of electrons in higher energy level is more than lower level.</p>
+
+<p><b>Engineering Applications of Laser:</b></p>
+<p>1) Cutting and welding of metals.</p>
+<p>2) Barcode scanners.</p>
+<p>3) Optical communication.</p>
+
+<p><b>Medical Applications of Laser:</b></p>
+<p>1) Eye surgery (LASIK).</p>
+<p>2) Removal of kidney stones.</p>
+<p>3) Skin treatment.</p>
+
+<p><b>FIBRE OPTICS</b></p>
+
+<p><b>Introduction:</b></p>
+<p>Optical fiber is a thin glass or plastic fiber used to transmit light signals.</p>
+
+<p><b>Definition:</b></p>
+<p>An optical fiber is a flexible transparent fiber that transmits light by total internal reflection.</p>
+
+<p><b>Principle:</b></p>
+<p>It works on the principle of total internal reflection.</p>
+
+<p><b>Parts of Optical Fiber:</b></p>
+<p>1) Core</p>
+<p>2) Cladding</p>
+<p>3) Protective coating</p>
+
+<p><b>Light Propagation:</b></p>
+<p>Light travels through the core by repeated total internal reflection.</p>
+
+<p><b>Types of Optical Fibers:</b></p>
+<p>1) Mono-mode (Single mode) – Allows only one light path.</p>
+<p>2) Multi-mode – Allows multiple light paths.</p>
+
+<p><b>Applications:</b></p>
+<p><b>Medical:</b> Endoscopy.</p>
+<p><b>Tele
+
+        `;
+    }
+
+    if(subject === "analog"){
+        subjectTitle.innerText = "Analog Electronics";
+        notesContent.innerHTML = `
+         <p><b>SEMICONDUCTORS AND DIODES</b></p>
+
+<p><b>Electrons:</b></p>
+<p><b>Free Electrons:</b> Electrons that are free to move and conduct electricity.</p>
+<p><b>Valence Electrons:</b> Electrons present in the outermost shell of an atom.</p>
+
+<p><b>Conductors, Insulators and Semiconductors:</b></p>
+
+<p><b>Conductors:</b></p>
+<p>Materials that allow electric current to pass easily.</p>
+<p>Energy bands overlap (no energy gap).</p>
+<p>Example: Copper.</p>
+
+<p><b>Insulators:</b></p>
+<p>Materials that do not allow current to pass.</p>
+<p>Large energy gap between valence and conduction band.</p>
+<p>Example: Glass.</p>
+
+<p><b>Semiconductors:</b></p>
+<p>Materials with conductivity between conductor and insulator.</p>
+<p>Small energy gap.</p>
+<p>Example: Silicon, Germanium.</p>
+
+<p><b>Properties of Semiconductors:</b></p>
+<p>1) Moderate conductivity.</p>
+<p>2) Conductivity increases with temperature.</p>
+<p>3) Can be doped to improve conductivity.</p>
+
+<p><b>Hole Current:</b></p>
+<p>Current due to movement of holes (absence of electrons).</p>
+
+<p><b>Electron-Hole Pair:</b></p>
+<p>When an electron leaves valence band, it creates a hole.</p>
+
+<p><b>Recombination:</b></p>
+<p>When a free electron fills a hole.</p>
+
+<p><b>Doping:</b></p>
+<p>Adding small amount of impurity to pure semiconductor to increase conductivity.</p>
+
+<p><b>Donor Impurity:</b></p>
+<p>Gives extra electrons (Pentavalent atoms like Phosphorus).</p>
+
+<p><b>Acceptor Impurity:</b></p>
+<p>Creates holes (Trivalent atoms like Boron).</p>
+
+<p><b>Intrinsic Semiconductor:</b></p>
+<p>Pure semiconductor without impurity.</p>
+
+<p><b>Extrinsic Semiconductor:</b></p>
+<p>Doped semiconductor with impurities added.</p>
+
+<p><b>N-type Semiconductor:</b></p>
+<p>Formed by adding donor impurity. Majority carriers are electrons.</p>
+
+<p><b>P-type Semiconductor:</b></p>
+<p>Formed by adding acceptor impurity. Majority carriers are holes.</p>
+
+<p><b>Diode:</b></p>
+<p>A diode is a two-terminal semiconductor device that allows current to flow in one direction.</p>
+
+<p><b>Formation of Diode:</b></p>
+<p>Formed by joining P-type and N-type semiconductor (PN junction).</p>
+
+<p><b>Depletion Region:</b></p>
+<p>Region around PN junction where no free charge carriers exist.</p>
+
+<p><b>VI Characteristics:</b></p>
+<p>Forward bias – Current increases after threshold voltage.</p>
+<p>Reverse bias – Very small current flows.</p>
+
+<p><b>Diode Ratings:</b></p>
+<p>Maximum voltage, current and power handling capacity.</p>
+
+<p><b>Types of Diodes:</b></p>
+<p>1) Rectifier diode</p>
+<p>2) Zener diode</p>
+<p>3) LED</p>
+<p>4) Photodiode</p>
+
+<p><b>Applications of Diode:</b></p>
+<p>1) Rectification (AC to DC conversion).</p>
+<p>2) Signal detection.</p>
+<p>3) Protection circuits.</p>
+
+<p><b>Zener Diode:</b></p>
+<p>Special diode used for voltage regulation.</p>
+
+<p><b>Reverse Bias Characteristics:</b></p>
+<p>At breakdown voltage, current increases sharply but voltage remains constant.</p>
+
+<p><b>Voltage Regulation:</b></p>
+<p>Zener diode maintains constant output voltage.</p>
+
+<p><b>Shunt Voltage Regulator:</b></p>
+<p>Zener diode connected in parallel with load to regulate voltage.</p>
+
+<p><b>Applications of Zener Diode:</b></p>
+<p>1) Voltage stabilizer.</p>
+<p>2) Overvoltage protection.</p>
+
+<p><b>Varistor:</b></p>
+<p>A voltage dependent resistor. Resistance changes with voltage.</p>
+<p><b>Application:</b> Protect circuits from voltage spikes.</p>
+
+<p><b>Thermistor:</b></p>
+<p>A temperature dependent resistor. Resistance changes with temperature.</p>
+<p><b>Application:</b> Temperature measurement and control.</p>
+<p><b>TRANSISTORS AND MOSFETs</b></p>
+
+<p><b>Transistor:</b></p>
+<p>A transistor is a three-terminal semiconductor device used for amplification and switching.</p>
+
+<p><b>Terminals:</b></p>
+<p>1) Emitter (E)</p>
+<p>2) Base (B)</p>
+<p>3) Collector (C)</p>
+
+<p><b>Types:</b></p>
+<p>1) NPN</p>
+<p>2) PNP</p>
+
+<p><b>Formation:</b></p>
+<p>NPN: Two N-type layers with one P-type layer in between.</p>
+<p>PNP: Two P-type layers with one N-type layer in between.</p>
+
+<p><b>Ratings:</b></p>
+<p>Maximum voltage, current and power handling capacity.</p>
+
+<p><b>Transistor Biasing:</b></p>
+<p>Biasing means applying proper DC voltage to operate transistor in active region.</p>
+
+<p><b>Importance:</b></p>
+<p>1) Proper operation.</p>
+<p>2) Avoid distortion.</p>
+
+<p><b>Types of Biasing:</b></p>
+<p>1) Fixed bias</p>
+<p>2) Collector-to-base bias</p>
+<p>3) Voltage divider bias</p>
+
+<p><b>Stabilisation:</b></p>
+<p>Maintaining constant operating point despite temperature changes.</p>
+
+<p><b>Thermal Runaway:</b></p>
+<p>Increase in temperature increases current, which further increases temperature and may damage transistor.</p>
+
+<p><b>Heat Sink:</b></p>
+<p>Metal device used to remove excess heat from transistor.</p>
+
+<p><b>Voltage Divider Method:</b></p>
+<p>Most stable biasing method using two resistors to set base voltage.</p>
+
+<p><b>Configurations:</b></p>
+<p>1) Common Emitter (CE)</p>
+<p>2) Common Base (CB)</p>
+<p>3) Common Collector (CC)</p>
+
+<p><b>Applications:</b></p>
+<p>Amplifier, switch, oscillator.</p>
+
+<p><b>Alpha (α):</b></p>
+<p>Current gain in CB configuration.</p>
+<p>α = Ic / Ie</p>
+
+<p><b>Beta (β):</b></p>
+<p>Current gain in CE configuration.</p>
+<p>β = Ic / Ib</p>
+
+<p><b>Relation:</b></p>
+<p>β = α / (1 - α)</p>
+
+<p><b>CE Characteristics:</b></p>
+<p>Cut-off region – No conduction.</p>
+<p>Active region – Used for amplification.</p>
+<p>Saturation region – Fully ON condition.</p>
+
+<p><b>Transistor as a Switch:</b></p>
+<p>Operates between cut-off (OFF) and saturation (ON) region.</p>
+
+<p><b>FET (Field Effect Transistor):</b></p>
+<p>A voltage-controlled semiconductor device.</p>
+<p>Types: JFET and MOSFET.</p>
+
+<p><b>MOSFET:</b></p>
+<p>Metal Oxide Semiconductor Field Effect Transistor.</p>
+
+<p><b>Types:</b></p>
+<p>1) Enhancement mode</p>
+<p>2) Depletion mode</p>
+
+<p><b>N-Type Enhancement MOSFET:</b></p>
+<p><b>Construction:</b> Has gate, source, drain and substrate with insulating oxide layer.</p>
+<p><b>Working:</b> Conducts only when positive voltage is applied to gate.</p>
+<p><b>Characteristics:</b> No current flows at zero gate voltage.</p>
+<p><b>Switch:</b> ON when gate voltage applied, OFF when removed.</p>
+
+<p><b>Applications:</b></p>
+<p>Switching circuits, amplifiers, power control.</p>
+
+<p><b>Ratings:</b></p>
+<p>Maximum drain voltage, current and power.</p>
+
+<p><b>Difference Between BJT and MOSFET:</b></p>
+<p>BJT is current controlled device.</p>
+<p>MOSFET is voltage controlled device.</p>
+<p>BJT has low input impedance.</p>
+<p>MOSFET has high input impedance.</p>
+<p><b>RECTIFIERS, FILTERS AND REGULATORS</b></p>
+
+<p><b>Regulated Power Supply (RPS):</b></p>
+<p>A regulated power supply gives constant DC output voltage.</p>
+
+<p><b>Block Diagram:</b></p>
+<p>AC Supply → Transformer → Rectifier → Filter → Voltage Regulator → DC Output</p>
+
+<p><b>Applications:</b></p>
+<p>1) Electronic circuits</p>
+<p>2) Computers</p>
+<p>3) Communication systems</p>
+
+<p><b>Rectifier:</b></p>
+<p>A rectifier converts AC (Alternating Current) into DC (Direct Current).</p>
+
+<p><b>Half Wave Rectifier:</b></p>
+<p>Uses one diode. Converts only one half cycle of AC into DC.</p>
+
+<p><b>Full Wave Rectifier (Centre Tapped):</b></p>
+<p>Uses two diodes and centre tapped transformer. Converts both half cycles.</p>
+
+<p><b>Bridge Rectifier:</b></p>
+<p>Uses four diodes. Does not need centre tapped transformer.</p>
+
+<p><b>Efficiency:</b></p>
+<p>Half wave efficiency ≈ 40.6%</p>
+<p>Full wave efficiency ≈ 81.2%</p>
+
+<p><b>Ripple Factor:</b></p>
+<p>Measure of AC component present in DC output.</p>
+<p>Lower ripple factor means smoother DC.</p>
+
+<p><b>PIV (Peak Inverse Voltage):</b></p>
+<p>Maximum reverse voltage a diode can withstand.</p>
+
+<p><b>Ratings:</b></p>
+<p>Maximum current, voltage and power capacity of diode.</p>
+
+<p><b>Filters:</b></p>
+<p>A filter removes unwanted AC ripples from rectified output.</p>
+
+<p><b>Necessity:</b></p>
+<p>To get smooth DC voltage.</p>
+
+<p><b>C Filter (Capacitor Filter):</b></p>
+<p>Uses capacitor to reduce ripple.</p>
+
+<p><b>PI Filter:</b></p>
+<p>Combination of capacitor, inductor and capacitor (π shape connection).</p>
+
+<p><b>Regulator:</b></p>
+<p>A regulator maintains constant output voltage.</p>
+
+<p><b>7805 Regulator:</b></p>
+<p>Gives fixed +5V output.</p>
+
+<p><b>Other Voltage Regulators:</b></p>
+<p>7809 → +9V</p>
+<p>7812 → +12V</p>
+<p>7905 → -5V</p>
+<p>7912 → -12V</p>
+<p><b>AMPLIFIERS AND OSCILLATORS</b></p>
+
+<p><b>Amplifier:</b></p>
+<p>An amplifier is an electronic device that increases the strength of a weak signal.</p>
+
+<p><b>Faithful Amplification:</b></p>
+<p>When the output signal is an exact amplified copy of input without distortion.</p>
+
+<p><b>Classification of Amplifiers:</b></p>
+<p><b>Based on Configuration:</b> Common Emitter (CE), Common Base (CB), Common Collector (CC).</p>
+<p><b>Based on Power:</b> Voltage amplifier, Power amplifier.</p>
+<p><b>Based on Frequency:</b> AF (Audio Frequency), RF (Radio Frequency).</p>
+
+<p><b>Transistor CE Amplifier with Biasing:</b></p>
+<p>Uses common emitter configuration with proper biasing (usually voltage divider bias). 
+Provides high voltage gain.</p>
+
+<p><b>Class A Amplifier:</b></p>
+<p>Conducts for full 360° of input cycle. High fidelity, low efficiency.</p>
+
+<p><b>Class B Amplifier:</b></p>
+<p>Conducts for 180° of input cycle. Higher efficiency than Class A.</p>
+
+<p><b>Class C Amplifier:</b></p>
+<p>Conducts for less than 180°. Used in RF applications.</p>
+
+<p><b>Push-Pull Amplifier:</b></p>
+<p>Uses two transistors to amplify both half cycles of signal. Reduces distortion.</p>
+
+<p><b>Two Stage RC Coupled Amplifier:</b></p>
+<p>Two CE amplifier stages connected using resistor-capacitor (RC) coupling.</p>
+<p>Provides higher gain.</p>
+
+<p><b>Gain in dB:</b></p>
+<p>Gain (dB) = 20 log (Vout / Vin)</p>
+
+<p><b>Frequency Response:</b></p>
+<p>Shows how gain changes with frequency.</p>
+<p>Has three regions: Low, Mid and High frequency.</p>
+
+<p><b>Feedback:</b></p>
+<p>Feedback is the process of feeding a part of output back to input.</p>
+
+<p><b>Types:</b></p>
+<p>1) Positive Feedback</p>
+<p>2) Negative Feedback</p>
+
+<p><b>Advantages:</b></p>
+<p>1) Stabilizes gain</p>
+<p>2) Reduces distortion</p>
+
+<p><b>Disadvantages:</b></p>
+<p>1) May reduce gain</p>
+<p>2) Circuit becomes complex</p>
+
+<p><b>Applications:</b></p>
+<p>Amplifiers, Oscillators.</p>
+
+<p><b>Oscillator:</b></p>
+<p>An oscillator is a circuit that produces continuous AC signal without input signal.</p>
+
+<p><b>Classification:</b></p>
+<p>1) RC Oscillator</p>
+<p>2) LC Oscillator</p>
+<p>3) Crystal Oscillator</p>
+
+<p><b>LC Tank Circuit:</b></p>
+<p>Combination of inductor (L) and capacitor (C) used to produce oscillations.</p>
+
+<p><b>Criteria for Oscillation:</b></p>
+<p>1) Loop gain = 1</p>
+<p>2) Phase shift = 0° or 360°</p>
+
+<p><b>RC Phase Shift Oscillator:</b></p>
+<p>Uses RC network to produce phase shift of 180° with amplifier.</p>
+<p>Application: Audio frequency generation.</p>
+
+<p><b>Crystal Oscillator:</b></p>
+<p>Uses piezoelectric crystal for stable frequency.</p>
+<p>Application: Watches, communication systems.</p>
+
+<p><b>CRT (Cathode Ray Tube):</b></p>
+
+<p><b>Construction:</b></p>
+<p>Electron gun, deflection plates, fluorescent screen.</p>
+
+<p><b>Working:</b></p>
+<p>Electron beam strikes screen and produces visible light.</p>
+
+<p><b>Applications:</b></p>
+<p>1) Television</p>
+<p>2) Oscilloscope</p>
+<p>3) Monitor</p>
+<p><b>OP-AMP AND TIMERS</b></p>
+
+<p><b>OP-AMP (Operational Amplifier):</b></p>
+<p>An OP-AMP is a high gain voltage amplifier with differential inputs and single output.</p>
+
+<p><b>Block Diagram:</b></p>
+<p>1) Differential Amplifier</p>
+<p>2) Voltage Amplifier</p>
+<p>3) Output Stage</p>
+
+<p><b>Operation:</b></p>
+<p>Amplifies the difference between two input voltages.</p>
+
+<p><b>Characteristics:</b></p>
+<p>1) High gain</p>
+<p>2) High input impedance</p>
+<p>3) Low output impedance</p>
+
+<p><b>Applications:</b></p>
+<p>Amplifiers, filters, oscillators, comparators.</p>
+
+<p><b>µA741 Pin Diagram (Important Pins):</b></p>
+<p>Pin 2 – Inverting input</p>
+<p>Pin 3 – Non-inverting input</p>
+<p>Pin 6 – Output</p>
+<p>Pin 7 – +V supply</p>
+<p>Pin 4 – -V supply</p>
+
+<p><b>Virtual Ground:</b></p>
+<p>A point in OP-AMP circuit where voltage is nearly zero but not physically connected to ground.</p>
+
+<p><b>CMRR (Common Mode Rejection Ratio):</b></p>
+<p>Ability of OP-AMP to reject common signals applied to both inputs.</p>
+
+<p><b>Slew Rate:</b></p>
+<p>Maximum rate of change of output voltage per unit time.</p>
+
+<p><b>OP-AMP Applications:</b></p>
+
+<p><b>Inverting Amplifier:</b></p>
+<p>Output is 180° out of phase with input.</p>
+
+<p><b>Integrator:</b></p>
+<p>Produces output proportional to integral of input.</p>
+
+<p><b>Differentiator:</b></p>
+<p>Produces output proportional to derivative of input.</p>
+
+<p><b>Summer (Adder):</b></p>
+<p>Adds multiple input signals.</p>
+
+<p><b>Voltage Follower:</b></p>
+<p>Output equals input (unity gain).</p>
+
+<p><b>Comparator:</b></p>
+<p>Compares two voltages and gives high or low output.</p>
+
+<p><b>Filters:</b></p>
+<p>A filter allows certain frequencies and blocks others.</p>
+
+<p><b>Low Pass Filter:</b></p>
+<p>Allows low frequencies, blocks high frequencies.</p>
+
+<p><b>High Pass Filter:</b></p>
+<p>Allows high frequencies, blocks low frequencies.</p>
+
+<p><b>Passive Filter:</b></p>
+<p>Uses resistor and capacitor only.</p>
+
+<p><b>Active Filter:</b></p>
+<p>Uses OP-AMP with resistor and capacitor.</p>
+
+<p><b>Applications:</b></p>
+<p>Audio systems, communication systems.</p>
+
+<p><b>Timers (555 Timer):</b></p>
+<p>555 timer is an integrated circuit used for timing and oscillation.</p>
+
+<p><b>Block Diagram:</b></p>
+<p>Contains two comparators, flip-flop, discharge transistor and voltage divider.</p>
+
+<p><b>Pin Diagram (Important Pins):</b></p>
+<p>Pin 1 – Ground</p>
+<p>Pin 2 – Trigger</p>
+<p>Pin 3 – Output</p>
+<p>Pin 4 – Reset</p>
+<p>Pin 5 – Control voltage</p>
+<p>Pin 6 – Threshold</p>
+<p>Pin 7 – Discharge</p>
+<p>Pin 8 – Vcc</p>
+
+<p><b>Duty Cycle:</b></p>
+<p>Percentage of time output remains ON in one cycle.</p>
+
+<p><b>Time Constant:</b></p>
+<p>Time constant = R × C</p>
+
+<p><b>Applications:</b></p>
+<p>Pulse generation, timers, LED flashing.</p>
+
+<p><b>Multivibrators using 555:</b></p>
+
+<p><b>Astable Mode:</b></p>
+<p>Produces continuous square wave without external trigger.</p>
+
+<p><b>Monostable Mode:</b></p>
+<p>Produces single pulse for each trigger input.</p>
+
+        `;
+    }
+
+    if(subject === "graphics"){
+        subjectTitle.innerText = "Engineering Graphics";
+        notesContent.innerHTML = `
+            <h3>Drawing Concepts</h3>
+            <ul>
+                <li>Projection of Lines</li>
+                <li>Isometric Views</li>
+                <li>Sectional Views</li>
+            </ul>
+        `;
+    }
+
+    if(subject === "multimedia"){
+        subjectTitle.innerText = "Multimedia Applications";
+        notesContent.innerHTML = `
+<p><b>DEFINITIONS AND CLASSIFICATION (MULTIMEDIA)</b></p>
+
+<p><b>Definition of Multimedia:</b></p>
+<p>Multimedia is the combination of text, images, audio, video and animation to present information.</p>
+
+<p><b>Classification of Multimedia:</b></p>
+<p>1) Linear Multimedia – Runs automatically without user control (like a movie).</p>
+<p>2) Non-Linear Multimedia – User can control and interact (like websites, games).</p>
+
+<p><b>Multimedia Hardware:</b></p>
+<p>Hardware devices used to create and use multimedia.</p>
+<p>Examples:</p>
+<p>1) Microphone – For recording audio.</p>
+<p>2) Speakers – For playing sound.</p>
+<p>3) Webcam – For video recording.</p>
+<p>4) Scanner – For scanning images.</p>
+<p>5) CD/DVD drive – For reading discs.</p>
+
+<p><b>Multimedia Software:</b></p>
+<p>Software used to create and edit multimedia content.</p>
+<p>Examples:</p>
+<p>1) MS PowerPoint</p>
+<p>2) VLC Media Player</p>
+<p>3) Photoshop</p>
+<p>4) Video editing software</p>
+
+<p><b>Meeting the Analog Signals:</b></p>
+<p>Analog signals are continuous signals like human voice and music.</p>
+<p>They are converted into digital signals using devices like microphone and sound card.</p>
+
+<p><b>Search of Digital Recording:</b></p>
+<p>Digital recording stores sound and video in digital format (0 and 1).</p>
+<p>It provides better quality and easy storage compared to analog recording.</p>
+
+<p><b>CD-ROMs:</b></p>
+<p>CD-ROM stands for Compact Disc Read Only Memory.</p>
+<p>It is used to store data, audio, video and software.</p>
+<p>Data once written cannot be changed.</p>
+<p><b>DIGITAL AUDIO TECHNOLOGIES</b></p>
+
+<p><b>Digital Audio:</b></p>
+<p>Digital audio is sound that is converted into digital form (0s and 1s) and stored in a computer.</p>
+
+<p><b>Sound Card:</b></p>
+<p>A sound card is a hardware device that allows a computer to play and record sound.</p>
+
+<p><b>Functions of Sound Card:</b></p>
+<p>1) Converts analog sound into digital signals (Recording).</p>
+<p>2) Converts digital signals into analog sound (Playback).</p>
+<p>3) Connects microphone, speakers and headphones.</p>
+
+<p><b>Playback:</b></p>
+<p>Playback means playing recorded digital audio through speakers or headphones.</p>
+
+<p><b>Recording:</b></p>
+<p>Recording means capturing sound using microphone and storing it in digital format.</p>
+
+<p><b>MIDI (Musical Instrument Digital Interface):</b></p>
+<p>MIDI is a standard that allows electronic musical instruments and computers to communicate.</p>
+
+<p><b>Features of MIDI:</b></p>
+<p>1) Stores music as instructions, not actual sound.</p>
+<p>2) Small file size.</p>
+<p>3) Easy to edit music.</p>
+
+<p><b>Working with MIDI:</b></p>
+<p>1) Connect MIDI keyboard or instrument to computer.</p>
+<p>2) Use MIDI software to record music notes.</p>
+<p>3) Edit tempo, pitch and instruments.</p>
+<p>4) Play or save the MIDI file.</p>
+<p><b>MULTIMEDIA TEXTS</b></p>
+
+<p><b>Multimedia Text:</b></p>
+<p>Text used in multimedia projects like websites, presentations and videos.</p>
+<p>It should be clear, simple and easy to read.</p>
+
+<p><b>Features of Multimedia Text:</b></p>
+<p>1) Proper font style and size.</p>
+<p>2) Good color combination.</p>
+<p>3) Proper alignment and spacing.</p>
+<p>4) Attractive headings and subheadings.</p>
+
+<p><b>Coloring:</b></p>
+<p>Color improves appearance and attracts attention.</p>
+<p>Primary colors: Red, Green, Blue (RGB).</p>
+<p>Color models: RGB (used in screens), CMYK (used in printing).</p>
+<p>Good color contrast improves readability.</p>
+
+<p><b>Digital Imaging Fundamentals:</b></p>
+<p>A digital image is made of small dots called pixels.</p>
+<p>Resolution means number of pixels in an image.</p>
+<p>Higher resolution gives better image quality.</p>
+<p>Image formats: JPEG, PNG, GIF.</p>
+
+<p><b>Digital Image Development:</b></p>
+<p>1) Capture image using camera or scanner.</p>
+<p>2) Store image in digital format.</p>
+<p>3) Adjust brightness, contrast and color.</p>
+
+<p><b>Digital Image Editing:</b></p>
+<p>Image editing means modifying or improving images.</p>
+<p>Common editing tasks:</p>
+<p>1) Cropping</p>
+<p>2) Resizing</p>
+<p>3) Color correction</p>
+<p>4) Adding effects or filters</p>
+<p>5) Removing unwanted parts</p>
+<p><b>ANIMATION FUNDAMENTALS</b></p>
+
+<p><b>Animation:</b></p>
+<p>Animation is the technique of creating the illusion of movement by showing a sequence of images quickly.</p>
+
+<p><b>Types of Animation:</b></p>
+<p>1) 2D Animation – Two-dimensional animation.</p>
+<p>2) 3D Animation – Three-dimensional animation.</p>
+<p>3) Stop Motion – Objects moved and captured frame by frame.</p>
+
+<p><b>Animation Software Tools:</b></p>
+<p>Software used to create animation.</p>
+<p>Examples:</p>
+<p>1) Adobe Animate</p>
+<p>2) Blender</p>
+<p>3) Maya</p>
+<p>4) Toon Boom</p>
+
+<p><b>Animation Techniques:</b></p>
+<p>1) Frame by Frame Animation – Each frame is drawn separately.</p>
+<p>2) Tweening – Software creates intermediate frames automatically.</p>
+<p>3) Motion Path – Object follows a defined path.</p>
+<p>4) Keyframe Animation – Important frames are defined and software fills the rest.</p>
+
+<p><b>DIGITAL VIDEO FUNDAMENTALS</b></p>
+
+<p><b>Digital Video:</b></p>
+<p>Digital video is a sequence of digital images (frames) shown rapidly to create motion.</p>
+
+<p><b>Important Terms:</b></p>
+<p>1) Frame – Single image in video.</p>
+<p>2) Frame Rate – Number of frames per second (fps).</p>
+<p>3) Resolution – Number of pixels in video.</p>
+<p>4) Aspect Ratio – Width and height ratio of video screen.</p>
+
+<p><b>DIGITAL VIDEO PRODUCTION TECHNIQUES</b></p>
+
+<p><b>Steps in Video Production:</b></p>
+<p>1) Pre-production – Planning and scripting.</p>
+<p>2) Production – Shooting video.</p>
+<p>3) Post-production – Editing and adding effects.</p>
+
+<p><b>Editing Techniques:</b></p>
+<p>1) Cutting and trimming.</p>
+<p>2) Adding transitions.</p>
+<p>3) Adding background music.</p>
+<p>4) Adding titles and subtitles.</p>
+<p>5) Color correction.</p>
+<p><b>MULTIMEDIA PROJECT DESIGN CONCEPTS</b></p>
+
+<p><b>Multimedia Project:</b></p>
+<p>A multimedia project is a combination of text, audio, video, images and animation created for a specific purpose.</p>
+
+<p><b>Authoring:</b></p>
+<p>Authoring means combining all multimedia elements into one final project using authoring software.</p>
+<p>Examples of authoring tools: Adobe Animate, Director, Flash.</p>
+<p>It helps in organizing content, adding interactivity and navigation.</p>
+
+<p><b>Project Planning:</b></p>
+<p>Planning is the first step before developing a multimedia project.</p>
+<p>Steps in planning:</p>
+<p>1) Define objective of project.</p>
+<p>2) Identify target audience.</p>
+<p>3) Prepare content outline.</p>
+<p>4) Create storyboard.</p>
+<p>5) Decide tools and technology.</p>
+
+<p><b>Project Costing:</b></p>
+<p>Costing means calculating total cost required to complete the project.</p>
+<p>Includes:</p>
+<p>1) Software cost.</p>
+<p>2) Hardware cost.</p>
+<p>3) Team salary.</p>
+<p>4) Production and editing cost.</p>
+
+<p><b>Multimedia Team:</b></p>
+<p>A multimedia project is developed by a team of professionals.</p>
+<p>Main members:</p>
+<p>1) Project Manager – Manages the project.</p>
+<p>2) Content Writer – Prepares text content.</p>
+<p>3) Graphic Designer – Designs images and layout.</p>
+<p>4) Animator – Creates animation.</p>
+<p>5) Video Editor – Edits video.</p>
+<p>6) Programmer – Adds interactivity.</p>
+<p>7) Sound Engineer – Handles audio.</p>
+
+        `;
+    }
+
+    if(subject === "evs"){
+        subjectTitle.innerText = "Environmental Studies & Disaster Management";
+        notesContent.innerHTML = `
+            <p><b>INTRODUCTION</b></p>
+
+<p><b>Ecology:</b></p>
+<p>Ecology is the study of living organisms and their relationship with the environment.</p>
+
+<p><b>Basics of Ecology:</b></p>
+<p>1) Environment includes living (biotic) and non-living (abiotic) components.</p>
+<p>2) Biotic factors – Plants, animals, humans.</p>
+<p>3) Abiotic factors – Air, water, soil, sunlight.</p>
+
+<p><b>Ecosystem:</b></p>
+<p>An ecosystem is a system where living and non-living things interact with each other.</p>
+<p>Example: Forest, pond, desert.</p>
+
+<p><b>Sustainable Development:</b></p>
+<p>Development that meets present needs without harming future generations.</p>
+<p>It balances economic growth and environmental protection.</p>
+
+<p><b>Energy Sources:</b></p>
+
+<p><b>Renewable Energy:</b></p>
+<p>Energy sources that can be renewed naturally.</p>
+<p>Examples: Solar, wind, hydro power.</p>
+
+<p><b>Advantages:</b></p>
+<p>1) Environment friendly.</p>
+<p>2) Unlimited supply.</p>
+
+<p><b>Disadvantages:</b></p>
+<p>1) High initial cost.</p>
+<p>2) Depends on weather conditions.</p>
+
+<p><b>Non-Renewable Energy:</b></p>
+<p>Energy sources that cannot be replaced quickly.</p>
+<p>Examples: Coal, petroleum, natural gas.</p>
+
+<p><b>Advantages:</b></p>
+<p>1) High energy output.</p>
+<p>2) Easy to use.</p>
+
+<p><b>Disadvantages:</b></p>
+<p>1) Causes pollution.</p>
+<p>2) Limited resources.</p>
+
+<p><b>Rain Water Harvesting:</b></p>
+<p>Rain water harvesting is the process of collecting and storing rainwater for future use.</p>
+<p>Benefits:</p>
+<p>1) Saves water.</p>
+<p>2) Recharges groundwater.</p>
+<p>3) Reduces water shortage.</p>
+
+<p><b>Deforestation:</b></p>
+<p>Deforestation means cutting down of trees on a large scale.</p>
+
+<p><b>Effects of Deforestation:</b></p>
+<p>1) Loss of wildlife.</p>
+<p>2) Soil erosion.</p>
+<p>3) Climate change.</p>
+<p>4) Increase in carbon dioxide.</p>
+
+<p><b>Control Measures:</b></p>
+<p>1) Afforestation (planting trees).</p>
+<p>2) Use forest resources carefully.</p>
+<p>3) Create awareness.</p>
+<p>4) Strict government laws.</p>
+<p><b>AIR AND NOISE POLLUTION</b></p>
+
+<p><b>AIR POLLUTION</b></p>
+
+<p><b>Air Pollution:</b></p>
+<p>Air pollution is the presence of harmful gases, dust and smoke in the air.</p>
+
+<p><b>Sources of Air Pollution:</b></p>
+<p>1) Vehicle exhaust.</p>
+<p>2) Industrial smoke.</p>
+<p>3) Burning of coal and wood.</p>
+<p>4) Construction activities.</p>
+<p>5) Forest fires.</p>
+
+<p><b>Effects on Human Health:</b></p>
+<p>1) Breathing problems.</p>
+<p>2) Asthma and lung diseases.</p>
+<p>3) Eye irritation.</p>
+<p>4) Heart problems.</p>
+
+<p><b>Effects on Economy:</b></p>
+<p>1) Increased medical expenses.</p>
+<p>2) Reduced work productivity.</p>
+<p>3) Damage to crops and buildings.</p>
+
+<p><b>Air Pollution Control Methods:</b></p>
+<p>1) Use of clean fuels (CNG, LPG).</p>
+<p>2) Planting more trees.</p>
+<p>3) Using public transport.</p>
+<p>4) Installing filters in factories.</p>
+<p>5) Following pollution control laws.</p>
+
+<p><b>NOISE POLLUTION</b></p>
+
+<p><b>Noise Pollution:</b></p>
+<p>Noise pollution is excessive or unwanted sound that causes harm.</p>
+
+<p><b>Sources of Noise Pollution:</b></p>
+<p>1) Traffic and vehicles.</p>
+<p>2) Loudspeakers and music systems.</p>
+<p>3) Industrial machines.</p>
+<p>4) Construction work.</p>
+
+<p><b>Unit of Noise:</b></p>
+<p>Decibel (dB).</p>
+
+<p><b>Effects of Noise Pollution:</b></p>
+<p>1) Hearing loss.</p>
+<p>2) Stress and headache.</p>
+<p>3) Sleep disturbance.</p>
+<p>4) High blood pressure.</p>
+
+<p><b>Acceptable Noise Level:</b></p>
+<p>30–50 dB is safe for residential areas.</p>
+<p>Above 85 dB can be harmful.</p>
+
+<p><b>Methods to Minimize Noise Pollution:</b></p>
+<p>1) Use silencers in vehicles.</p>
+<p>2) Avoid unnecessary honking.</p>
+<p>3) Plant trees.</p>
+<p>4) Use soundproof materials.</p>
+<p>5) Follow government rules.</p>
+<p><b>WATER AND SOIL POLLUTION</b></p>
+
+<p><b>WATER POLLUTION</b></p>
+
+<p><b>Water Pollution:</b></p>
+<p>Water pollution is the contamination of water by harmful substances.</p>
+
+<p><b>Impurities in Water:</b></p>
+<p>1) Physical impurities – Dust, sand, suspended particles.</p>
+<p>2) Chemical impurities – Acids, salts, heavy metals.</p>
+<p>3) Biological impurities – Bacteria, viruses, microorganisms.</p>
+
+<p><b>Causes and Sources of Water Pollution:</b></p>
+<p>1) Industrial waste.</p>
+<p>2) Sewage discharge.</p>
+<p>3) Agricultural fertilizers and pesticides.</p>
+<p>4) Oil spills.</p>
+<p>5) Domestic waste.</p>
+
+<p><b>Effects on Human Health:</b></p>
+<p>1) Water-borne diseases (cholera, typhoid).</p>
+<p>2) Skin infections.</p>
+<p>3) Stomach problems.</p>
+
+<p><b>DO (Dissolved Oxygen):</b></p>
+<p>Amount of oxygen dissolved in water. Higher DO means cleaner water.</p>
+
+<p><b>BOD (Biochemical Oxygen Demand):</b></p>
+<p>Amount of oxygen required by microorganisms to decompose organic matter.</p>
+<p>Higher BOD means more pollution.</p>
+
+<p><b>COD (Chemical Oxygen Demand):</b></p>
+<p>Amount of oxygen required to chemically oxidize pollutants in water.</p>
+
+<p><b>Prevention of Water Pollution:</b></p>
+<p>1) Proper sewage treatment.</p>
+<p>2) Avoid dumping waste into water bodies.</p>
+<p>3) Use eco-friendly fertilizers.</p>
+
+<p><b>Water Treatment Processes:</b></p>
+<p>1) Sedimentation.</p>
+<p>2) Filtration.</p>
+<p>3) Chlorination.</p>
+
+<p><b>Sewage Treatment:</b></p>
+<p>Primary treatment – Removal of solid waste.</p>
+<p>Secondary treatment – Biological treatment.</p>
+<p>Final treatment – Disinfection before discharge.</p>
+
+<p><b>Water Quality Standards:</b></p>
+<p>Water should be free from harmful chemicals and bacteria and should meet safe limits of pH and dissolved oxygen.</p>
+
+<p><b>SOIL POLLUTION</b></p>
+
+<p><b>Sources of Soil Pollution:</b></p>
+<p>1) Industrial waste.</p>
+<p>2) Use of chemical fertilizers and pesticides.</p>
+<p>3) Solid waste dumping.</p>
+<p>4) Oil spills.</p>
+
+<p><b>Effects of Soil Pollution:</b></p>
+<p>1) Decrease in soil fertility.</p>
+<p>2) Harm to crops and plants.</p>
+<p>3) Contamination of groundwater.</p>
+
+<p><b>Control of Soil Pollution:</b></p>
+<p>1) Use organic fertilizers.</p>
+<p>2) Proper waste disposal.</p>
+<p>3) Recycling and reuse.</p>
+
+<p><b>Types of Solid Waste:</b></p>
+<p>1) Household waste – Kitchen waste, plastic.</p>
+<p>2) Industrial waste – Chemicals, metals.</p>
+<p>3) Agricultural waste – Crop residue.</p>
+<p>4) Biomedical waste – Hospital waste.</p>
+
+<p><b>Disposal of Solid Waste:</b></p>
+<p>1) Landfilling.</p>
+<p>2) Incineration.</p>
+<p>3) Composting.</p>
+<p>4) Recycling.</p>
+
+<p><b>Solid Waste Management:</b></p>
+<p>Proper collection, segregation, recycling and safe disposal of waste.</p>
+
+<p><b>E-Waste:</b></p>
+<p>Electronic waste like old computers, mobiles, TVs.</p>
+
+<p><b>E-Waste Management:</b></p>
+<p>1) Recycling electronic parts.</p>
+<p>2) Safe disposal of hazardous materials.</p>
+<p>3) Reuse and refurbishment.</p>
+<p><b>IMPACT OF ENERGY USAGE ON ENVIRONMENT</b></p>
+
+<p><b>Global Warming:</b></p>
+<p>Global warming is the increase in Earth’s average temperature due to excessive greenhouse gases.</p>
+<p>It is mainly caused by burning fossil fuels like coal and petroleum.</p>
+
+<p><b>Greenhouse Effect:</b></p>
+<p>The greenhouse effect is the trapping of heat in the Earth’s atmosphere by gases like carbon dioxide (CO₂), methane and water vapor.</p>
+<p>A small amount is necessary, but excess causes global warming.</p>
+
+<p><b>Depletion of Ozone Layer:</b></p>
+<p>The ozone layer protects us from harmful ultraviolet (UV) rays.</p>
+<p>It is damaged by chemicals like CFCs (Chlorofluorocarbons).</p>
+<p>Effects include skin cancer and climate imbalance.</p>
+
+<p><b>Acid Rain:</b></p>
+<p>Acid rain is rain that contains harmful acids formed from sulfur dioxide (SO₂) and nitrogen oxides (NOx).</p>
+<p>It damages crops, buildings and water bodies.</p>
+
+<p><b>Eco-friendly Materials:</b></p>
+<p>Materials that do not harm the environment.</p>
+<p>Examples: Jute bags, biodegradable plastics, recycled paper.</p>
+
+<p><b>Recycling of Materials:</b></p>
+<p>Recycling means converting waste materials into reusable products.</p>
+<p>It reduces pollution and saves natural resources.</p>
+
+<p><b>Concept of Green Buildings:</b></p>
+<p>Green buildings are designed to reduce environmental impact.</p>
+<p>Features:</p>
+<p>1) Energy-efficient lighting.</p>
+<p>2) Use of renewable energy.</p>
+<p>3) Rainwater harvesting.</p>
+<p>4) Proper waste management.</p>
+
+<p><b>Carbon Credit:</b></p>
+<p>A carbon credit is a permit that allows a country or company to emit a certain amount of carbon dioxide.</p>
+<p>It helps in reducing overall greenhouse gas emissions.</p>
+
+<p><b>Carbon Footprint:</b></p>
+<p>Carbon footprint is the total amount of carbon dioxide released by a person, organization or activity.</p>
+<p>It can be reduced by using public transport, saving energy and planting trees.</p>
+<p><b>DISASTER MANAGEMENT</b></p>
+
+<p><b>A. DIFFERENT TYPES OF DISASTER</b></p>
+
+<p><b>Natural Disasters:</b></p>
+<p>Natural disasters are caused by natural forces.</p>
+<p>Examples:</p>
+<p>1) Flood – Overflow of water on land.</p>
+<p>2) Cyclone – Strong wind storm with heavy rain.</p>
+<p>3) Earthquake – Sudden shaking of the earth.</p>
+<p>4) Landslide – Sliding of soil or rocks from hills.</p>
+
+<p><b>Man-made Disasters:</b></p>
+<p>Man-made disasters are caused by human activities.</p>
+<p>Examples:</p>
+<p>1) Fire accidents.</p>
+<p>2) Industrial pollution.</p>
+<p>3) Nuclear disasters.</p>
+<p>4) Biological disasters (diseases, epidemics).</p>
+<p>5) Accidents – Air, Sea, Rail and Road accidents.</p>
+<p>6) Structural failures – Building or bridge collapse.</p>
+<p>7) War and Terrorism.</p>
+
+<p><b>B. DISASTER PREPAREDNESS</b></p>
+
+<p><b>Disaster Preparedness Plan:</b></p>
+<p>A disaster preparedness plan is a set of steps taken before a disaster to reduce damage.</p>
+<p>Includes:</p>
+<p>1) Emergency contact numbers.</p>
+<p>2) Safe shelter locations.</p>
+<p>3) First aid kits and food storage.</p>
+<p>4) Evacuation plan.</p>
+
+<p><b>Prediction and Early Warning:</b></p>
+<p>Advanced technology helps predict disasters like cyclones and floods.</p>
+<p>Early warning systems help people take safety measures.</p>
+
+<p><b>Safety Measures:</b></p>
+<p>1) Follow government instructions.</p>
+<p>2) Move to safe places.</p>
+<p>3) Avoid risky areas.</p>
+<p>4) Keep emergency supplies ready.</p>
+
+<p><b>Psychological Response and Management:</b></p>
+<p>Disasters can cause trauma, stress, rumour and panic.</p>
+
+<p><b>Trauma:</b> Emotional shock after disaster.</p>
+<p><b>Stress:</b> Mental pressure due to fear or loss.</p>
+<p><b>Rumour:</b> False information spreading panic.</p>
+<p><b>Panic:</b> Sudden fear leading to confusion.</p>
+
+<p><b>Management:</b></p>
+<p>1) Provide counseling.</p>
+<p>2) Give correct information.</p>
+<p>3) Support affected people emotionally.</p>
+<p>4) Maintain calm and order.</p>
+
+        `;
+    }
+    /* -------- SEMESTER 3 -------- */
+
+if(subject === "os"){
+    subjectTitle.innerText = "Operating Systems";
+    notesContent.innerHTML = `
+        <p><b>OVERVIEW OF OPERATING SYSTEM</b></p>
+
+<p><b>Definition of Operating System:</b></p>
+<p>An Operating System (OS) is system software that manages computer hardware and software and provides services to users and programs.</p>
+
+<p><b>Types of Operating Systems:</b></p>
+<p>1) Batch Operating System</p>
+<p>2) Time Sharing Operating System</p>
+<p>3) Multiprogramming Operating System</p>
+<p>4) Multiprocessing Operating System</p>
+<p>5) Real-Time Operating System</p>
+<p>6) Distributed Operating System</p>
+
+<p><b>Operating System Services:</b></p>
+<p>1) Process management</p>
+<p>2) Memory management</p>
+<p>3) File system management</p>
+<p>4) Device management</p>
+<p>5) Security and protection</p>
+<p>6) User interface</p>
+
+<p><b>User Operating System Interface:</b></p>
+<p>1) Command Line Interface (CLI) – User types commands.</p>
+<p>2) Graphical User Interface (GUI) – User interacts using icons, windows and mouse.</p>
+
+<p><b>System Calls:</b></p>
+<p>System calls are requests made by programs to the operating system for services.</p>
+
+<p><b>Types of System Calls:</b></p>
+<p>1) Process control</p>
+<p>2) File management</p>
+<p>3) Device management</p>
+<p>4) Information maintenance</p>
+<p>5) Communication</p>
+
+<p><b>System Programs:</b></p>
+<p>Programs that provide a convenient environment for program development and execution.</p>
+<p>Examples: File managers, compilers, editors.</p>
+
+<p><b>Operating System Structure:</b></p>
+<p>1) Simple structure</p>
+<p>2) Layered structure</p>
+<p>3) Microkernel structure</p>
+
+<p><b>Virtual Machine:</b></p>
+<p>A virtual machine is a software-based simulation of a physical computer.</p>
+
+<p><b>Benefits of Virtual Machine:</b></p>
+<p>1) Run multiple operating systems on one computer.</p>
+<p>2) Better security and isolation.</p>
+<p>3) Easy testing and development.</p>
+<p>4) Efficient resource utilization.</p>
+<p><b>OVERVIEW OF OPERATING SYSTEM</b></p>
+
+<p><b>Definition of Operating System:</b></p>
+<p>An Operating System (OS) is system software that manages computer hardware and software and provides services to users and programs.</p>
+
+<p><b>Types of Operating Systems:</b></p>
+<p>1) Batch Operating System</p>
+<p>2) Time Sharing Operating System</p>
+<p>3) Multiprogramming Operating System</p>
+<p>4) Multiprocessing Operating System</p>
+<p>5) Real-Time Operating System</p>
+<p>6) Distributed Operating System</p>
+
+<p><b>Operating System Services:</b></p>
+<p>1) Process management</p>
+<p>2) Memory management</p>
+<p>3) File system management</p>
+<p>4) Device management</p>
+<p>5) Security and protection</p>
+<p>6) User interface</p>
+
+<p><b>User Operating System Interface:</b></p>
+<p>1) Command Line Interface (CLI) – User types commands.</p>
+<p>2) Graphical User Interface (GUI) – User interacts using icons, windows and mouse.</p>
+
+<p><b>System Calls:</b></p>
+<p>System calls are requests made by programs to the operating system for services.</p>
+
+<p><b>Types of System Calls:</b></p>
+<p>1) Process control</p>
+<p>2) File management</p>
+<p>3) Device management</p>
+<p>4) Information maintenance</p>
+<p>5) Communication</p>
+
+<p><b>System Programs:</b></p>
+<p>Programs that provide a convenient environment for program development and execution.</p>
+<p>Examples: File managers, compilers, editors.</p>
+
+<p><b>Operating System Structure:</b></p>
+<p>1) Simple structure</p>
+<p>2) Layered structure</p>
+<p>3) Microkernel structure</p>
+
+<p><b>Virtual Machine:</b></p>
+<p>A virtual machine is a software-based simulation of a physical computer.</p>
+
+<p><b>Benefits of Virtual Machine:</b></p>
+<p>1) Run multiple operating systems on one computer.</p>
+<p>2) Better security and isolation.</p>
+<p>3) Easy testing and development.</p>
+<p>4) Efficient resource utilization.</p>
+<p><b>CPU SCHEDULING AND DEADLOCK</b></p>
+
+<p><b>Shortest Job First (SJF):</b></p>
+<p>SJF is a CPU scheduling algorithm in which the process with the shortest burst time is executed first.</p>
+<p>Advantage: Minimum average waiting time.</p>
+<p>Disadvantage: Starvation of long processes.</p>
+
+<p><b>Round Robin (RR):</b></p>
+<p>Round Robin scheduling gives each process a fixed time slice (time quantum) in cyclic order.</p>
+<p>Advantage: Fair to all processes.</p>
+<p>Disadvantage: Too small time quantum increases overhead.</p>
+
+<p><b>Multiprocessor Scheduling:</b></p>
+<p>Used in systems with more than one CPU.</p>
+<p>Processes are distributed among multiple processors to improve performance.</p>
+<p>Types: Asymmetric multiprocessing and Symmetric multiprocessing.</p>
+
+<p><b>Process Synchronization:</b></p>
+<p>Process synchronization ensures that multiple processes access shared resources safely.</p>
+<p>Prevents race condition.</p>
+<p>Tools: Semaphores, Mutex, Monitors.</p>
+
+<p><b>Deadlock:</b></p>
+<p>Deadlock is a situation where two or more processes wait forever for resources held by each other.</p>
+
+<p><b>Conditions for Deadlock (Four Necessary Conditions):</b></p>
+<p>1) Mutual Exclusion – Only one process can use a resource at a time.</p>
+<p>2) Hold and Wait – Process holds one resource and waits for another.</p>
+<p>3) No Preemption – Resources cannot be forcibly taken.</p>
+<p>4) Circular Wait – Processes form a circular chain waiting for resources.</p>
+
+<p><b>Methods for Handling Deadlocks:</b></p>
+<p>1) Deadlock Prevention</p>
+<p>2) Deadlock Avoidance</p>
+<p>3) Deadlock Detection and Recovery</p>
+
+<p><b>Deadlock Prevention:</b></p>
+<p>Eliminate at least one of the four necessary conditions.</p>
+
+<p><b>Deadlock Avoidance:</b></p>
+<p>Allocate resources carefully to avoid unsafe state.</p>
+<p>Example: Banker’s Algorithm.</p>
+
+<p><b>Deadlock Detection:</b></p>
+<p>Allow deadlock to occur and detect it using algorithms.</p>
+
+<p><b>Recovery from Deadlock:</b></p>
+<p>1) Terminate one or more processes.</p>
+<p>2) Preempt resources from some processes.</p>
+<p><b>MEMORY MANAGEMENT FUNCTION</b></p>
+
+<p><b>Definition:</b></p>
+<p>Memory management is the function of an operating system that manages primary memory (RAM) and allocates memory to processes.</p>
+
+<p><b>Logical Address Space:</b></p>
+<p>The set of addresses generated by the CPU. It is also called virtual address.</p>
+
+<p><b>Physical Address Space:</b></p>
+<p>The actual address in the main memory (RAM).</p>
+
+<p><b>Swapping:</b></p>
+<p>Swapping is the process of moving processes between main memory and secondary storage (hard disk).</p>
+
+<p><b>Memory Allocation:</b></p>
+<p>Memory allocation means assigning memory space to processes.</p>
+
+<p><b>Contiguous Memory Allocation:</b></p>
+<p>In this method, each process is stored in a single continuous block of memory.</p>
+
+<p><b>Fixed Partition:</b></p>
+<p>Memory is divided into fixed size partitions.</p>
+<p>Simple but may waste memory.</p>
+
+<p><b>Variable Partition:</b></p>
+<p>Memory partitions are created according to process size.</p>
+<p>Better memory utilization.</p>
+
+<p><b>Internal Fragmentation:</b></p>
+<p>Unused memory inside allocated partition.</p>
+
+<p><b>External Fragmentation:</b></p>
+<p>Free memory is available but scattered in small blocks.</p>
+
+<p><b>Compaction:</b></p>
+<p>Compaction is the process of combining small free memory blocks into one large block.</p>
+
+<p><b>Paging:</b></p>
+<p>Paging is a memory management technique that divides memory into fixed size blocks called pages and frames.</p>
+
+<p><b>Principle of Operation:</b></p>
+<p>Logical memory is divided into pages and physical memory into frames. Pages are mapped to frames using page table.</p>
+
+<p><b>Page Allocation:</b></p>
+<p>Each page of process is allocated to any available frame in memory.</p>
+
+<p><b>Hardware Support for Paging:</b></p>
+<p>1) Page Table</p>
+<p>2) Translation Lookaside Buffer (TLB)</p>
+
+<p><b>Protection and Sharing:</b></p>
+<p>Paging allows protection by controlling access rights and sharing of pages between processes.</p>
+
+<p><b>Disadvantages of Paging:</b></p>
+<p>1) Page table overhead.</p>
+<p>2) Increased memory access time.</p>
+
+<p><b>Segmentation:</b></p>
+<p>Segmentation divides memory into logical segments like code, data and stack.</p>
+
+<p><b>Virtual Memory:</b></p>
+<p>Virtual memory allows execution of large programs by using secondary storage as extension of RAM.</p>
+<p><b>I/O MANAGEMENT FUNCTIONS AND FILE MANAGEMENT</b></p>
+
+<p><b>I/O Management:</b></p>
+<p>I/O (Input/Output) management controls communication between CPU and I/O devices.</p>
+
+<p><b>Dedicated Devices:</b></p>
+<p>Devices used by only one process at a time.</p>
+<p>Example: Printer (in some systems).</p>
+
+<p><b>Shared Devices:</b></p>
+<p>Devices that can be used by multiple processes.</p>
+<p>Example: Hard disk.</p>
+
+<p><b>I/O Devices:</b></p>
+<p>Devices used for input and output.</p>
+<p>Examples: Keyboard, Mouse, Monitor, Printer.</p>
+
+<p><b>Storage Devices:</b></p>
+<p>Devices used to store data permanently.</p>
+<p>Examples: Hard disk, SSD, Pen drive.</p>
+
+<p><b>Buffering:</b></p>
+<p>Buffering is storing data temporarily in memory while transferring between devices.</p>
+<p>It improves speed and efficiency.</p>
+
+<p><b>Spooling:</b></p>
+<p>Spooling (Simultaneous Peripheral Operations Online) stores data in a queue for processing.</p>
+<p>Example: Print queue.</p>
+
+<p><b>FILE MANAGEMENT</b></p>
+
+<p><b>Types of File Systems:</b></p>
+
+<p><b>1) Simple File System:</b></p>
+<p>Basic system that manages file storage.</p>
+
+<p><b>2) Basic File System:</b></p>
+<p>Handles general file commands like read and write.</p>
+
+<p><b>3) Logical File System:</b></p>
+<p>Manages file names, directories and access control.</p>
+
+<p><b>4) Physical File System:</b></p>
+<p>Deals with physical storage and disk blocks.</p>
+
+<p><b>Methods of Allocating Disk Space:</b></p>
+
+<p><b>1) Contiguous Allocation:</b></p>
+<p>File occupies continuous blocks on disk.</p>
+<p>Fast access but causes fragmentation.</p>
+
+<p><b>2) Linked Allocation:</b></p>
+<p>File blocks are linked together.</p>
+<p>No external fragmentation.</p>
+
+<p><b>3) Indexed Allocation:</b></p>
+<p>Uses index block to store addresses of file blocks.</p>
+<p>Efficient and flexible.</p>
+<p><b>LINUX OPERATING SYSTEM</b></p>
+
+<p><b>History of Unix and Linux:</b></p>
+<p>UNIX was developed in 1969 at Bell Labs.  
+Linux was created by Linus Torvalds in 1991.  
+Linux is based on UNIX principles and is open source.</p>
+
+<p><b>Linux Overview:</b></p>
+<p>Linux is a free and open-source operating system.  
+It is widely used in servers, desktops and mobile devices.</p>
+
+<p><b>Structure of Linux:</b></p>
+<p>1) Kernel – Core part that manages hardware.</p>
+<p>2) Shell – Interface between user and kernel.</p>
+<p>3) File System – Organizes files and directories.</p>
+<p>4) Applications – Programs used by users.</p>
+
+<p><b>Linux Releases (Distributions):</b></p>
+<p>Examples: Ubuntu, Fedora, Debian, Red Hat.</p>
+
+<p><b>Open Linux:</b></p>
+<p>Linux source code is freely available and can be modified.</p>
+
+<p><b>Linux System Requirements:</b></p>
+<p>1) Processor (minimum 1 GHz).</p>
+<p>2) RAM (minimum 1 GB or more).</p>
+<p>3) Hard disk space.</p>
+
+<p><b>Linux Commands:</b></p>
+
+<p>mkdir – Create directory.</p>
+<p>cd – Change directory.</p>
+<p>rmdir – Remove directory.</p>
+<p>pwd – Show current directory.</p>
+<p>ls – List files.</p>
+<p>who – Show logged in users.</p>
+<p>whoami – Show current user.</p>
+<p>date – Display date and time.</p>
+<p>cat – Display file content.</p>
+<p>chmod – Change file permission.</p>
+<p>cp – Copy file.</p>
+<p>mv – Move/rename file.</p>
+<p>rm – Delete file.</p>
+<p>pg, more – View file page by page.</p>
+<p>pr – Print file with formatting.</p>
+<p>tail – Show last lines of file.</p>
+<p>head – Show first lines of file.</p>
+<p>cut – Cut selected columns.</p>
+<p>paste – Merge lines of files.</p>
+<p>nl – Number lines.</p>
+<p>grep – Search pattern in file.</p>
+<p>wc – Word count.</p>
+<p>sort – Sort lines.</p>
+<p>kill – Terminate process.</p>
+<p>write, talk – Send message to users.</p>
+<p>mesg – Control message permission.</p>
+<p>wall – Send message to all users.</p>
+<p>merge – Merge files.</p>
+<p>mail – Send email.</p>
+<p>news – Read news.</p>
+
+<p><b>Shell:</b></p>
+<p>Shell is a command interpreter that accepts commands from user.</p>
+
+<p><b>Command Options:</b></p>
+<p>Options are additional arguments used with commands (Example: ls -l).</p>
+
+<p><b>Input and Output:</b></p>
+<p>Input – Data given to command.</p>
+<p>Output – Result of command.</p>
+
+<p><b>Redirection:</b></p>
+<p>&gt; – Redirect output.</p>
+<p>&lt; – Redirect input.</p>
+
+<p><b>Pipes:</b></p>
+<p>| – Connect output of one command to input of another.</p>
+
+<p><b>Redirecting and Piping with Standard Er
+
+    `;
+}
+
+if(subject === "de"){
+    subjectTitle.innerText = "Digital Electronics";
+    notesContent.innerHTML = `
+       <p><b>NUMBER SYSTEMS AND CODES</b></p>
+
+<p><b>Analog and Digital Signal:</b></p>
+<p>Analog signal is a continuous signal that changes smoothly (example: human voice).</p>
+<p>Digital signal is a discrete signal that has only two values (0 and 1).</p>
+
+<p><b>Number Systems:</b></p>
+
+<p><b>Binary Number System:</b></p>
+<p>Base 2 (digits: 0 and 1).</p>
+
+<p><b>Octal Number System:</b></p>
+<p>Base 8 (digits: 0 to 7).</p>
+
+<p><b>Hexadecimal Number System:</b></p>
+<p>Base 16 (digits: 0–9 and A–F).</p>
+
+<p><b>Conversions:</b></p>
+<p>Decimal to Binary – Divide number by 2 repeatedly.</p>
+<p>Binary to Decimal – Multiply digits by powers of 2.</p>
+<p>Hexadecimal to Binary – Replace each hex digit by 4-bit binary.</p>
+<p>Binary to Hexadecimal – Group binary digits in 4 bits.</p>
+
+<p><b>Binary Addition:</b></p>
+<p>0 + 0 = 0</p>
+<p>0 + 1 = 1</p>
+<p>1 + 0 = 1</p>
+<p>1 + 1 = 10</p>
+
+<p><b>Binary Subtraction:</b></p>
+<p>0 − 0 = 0</p>
+<p>1 − 0 = 1</p>
+<p>1 − 1 = 0</p>
+<p>0 − 1 = 1 (borrow 1)</p>
+
+<p>Binary points are handled similar to decimal points.</p>
+
+<p><b>1’s Complement:</b></p>
+<p>Change all 0s to 1s and 1s to 0s.</p>
+
+<p><b>2’s Complement:</b></p>
+<p>Take 1’s complement and add 1.</p>
+<p>Used for subtraction.</p>
+
+<p><b>Concept of Code:</b></p>
+<p>Code is a system of representing information in digital form.</p>
+
+<p><b>Weighted Codes:</b></p>
+<p>Each position has a fixed weight.</p>
+<p>Example: 8421 code (BCD).</p>
+
+<p><b>8421 BCD Code:</b></p>
+<p>Binary Coded Decimal where each decimal digit is represented by 4 bits.</p>
+
+<p><b>Excess-3 Code:</b></p>
+<p>Add 3 to each decimal digit and then convert to binary.</p>
+
+<p><b>Gray Code:</b></p>
+<p>Non-weighted code where two consecutive numbers differ by only one bit.</p>
+
+<p><b>Concept of Parity:</b></p>
+<p>Parity is used to detect errors in data transmission.</p>
+
+<p><b>Single Parity:</b></p>
+<p>Add one extra bit to make total number of 1s even or odd.</p>
+
+<p><b>Double Parity:</b></p>
+<p>Uses both row and column parity for better error detection.</p>
+<p><b>LOGIC GATES AND LOGIC SIMPLIFICATIONS</b></p>
+
+<p><b>Positive and Negative Logic:</b></p>
+<p><b>Positive Logic:</b> Higher voltage represents logic 1 and lower voltage represents logic 0.</p>
+<p><b>Negative Logic:</b> Higher voltage represents logic 0 and lower voltage represents logic 1.</p>
+
+<p><b>Logic Gates:</b></p>
+<p>Logic gates are basic building blocks of digital circuits.</p>
+
+<p><b>NOT Gate:</b></p>
+<p>Also called Inverter. It gives opposite output.</p>
+<p>Truth Table:</p>
+<p>0 → 1</p>
+<p>1 → 0</p>
+
+<p><b>AND Gate:</b></p>
+<p>Output is 1 only if both inputs are 1.</p>
+<p>Truth Table:</p>
+<p>0 0 → 0</p>
+<p>0 1 → 0</p>
+<p>1 0 → 0</p>
+<p>1 1 → 1</p>
+
+<p><b>OR Gate:</b></p>
+<p>Output is 1 if any one input is 1.</p>
+
+<p><b>NAND Gate:</b></p>
+<p>Opposite of AND gate.</p>
+
+<p><b>NOR Gate:</b></p>
+<p>Opposite of OR gate.</p>
+
+<p><b>EX-OR (XOR) Gate:</b></p>
+<p>Output is 1 when inputs are different.</p>
+
+<p><b>NAND and NOR as Universal Gates:</b></p>
+<p>NAND and NOR gates can be used to create any other logic gate.</p>
+
+<p><b>TTL and CMOS Logic Families:</b></p>
+<p><b>TTL (Transistor-Transistor Logic):</b> Uses bipolar junction transistors. Fast but consumes more power.</p>
+<p><b>CMOS (Complementary MOS):</b> Uses MOSFETs. Low power consumption.</p>
+
+<p><b>Boolean Algebra Postulates:</b></p>
+<p>1) A + 0 = A</p>
+<p>2) A · 1 = A</p>
+<p>3) A + A = A</p>
+<p>4) A · A = A</p>
+<p>5) A + A’ = 1</p>
+<p>6) A · A’ = 0</p>
+
+<p><b>De Morgan’s Theorems:</b></p>
+<p>1) (A · B)’ = A’ + B’</p>
+<p>2) (A + B)’ = A’ · B’</p>
+
+<p><b>Karnaugh Map (K-Map):</b></p>
+<p>K-Map is a graphical method used to simplify Boolean expressions.</p>
+<p>It is used for up to 4 variables.</p>
+<p>Steps:</p>
+<p>1) Draw K-Map grid.</p>
+<p>2) Fill values from truth table.</p>
+<p>3) Group adjacent 1s in pairs, quads etc.</p>
+<p>4) Write simplified expression.</p>
+
+<p><b>Application:</b></p>
+<p>K-Map helps in designing simple combinational logic circuits with minimum gates.</p>
+<p><b>COMBINATIONAL CIRCUITS</b></p>
+
+<p><b>Half Adder:</b></p>
+<p>A half adder adds two binary bits and gives Sum and Carry.</p>
+<p>Inputs: A, B</p>
+<p>Outputs: Sum (S), Carry (C)</p>
+<p>Sum = A ⊕ B</p>
+<p>Carry = A · B</p>
+<p>Implemented using XOR gate (for Sum) and AND gate (for Carry).</p>
+
+<p><b>Full Adder:</b></p>
+<p>A full adder adds three binary bits (A, B and Carry-in).</p>
+<p>Inputs: A, B, Cin</p>
+<p>Outputs: Sum (S), Carry (Cout)</p>
+<p>Sum = A ⊕ B ⊕ Cin</p>
+<p>Carry = AB + BCin + ACin</p>
+<p>It can be designed using two half adders and one OR gate.</p>
+
+<p><b>4-Bit Adder:</b></p>
+<p>A 4-bit adder adds two 4-bit binary numbers.</p>
+<p>It is formed by connecting four full adders in series (ripple carry adder).</p>
+<p>Carry output of one stage is connected to next stage.</p>
+
+<p><b>4-Bit Decoder for 7-Segment Display:</b></p>
+<p>A decoder converts binary input into corresponding output signals.</p>
+<p>4-bit BCD input is converted to 7 outputs (a, b, c, d, e, f, g) for display.</p>
+<p>Common ICs: 7447 (for common anode), 7448.</p>
+
+<p><b>Multiplexer (MUX):</b></p>
+<p>A MUX selects one input from many inputs and sends it to output.</p>
+<p>Block diagram includes multiple inputs, select lines and one output.</p>
+<p>Common ICs: 74150, 74151.</p>
+
+<p><b>Demultiplexer (DEMUX):</b></p>
+<p>A DEMUX sends one input to one of many outputs based on select lines.</p>
+<p>Common ICs: 74138, 74139.</p>
+
+<p><b>Encoder:</b></p>
+<p>An encoder converts multiple input lines into a smaller number of output lines.</p>
+<p>Example: 8-to-3 encoder (8 inputs, 3 outputs).</p>
+<p>It reduces number of data lines.</p>
+<p><b>SEQUENTIAL CIRCUITS</b></p>
+
+<p><b>Sequential Circuit:</b></p>
+<p>A sequential circuit is a digital circuit whose output depends on present input and previous output (memory).</p>
+
+<p><b>Latches:</b></p>
+<p>A latch is a basic memory device.</p>
+
+<p><b>Types of Latch:</b></p>
+
+<p><b>1) SR Latch:</b></p>
+<p>Inputs: S (Set), R (Reset)</p>
+<p>Output: Q</p>
+<p>S=1, R=0 → Q=1 (Set)</p>
+<p>S=0, R=1 → Q=0 (Reset)</p>
+<p>S=0, R=0 → No change</p>
+<p>S=1, R=1 → Invalid</p>
+
+<p><b>2) D Latch:</b></p>
+<p>Has one input D and Enable.</p>
+<p>Q follows D when enable is active.</p>
+
+<p><b>Applications of Latch:</b></p>
+<p>Temporary data storage, registers.</p>
+
+<p><b>Flip-Flops:</b></p>
+<p>A flip-flop is a clock-controlled memory device.</p>
+
+<p><b>RS Flip-Flop:</b></p>
+<p>Works similar to SR latch but controlled by clock.</p>
+
+<p><b>T Flip-Flop:</b></p>
+<p>T=1 → Output toggles.</p>
+<p>T=0 → No change.</p>
+
+<p><b>D Flip-Flop:</b></p>
+<p>Output Q equals input D at clock pulse.</p>
+
+<p><b>JK Flip-Flop:</b></p>
+<p>Improved version of RS flip-flop.</p>
+<p>J=1, K=0 → Set</p>
+<p>J=0, K=1 → Reset</p>
+<p>J=1, K=1 → Toggle</p>
+
+<p><b>Master-Slave JK Flip-Flop:</b></p>
+<p>Uses two JK flip-flops to remove race condition.</p>
+
+<p><b>Difference Between Latch and Flip-Flop:</b></p>
+<p>Latch is level triggered.</p>
+<p>Flip-flop is edge triggered (clock controlled).</p>
+
+<p><b>Counters:</b></p>
+<p>Counters are sequential circuits that count pulses.</p>
+
+<p><b>Asynchronous Counter:</b></p>
+<p>Flip-flops are not triggered simultaneously (ripple counter).</p>
+
+<p><b>Synchronous Counter:</b></p>
+<p>All flip-flops are triggered at same time by common clock.</p>
+
+<p><b>Binary Counter:</b></p>
+<p>Counts in binary sequence (0,1,2,3...).</p>
+
+<p><b>Divide by N Ripple Counter:</b></p>
+<p>Divides input frequency by N.</p>
+
+<p><b>Decade Counter:</b></p>
+<p>Counts from 0 to 9 (Mod-10 counter).</p>
+
+<p><b>Ring Counter:</b></p>
+<p>Shift register with output of last flip-flop connected to first.</p>
+
+<p><b>Shift Registers:</b></p>
+<p>Registers used to store and shift data.</p>
+
+<p><b>Shift Left:</b></p>
+<p>Data moves one bit to left.</p>
+
+<p><b>Shift Right:</b></p>
+<p>Data moves one bit to right.</p>
+
+<p><b>Types of Shift Registers:</b></p>
+<p>1) Serial In Serial Out (SISO)</p>
+<p>2) Serial In Parallel Out (SIPO)</p>
+<p>3) Parallel In Serial Out (PISO)</p>
+<p>4) Parallel In Parallel Out (PIPO)</p>
+
+<p><b>Universal Shift Register:</b></p>
+<p>A shift register that can shift left, shift right and load data in parallel.</p>
+<p><b>CONVERTERS AND MEMORIES</b></p>
+
+<p><b>A/D Converter (Analog to Digital Converter):</b></p>
+<p>An A/D converter converts analog signal into digital form.</p>
+
+<p><b>Working Principle:</b></p>
+<p>It samples the analog input and converts it into binary number.</p>
+
+<p><b>Techniques of A/D Conversion:</b></p>
+
+<p><b>a) Stair Step (Ramp) A/D Converter:</b></p>
+<p>Uses a counter and DAC to generate step voltage.</p>
+<p>Compares input with ramp voltage until equal.</p>
+
+<p><b>b) Dual Slope A/D Converter:</b></p>
+<p>Input voltage is integrated for fixed time.</p>
+<p>Then reference voltage is applied in opposite direction.</p>
+<p>Time taken to return to zero is measured.</p>
+<p>High accuracy and noise rejection.</p>
+
+<p><b>c) Successive Approximation A/D Converter:</b></p>
+<p>Uses comparator and control logic.</p>
+<p>Starts with MSB and checks bit by bit.</p>
+<p>Fast and widely used.</p>
+
+<p><b>D/A Converter (Digital to Analog Converter):</b></p>
+<p>Converts digital signal into analog voltage.</p>
+
+<p><b>a) Binary Weighted D/A Converter:</b></p>
+<p>Uses resistors weighted in powers of 2.</p>
+<p>Simple design but needs precise resistor values.</p>
+
+<p><b>b) R/2R Ladder D/A Converter:</b></p>
+<p>Uses only two resistor values (R and 2R).</p>
+<p>Easy to design and more accurate.</p>
+
+<p><b>Applications of A/D and D/A Converters:</b></p>
+<p>1) Digital instruments.</p>
+<p>2) Audio and video systems.</p>
+<p>3) Communication systems.</p>
+<p>4) Microprocessor systems.</p>
+
+<p><b>Memory Organization:</b></p>
+<p>Memory is organized as rows and columns of storage cells.</p>
+<p>Address lines select location and data lines carry data.</p>
+
+<p><b>Classification of Semiconductor Memories:</b></p>
+
+<p><b>RAM (Random Access Memory):</b></p>
+<p>Volatile memory. Data lost when power off.</p>
+
+<p><b>ROM (Read Only Memory):</b></p>
+<p>Non-volatile memory. Stores permanent data.</p>
+
+<p><b>PROM:</b></p>
+<p>Programmable once by user.</p>
+
+<p><b>EPROM:</b></p>
+<p>Erasable using ultraviolet light.</p>
+
+<p><b>EEPROM:</b></p>
+<p>Electrically erasable and reprogrammable.</p>
+
+<p><b>Static RAM (SRAM):</b></p>
+<p>Uses flip-flops. Fast and costly.</p>
+
+<p><b>Dynamic RAM (DRAM):</b></p>
+<p>Uses capacitors. Slower but cheaper.</p>
+
+<p><b>74181 ALU IC:</b></p>
+<p>74181 is a 4-bit Arithmetic Logic Unit IC.</p>
+<p>It performs arithmetic and logical operations like addition, subtraction, AND, OR.</p>
+
+    `;
+}
+
+if(subject === "cprog"){
+    subjectTitle.innerText = "Programming in C";
+    notesContent.innerHTML = `
+      <p><b>BASICS OF C PROGRAMMING</b></p>
+
+<p><b>Steps in Development of a Program:</b></p>
+<p>1) Problem definition</p>
+<p>2) Algorithm development</p>
+<p>3) Draw flowchart</p>
+<p>4) Write C program</p>
+<p>5) Compile and run</p>
+<p>6) Testing and debugging</p>
+
+<p><b>Flowchart:</b></p>
+<p>A graphical representation of program steps using symbols.</p>
+
+<p><b>Algorithm:</b></p>
+<p>A step-by-step procedure to solve a problem.</p>
+
+<p><b>Program Debugging:</b></p>
+<p>Process of finding and correcting errors in a program.</p>
+
+<p><b>Input and Output Statements:</b></p>
+<p>printf() – Used to display output.</p>
+<p>scanf() – Used to take input.</p>
+
+<p><b>Constants:</b></p>
+<p>Fixed values that do not change.</p>
+<p>Example: 10, 3.14, 'A'</p>
+
+<p><b>Variables:</b></p>
+<p>Named storage locations to store data.</p>
+
+<p><b>Data Types:</b></p>
+<p>int – Integer</p>
+<p>float – Decimal number</p>
+<p>char – Character</p>
+<p>double – Large decimal number</p>
+
+<p><b>Operators:</b></p>
+<p>Arithmetic: +, -, *, /, %</p>
+<p>Relational: >, <, ==, !=</p>
+<p>Logical: &&, ||, !</p>
+<p>Assignment: =</p>
+
+<p><b>Expressions:</b></p>
+<p>Combination of variables, constants and operators.</p>
+
+<p><b>Unformatted I/O:</b></p>
+<p>getchar(), putchar()</p>
+
+<p><b>Formatted I/O:</b></p>
+<p>printf(), scanf() with format specifiers like %d, %f, %c</p>
+
+<p><b>Data Type Casting:</b></p>
+<p>Converting one data type to another.</p>
+<p>Example: (float)a</p>
+
+<p><b>Decision Making Statements:</b></p>
+
+<p><b>IF Statement:</b></p>
+<p>Executes block if condition is true.</p>
+
+<p><b>IF-Else Statement:</b></p>
+<p>Chooses between two blocks.</p>
+
+<p><b>Nested IF:</b></p>
+<p>IF statement inside another IF.</p>
+
+<p><b>Loops:</b></p>
+
+<p><b>While Loop:</b></p>
+<p>Repeats while condition is true.</p>
+
+<p><b>Do-While Loop:</b></p>
+<p>Executes at least once, then checks condition.</p>
+
+<p><b>For Loop:</b></p>
+<p>Used when number of repetitions is known.</p>
+
+<p><b>Break Statement:</b></p>
+<p>Stops loop immediately.</p>
+
+<p><b>Continue Statement:</b></p>
+<p>Skips current iteration.</p>
+
+<p><b>Goto Statement:</b></p>
+<p>Transfers control to labeled statement.</p>
+
+<p><b>Switch Statement:</b></p>
+<p>Used for multiple selection based on expression value.</p>
+<p><b>POINTERS AND FUNCTIONS</b></p>
+
+<p><b>Introduction to Pointers:</b></p>
+<p>A pointer is a variable that stores the address of another variable.</p>
+
+<p><b>Address Operator (&amp;):</b></p>
+<p>The &amp; operator gives the address of a variable.</p>
+<p>Example: int a = 10;  &amp;a gives address of a.</p>
+
+<p><b>Declaring a Pointer:</b></p>
+<p>int *p;  (p is a pointer to integer)</p>
+
+<p><b>Initializing a Pointer:</b></p>
+<p>int a = 10;</p>
+<p>int *p = &amp;a;</p>
+
+<p><b>Single Pointer:</b></p>
+<p>A pointer that stores address of one variable.</p>
+
+<p><b>Accessing Value Using Pointer:</b></p>
+<p>*p gives value stored at address.</p>
+
+<p><b>Introduction to Functions:</b></p>
+<p>A function is a block of code that performs a specific task.</p>
+
+<p><b>Function Declaration (Prototype):</b></p>
+<p>int add(int, int);</p>
+
+<p><b>Function Definition:</b></p>
+<p>int add(int a, int b)</p>
+<p>{</p>
+<p> return a + b;</p>
+<p>}</p>
+
+<p><b>Function Calling:</b></p>
+<p>result = add(5, 3);</p>
+
+<p><b>Parameter Passing:</b></p>
+<p>Passing values to function.</p>
+
+<p><b>Call by Value:</b></p>
+<p>Copies value of arguments.</p>
+<p>Changes inside function do not affect original variable.</p>
+
+<p><b>Call by Reference:</b></p>
+<p>Passes address of variable using pointer.</p>
+<p>Changes inside function affect original variable.</p>
+
+<p><b>Global Variables:</b></p>
+<p>Declared outside all functions.</p>
+<p>Accessible by all functions.</p>
+
+<p><b>Local Variables:</b></p>
+<p>Declared inside a function.</p>
+<p>Accessible only within that function.</p>
+<p><b>ARRAYS AND STRINGS</b></p>
+
+<p><b>Introduction to Arrays:</b></p>
+<p>An array is a collection of similar data types stored in continuous memory locations.</p>
+
+<p><b>Array Declaration:</b></p>
+<p>int a[5];  (Declares an array of 5 integers)</p>
+
+<p><b>Length of Array:</b></p>
+<p>The number inside brackets shows the size (length) of the array.</p>
+
+<p><b>Single Dimensional Array:</b></p>
+<p>Stores elements in one row.</p>
+<p>Example: int a[5];</p>
+
+<p><b>Multi-Dimensional Array:</b></p>
+<p>Stores data in rows and columns.</p>
+<p>Example: int a[3][3];</p>
+
+<p><b>Arrays of Characters:</b></p>
+<p>Used to store characters.</p>
+<p>Example: char name[10];</p>
+
+<p><b>Introduction to Strings:</b></p>
+<p>A string is a collection of characters ending with null character '\0'.</p>
+
+<p><b>String Declaration and Definition:</b></p>
+<p>char str[20];</p>
+<p>char str[] = "Hello";</p>
+
+<p><b>String Functions:</b></p>
+<p>strlen(str) – Finds length of string.</p>
+<p>strcpy(str1, str2) – Copies one string to another.</p>
+<p>strcmp(str1, str2) – Compares two strings.</p>
+
+<p><b>Passing Array to Function:</b></p>
+<p>Arrays can be passed as arguments to functions.</p>
+<p>Example: void display(int a[]);</p>
+
+<p><b>Pointers to Array:</b></p>
+<p>int *p = a;  (Pointer points to first element of array)</p>
+
+<p><b>Pointers to Strings:</b></p>
+<p>char *p = "Hello";</p>
+<p>Pointer stores address of first character of string.</p>
+<p><b>STRUCTURES AND UNIONS</b></p>
+
+<p><b>Structure:</b></p>
+<p>A structure is a user-defined data type used to group different types of data together.</p>
+
+<p><b>Declaration of Structure:</b></p>
+<p>struct student</p>
+<p>{</p>
+<p> int roll;</p>
+<p> char name[20];</p>
+<p> float marks;</p>
+<p>};</p>
+
+<p><b>Creating Structure Variable:</b></p>
+<p>struct student s1;</p>
+
+<p><b>Accessing Structure Members:</b></p>
+<p>Using dot (.) operator.</p>
+<p>Example: s1.roll = 1;</p>
+<p>s1.marks = 85.5;</p>
+
+<p><b>Structure Initialization:</b></p>
+<p>struct student s1 = {1, "Rahul", 90.5};</p>
+
+<p><b>Pointer to Structure:</b></p>
+<p>struct student *ptr;</p>
+<p>ptr = &amp;s1;</p>
+<p>Access members using arrow (->) operator.</p>
+<p>Example: ptr->roll;</p>
+
+<p><b>Union:</b></p>
+<p>A union is similar to structure but all members share the same memory location.</p>
+
+<p><b>Declaration of Union:</b></p>
+<p>union data</p>
+<p>{</p>
+<p> int i;</p>
+<p> float f;</p>
+<p> char ch;</p>
+<p>};</p>
+
+<p><b>Difference Between Structure and Union:</b></p>
+<p>In structure, each member has separate memory.</p>
+<p>In union, all members share same memory.</p>
+<p><b>FILE HANDLING IN C</b></p>
+
+<p><b>File Handling:</b></p>
+<p>File handling is used to store data permanently in a file.</p>
+
+<p><b>Opening a File:</b></p>
+<p>To open a file, we use fopen() function.</p>
+<p>Syntax: FILE *fp;</p>
+<p>fp = fopen("file.txt", "mode");</p>
+
+<p><b>Closing a File:</b></p>
+<p>To close a file, we use fclose() function.</p>
+<p>Syntax: fclose(fp);</p>
+
+<p><b>Modes of Accessing Files:</b></p>
+<p>"r"  → Open file for reading.</p>
+<p>"w"  → Open file for writing (creates new file).</p>
+<p>"a"  → Open file for appending.</p>
+<p>"r+" → Open file for reading and writing.</p>
+<p>"w+" → Open file for reading and writing (overwrites file).</p>
+<p>"a+" → Open file for reading and appending.</p>
+
+<p><b>Reading from File:</b></p>
+<p>Functions used:</p>
+<p>fscanf(fp, "%d", &amp;x);</p>
+<p>fgets(str, size, fp);</p>
+<p>fgetc(fp);</p>
+
+<p><b>Writing to File:</b></p>
+<p>Functions used:</p>
+<p>fprintf(fp, "%d", x);</p>
+<p>fputs(str, fp);</p>
+<p>fputc(ch, fp);</p>
+
+<p><b>Steps in File Handling:</b></p>
+<p>1) Declare file pointer.</p>
+<p>2) Open file using fopen().</p>
+<p>3) Perform read/write operations.</p>
+<p>4) Close file using fclose().</p>
+
+    `;
+}
+
+if(subject === "dbms"){
+    subjectTitle.innerText = "Data Base Management System";
+    notesContent.innerHTML = `
+        <p><b>INTRODUCTION TO DATABASE SYSTEM CONCEPTS AND ARCHITECTURE</b></p>
+
+<p><b>Database System:</b></p>
+<p>A database system is a collection of related data and programs used to access and manage that data.</p>
+
+<p><b>Database:</b></p>
+<p>A database is an organized collection of data stored electronically.</p>
+
+<p><b>Purpose of Database:</b></p>
+<p>To store, manage and retrieve data efficiently.</p>
+
+<p><b>Characteristics of Database Approach:</b></p>
+<p>1) Self-describing nature (stores data and metadata).</p>
+<p>2) Data independence.</p>
+<p>3) Reduced data redundancy.</p>
+<p>4) Data sharing and multi-user access.</p>
+
+<p><b>Advantages of DBMS:</b></p>
+<p>1) Reduces data duplication.</p>
+<p>2) Improves data security.</p>
+<p>3) Easy data access.</p>
+<p>4) Data consistency.</p>
+
+<p><b>Disadvantages of DBMS:</b></p>
+<p>1) High cost.</p>
+<p>2) Complexity.</p>
+<p>3) Requires trained staff.</p>
+
+<p><b>Classification of DBMS Users:</b></p>
+
+<p><b>Actors on the Scene:</b></p>
+
+<p><b>Database Administrator (DBA):</b></p>
+<p>Manages database security, backup and performance.</p>
+
+<p><b>Database Designers:</b></p>
+<p>Design database structure and schema.</p>
+
+<p><b>End Users:</b></p>
+<p>Use database for queries and reports.</p>
+
+<p><b>System Analysts and Application Programmers:</b></p>
+<p>Develop applications that use database.</p>
+
+<p><b>Workers Behind the Scene:</b></p>
+<p>1) DBMS Designers and Implementers.</p>
+<p>2) Tool Developers.</p>
+<p>3) Operators and Maintenance Personnel.</p>
+
+<p><b>Data Models:</b></p>
+<p>Conceptual tools used to describe structure of database (Example: Relational model).</p>
+
+<p><b>Schema:</b></p>
+<p>Overall design of database.</p>
+
+<p><b>Instance:</b></p>
+<p>Actual data stored in database at a particular time.</p>
+
+<p><b>Database State:</b></p>
+<p>Current data stored in database.</p>
+
+<p><b>DBMS Architecture:</b></p>
+
+<p><b>External Level:</b></p>
+<p>User view of database.</p>
+
+<p><b>Conceptual Level:</b></p>
+<p>Logical structure of entire database.</p>
+
+<p><b>Internal Level:</b></p>
+<p>Physical storage of data.</p>
+
+<p><b>Mappings:</b></p>
+<p>Link between different levels of architecture.</p>
+
+<p><b>Data Independence:</b></p>
+
+<p><b>Logical Data Independence:</b></p>
+<p>Ability to change conceptual schema without changing external schema.</p>
+
+<p><b>Physical Data Independence:</b></p>
+<p>Ability to change internal schema without affecting conceptual schema.</p>
+
+<p><b>Database Languages:</b></p>
+<p>DDL (Data Definition Language)</p>
+<p>DML (Data Manipulation Language)</p>
+<p>DCL (Data Control Language)</p>
+
+<p><b>DBMS Interfaces:</b></p>
+<p>1) Command Line Interface</p>
+<p>2) Graphical User Interface</p>
+<p>3) Application programs</p>
+
+<p><b>Classification of DBMS:</b></p>
+
+<p><b>Centralized DBMS:</b></p>
+<p>Database stored at single location.</p>
+
+<p><b>Distributed DBMS:</b></p>
+<p>Database stored at multiple locations connected through network.</p>
+<p><b>DATA MODELING USING E/R MODEL AND RELATIONAL DATA MODEL</b></p>
+
+<p><b>Classification of Data Models:</b></p>
+<p><b>1) File Based (Primitive) Model:</b> Data stored in files without proper structure.</p>
+<p><b>2) Traditional Data Models:</b> Hierarchical and Network models.</p>
+<p><b>3) Semantic Data Models:</b> E/R model which shows meaning of data.</p>
+
+<p><b>E/R (Entity Relationship) Model:</b></p>
+<p>A high-level data model used to design database.</p>
+
+<p><b>Entity:</b></p>
+<p>An object or thing about which data is stored. Example: Student, Employee.</p>
+
+<p><b>Attributes:</b></p>
+<p>Properties of entity. Example: Roll No, Name, Age.</p>
+
+<p><b>Entity Type:</b></p>
+<p>Group of similar entities.</p>
+
+<p><b>Entity Set:</b></p>
+<p>Collection of all entities of same type.</p>
+
+<p><b>Key Attribute:</b></p>
+<p>Attribute that uniquely identifies an entity.</p>
+
+<p><b>Domain of Attribute:</b></p>
+<p>Set of possible values an attribute can have.</p>
+
+<p><b>Relationship:</b></p>
+<p>Association among entities. Example: Student "enrolls" in Course.</p>
+
+<p><b>Database Design with E/R Model:</b></p>
+<p>1) Identify entities.</p>
+<p>2) Identify attributes.</p>
+<p>3) Define relationships.</p>
+<p>4) Draw E/R diagram.</p>
+
+<p><b>Relational Model Concepts:</b></p>
+
+<p><b>Domain:</b></p>
+<p>Set of valid values for an attribute.</p>
+
+<p><b>Attribute:</b></p>
+<p>Column in a table.</p>
+
+<p><b>Tuple:</b></p>
+<p>Row in a table.</p>
+
+<p><b>Cardinality:</b></p>
+<p>Number of tuples in a relation.</p>
+
+<p><b>Relation:</b></p>
+<p>A table with rows and columns.</p>
+
+<p><b>Keys:</b></p>
+<p><b>Primary Key:</b> Uniquely identifies each record.</p>
+<p><b>Secondary Key:</b> Non-unique attribute used for searching.</p>
+<p><b>Foreign Key:</b> Attribute that refers to primary key of another table.</p>
+<p><b>Alternate Key:</b> Candidate key not selected as primary key.</p>
+
+<p><b>Relational Constraints:</b></p>
+
+<p><b>Domain Constraint:</b> Attribute values must be from defined domain.</p>
+<p><b>Key Constraint:</b> No two tuples can have same primary key.</p>
+<p><b>Null Constraint:</b> Certain attributes cannot have NULL value.</p>
+
+<p><b>Relational Database Schema:</b></p>
+<p>Structure of database with table definitions.</p>
+
+<p><b>Entity Integrity:</b></p>
+<p>Primary key cannot be NULL.</p>
+
+<p><b>Referential Integrity:</b></p>
+<p>Foreign key must match primary key in referenced table.</p>
+
+<p><b>Comparison between E/R Model and Relational Model:</b></p>
+<p>E/R Model – Used for database design (conceptual level).</p>
+<p>Relational Model – Used for implementation (tables).</p>
+<p>E/R uses diagrams.</p>
+<p>Relational model uses tables.</p>
+<p><b>NORMALIZATION</b></p>
+
+<p><b>Normalization:</b></p>
+<p>Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity.</p>
+
+<p><b>Functional Dependency (FD):</b></p>
+<p>A functional dependency means one attribute depends on another attribute.</p>
+<p>Example: Roll_No → Name (Roll number determines name).</p>
+
+<p><b>Trivial Functional Dependency:</b></p>
+<p>A dependency where right side attribute is already part of left side.</p>
+<p>Example: (A, B) → A</p>
+
+<p><b>Non-Trivial Functional Dependency:</b></p>
+<p>A dependency where right side attribute is not part of left side.</p>
+<p>Example: A → B</p>
+
+<p><b>Non-Loss (Lossless) Decomposition:</b></p>
+<p>When a table is divided into smaller tables without losing data.</p>
+<p>After joining decomposed tables, original table is obtained.</p>
+
+<p><b>First Normal Form (1NF):</b></p>
+<p>1) Table should have atomic (single) values.</p>
+<p>2) No repeating groups.</p>
+
+<p><b>Second Normal Form (2NF):</b></p>
+<p>1) Must be in 1NF.</p>
+<p>2) No partial dependency (non-key attribute should depend on full primary key).</p>
+
+<p><b>Third Normal Form (3NF):</b></p>
+<p>1) Must be in 2NF.</p>
+<p>2) No transitive dependency (non-key attribute should not depend on another non-key attribute).</p>
+
+<p><b>Boyce-Codd Normal Form (BCNF):</b></p>
+<p>A stronger version of 3NF.</p>
+<p>Every determinant must be a candidate key.</p>
+
+<p><b>Denormalization:</b></p>
+<p>Process of combining tables to improve performance.</p>
+<p>Used when faster data retrieval is required.</p>
+<p><b>DATABASE ACCESS AND SECURITY</b></p>
+
+<p><b>Indexes:</b></p>
+<p>An index is used to speed up searching of data in a table.</p>
+
+<p><b>Creating an Index:</b></p>
+<p>CREATE INDEX index_name ON table_name(column_name);</p>
+
+<p><b>Using an Index:</b></p>
+<p>Indexes are automatically used by DBMS to search data faster.</p>
+
+<p><b>Views:</b></p>
+<p>A view is a virtual table based on a query.</p>
+<p>It does not store data physically.</p>
+
+<p><b>Creating a View:</b></p>
+<p>CREATE VIEW view_name AS SELECT column1, column2 FROM table_name;</p>
+
+<p><b>Using a View:</b></p>
+<p>SELECT * FROM view_name;</p>
+
+<p><b>Database Security:</b></p>
+<p>Database security protects data from unauthorized access.</p>
+
+<p><b>Process Controls:</b></p>
+<p>Rules and procedures to control access and usage of database.</p>
+
+<p><b>Database Protection:</b></p>
+<p>1) User authentication.</p>
+<p>2) Access control.</p>
+<p>3) Backup and recovery.</p>
+
+<p><b>GRANT Command:</b></p>
+<p>Used to give permissions to users.</p>
+<p>Example: GRANT SELECT ON table_name TO user_name;</p>
+
+<p><b>REVOKE Command:</b></p>
+<p>Used to remove permissions from users.</p>
+<p>Example: REVOKE SELECT ON table_name FROM user_name;</p>
+<p><b>MYSQL / SQL (STRUCTURED QUERY LANGUAGE)</b></p>
+
+<p><b>SQL:</b></p>
+<p>SQL is a language used to manage and manipulate databases.</p>
+
+<p><b>DDL (Data Definition Language):</b></p>
+<p>Used to define and modify database structure.</p>
+
+<p><b>Creating Table:</b></p>
+<p>CREATE TABLE student (id INT, name VARCHAR(20), marks INT);</p>
+
+<p><b>Creating Table from Another Table:</b></p>
+<p>CREATE TABLE new_table AS SELECT * FROM student;</p>
+
+<p><b>Inserting Values:</b></p>
+<p>INSERT INTO student VALUES (1, 'Rahul', 85);</p>
+
+<p><b>Updating Table:</b></p>
+<p>UPDATE student SET marks = 90 WHERE id = 1;</p>
+
+<p><b>Deleting Rows:</b></p>
+<p>DELETE FROM student WHERE id = 1;</p>
+
+<p><b>Dropping Table:</b></p>
+<p>DROP TABLE student;</p>
+
+<p><b>DML (Data Manipulation Language):</b></p>
+<p>Used to retrieve and manipulate data.</p>
+
+<p><b>Database Security and Privileges:</b></p>
+<p>Controls user access to database.</p>
+
+<p><b>Grant Command:</b></p>
+<p>GRANT SELECT, INSERT ON student TO user1;</p>
+
+<p><b>Revoke Command:</b></p>
+<p>REVOKE INSERT ON student FROM user1;</p>
+
+<p><b>Maintaining Database Objects:</b></p>
+<p>Using ALTER, DROP, RENAME commands.</p>
+
+<p><b>Commit:</b></p>
+<p>Saves changes permanently.</p>
+
+<p><b>Rollback:</b></p>
+<p>Cancels changes before commit.</p>
+
+<p><b>Select Commands:</b></p>
+<p>SELECT * FROM student;</p>
+<p>SELECT name FROM student WHERE marks > 80;</p>
+
+<p><b>Types of Joins:</b></p>
+<p>1) INNER JOIN</p>
+<p>2) LEFT JOIN</p>
+<p>3) RIGHT JOIN</p>
+<p>4) FULL JOIN</p>
+
+<p><b>Sub Query:</b></p>
+<p>A query inside another query.</p>
+
+<p><b>Aggregate Functions:</b></p>
+<p>COUNT(), SUM(), AVG(), MAX(), MIN()</p>
+
+<p><b>Challenges of MySQL:</b></p>
+<p>1) Handling very large data.</p>
+<p>2) Security risks if not configured properly.</p>
+<p>3) Performance issues with complex queries.</p>
+
+<p><b>Introduction to Big Data:</b></p>
+<p>Big Data refers to very large and complex data sets.</p>
+
+<p><b>Characteristics of Big Data (5V):</b></p>
+<p>1) Volume – Large amount of data.</p>
+<p>2) Velocity – Speed of data generation.</p>
+<p>3) Variety – Different types of data.</p>
+<p>4) Veracity – Data accuracy.</p>
+<p>5) Value – Useful information from data.</p>
+
+<p><b>Examples of Big Data:</b></p>
+<p>1) Social media data.</p>
+<p>2) Online shopping records.</p>
+<p>3) Sensor data.</p>
+<p>4) Banking transactions.</p>
+
+    `;
+}
+/* -------- SEMESTER 4 -------- */
+
+if(subject === "eng2"){
+    subjectTitle.innerText = "English and Communication Skills - II";
+    notesContent.innerHTML = `
+       <p><b>READING NOTES</b></p>
+
+<p><b>1) Portrait of a Lady – Khushwant Singh</b></p>
+<p>This story describes the author’s grandmother.</p>
+<p>She was old, kind and very religious.</p>
+<p>She loved the author deeply and looked after him.</p>
+<p>She did not like English education and modern life.</p>
+<p>After moving to the city, she felt lonely.</p>
+<p>She spent most of her time praying.</p>
+<p>In the end, she died peacefully.</p>
+<p><b>Main Idea:</b> Love, respect for elders and generation gap.</p>
+
+<p><b>2) The Doctor’s Word – R. K. Narayan</b></p>
+<p>This story is about Dr. Raman and his friend Gopal.</p>
+<p>Gopal was seriously ill.</p>
+<p>The doctor knew the truth but encouraged him.</p>
+<p>His positive words saved Gopal’s life.</p>
+<p><b>Main Idea:</b> Importance of hope and positive thinking.</p>
+
+<p><b>3) Speech by Dr. Kiran Bedi at IIM Indore (2007) – Leadership Concepts</b></p>
+<p>Dr. Kiran Bedi spoke about true leadership.</p>
+<p>A leader must be honest and disciplined.</p>
+<p>Leadership means taking responsibility.</p>
+<p>She encouraged youth to work hard and serve society.</p>
+<p><b>Main Idea:</b> Leadership requires courage, integrity and action.</p>
+
+<p><b>4) The Bet – Anton Chekhov</b></p>
+<p>This story is about a bet between a banker and a lawyer.</p>
+<p>The lawyer agreed to stay alone for 15 years to win money.</p>
+<p>During isolation, he read many books and gained knowledge.</p>
+<p>In the end, he gave up the money.</p>
+<p>He realized that money is not everything.</p>
+<p><b>Main Idea:</b> Knowledge and inner peace are more valuable than money.</p>
+<p><b>EFFECTIVE COMMUNICATION SKILLS</b></p>
+
+<p><b>Modern Means of Communication:</b></p>
+<p>1) Video Conferencing – Online face-to-face meeting.</p>
+<p>2) E-mail – Sending messages electronically.</p>
+<p>3) Teleconferencing – Audio meeting through phone.</p>
+
+<p><b>7 C’s of Communication:</b></p>
+<p>1) Clear</p>
+<p>2) Concise</p>
+<p>3) Correct</p>
+<p>4) Complete</p>
+<p>5) Concrete</p>
+<p>6) Courteous</p>
+<p>7) Considerate</p>
+
+<p><b>Non-Verbal Communication:</b></p>
+<p><b>Significance:</b> Body language supports spoken words.</p>
+<p><b>Types:</b> Facial expression, gestures, posture, eye contact.</p>
+<p><b>Techniques:</b> Maintain eye contact, confident posture, proper gestures.</p>
+
+<p><b>Barriers in Listening:</b></p>
+<p>Noise, lack of interest, distractions, emotional disturbance.</p>
+
+<p><b>Barriers in Speaking:</b></p>
+<p>Lack of confidence, poor vocabulary, fear, unclear ideas.</p>
+
+<p><b>PROFESSIONAL WRITING</b></p>
+
+<p><b>Enquiry Letter:</b> Asking information.</p>
+<p><b>Order Letter:</b> Placing order for goods.</p>
+<p><b>Complaint Letter:</b> Reporting problem.</p>
+<p><b>Report Writing:</b> Formal written document of facts.</p>
+<p><b>Memo:</b> Short official message.</p>
+<p><b>Circular:</b> Notice sent to many people.</p>
+<p><b>Press Release:</b> Official information for media.</p>
+<p><b>Inspection Notes:</b> Notes prepared during inspection.</p>
+<p><b>Corrigendum:</b> Correction of mistake in official document.</p>
+<p><b>Cover Letter:</b> Letter attached with resume.</p>
+
+<p><b>GRAMMAR AND VOCABULARY</b></p>
+
+<p><b>Prepositions:</b> in, on, at, under, between etc.</p>
+<p><b>Conjunctions:</b> and, but, because, although etc.</p>
+<p><b>Punctuation:</b> Full stop (.), Comma (,), Question mark (?) etc.</p>
+
+<p><b>Idioms and Phrases (Meaning Short):</b></p>
+<p>A bird’s eye view – Overview</p>
+<p>A child’s play – Very easy</p>
+<p>A fish out of water – Uncomfortable</p>
+<p>Apple of one’s eye – Very dear person</p>
+<p>Beat about the bush – Avoid main topic</p>
+<p>Black sheep – Bad member of group</p>
+<p>Once in a blue moon – Very rarely</p>
+<p>To kill two birds with one stone – Achieve two goals at once</p>
+<p>Ups and downs – Good and bad times</p>
+
+<p><b>Commonly Confused Words (Example Meanings):</b></p>
+<p>Accept – Receive / Except – Exclude</p>
+<p>Affect – Influence / Effect – Result</p>
+<p>Lose – Misplace / Loose – Not tight</p>
+<p>Principal – Head / Principle – Rule</p>
+<p>Stationary – Not moving / Stationery – Writing material</p>
+
+<p><b>Translation of Administrative Terms (Examples):</b></p>
+<p>Academy – अकादमी</p>
+<p>Administrator – प्रशासक</p>
+<p>Agenda – कार्यसूची</p>
+<p>Affidavit – शपथपत्र</p>
+<p>Director – निदेशक</p>
+<p>Income Tax – आयकर</p>
+<p>Legislative Assembly – विधानसभा</p>
+<p>Temporary – अस्थायी</p>
+<p>Verification – सत्यापन</p>
+<p>Warning – चेतावनी</p>
+
+<p><b>EMPLOYABILITY SKILLS</b></p>
+
+<p><b>Presentation Skills:</b></p>
+<p>1) Know your topic.</p>
+<p>2) Prepare slides clearly.</p>
+<p>3) Practice before presentation.</p>
+<p>4) Maintain confidence and eye contact.</p>
+
+<p><b>Telephone Etiquettes:</b></p>
+<p>1) Speak politely.</p>
+<p>2) Introduce yourself.</p>
+<p>3) Listen carefully.</p>
+
+<p><b>Importance of Soft Skills:</b></p>
+<p>Improves personality, teamwork and job opportunities.</p>
+
+<p><b>Resume Writing:</b></p>
+<p>Resume is a short summary of qualifications and skills.</p>
+<p><b>Bio-data:</b> Personal details mainly.</p>
+<p><b>CV:</b> Detailed academic and professional record.</p>
+
+<p><b>Group Discussion (GD):</b></p>
+<p>Exchange of ideas on a topic.</p>
+<p>Be confident, listen to others, speak clearly.</p>
+
+<p><b>Case Studies and Role Play:</b></p>
+<p>Practical activities to improve decision-making and communication skills.</p>
+
+    `;
+}
+
+if(subject === "coa"){
+    subjectTitle.innerText = "Computer Organization & Architecture";
+    notesContent.innerHTML = `
+        <p><b>CPU ORGANISATION</b></p>
+
+<p><b>General Register Organisation:</b></p>
+<p>CPU contains general purpose registers to store data temporarily.</p>
+<p>Registers are connected through a common bus.</p>
+
+<p><b>Stack Organisation:</b></p>
+<p>Stack is a memory structure that follows LIFO (Last In First Out).</p>
+<p>Used for function calls and temporary storage.</p>
+
+<p><b>Instruction Formats:</b></p>
+<p><b>Three Address:</b> ADD A, B, C (A = B + C)</p>
+<p><b>Two Address:</b> ADD A, B (A = A + B)</p>
+<p><b>One Address:</b> Uses accumulator (ADD B)</p>
+<p><b>Zero Address:</b> Used in stack (no explicit address)</p>
+<p><b>RISC Instruction:</b> Simple and fixed length instructions.</p>
+
+<p><b>Addressing Modes:</b></p>
+<p>Immediate – Operand is given in instruction.</p>
+<p>Register – Operand in register.</p>
+<p>Direct – Address of operand given directly.</p>
+<p>Indirect – Address stored in another location.</p>
+<p>Relative – Address relative to program counter.</p>
+<p>Indexed – Base address + index value.</p>
+
+<p><b>MEMORY ORGANISATION</b></p>
+
+<p><b>Memory Hierarchy:</b></p>
+<p>Registers → Cache → Main Memory → Secondary Memory.</p>
+
+<p><b>RAM and ROM Chips:</b></p>
+<p>RAM – Volatile memory.</p>
+<p>ROM – Non-volatile memory.</p>
+
+<p><b>Memory Address Map:</b></p>
+<p>Shows allocation of memory addresses.</p>
+
+<p><b>Memory Connection to CPU:</b></p>
+<p>Through address bus, data bus and control bus.</p>
+
+<p><b>Auxiliary Memory:</b></p>
+<p>Magnetic Disk – Stores large data permanently.</p>
+<p>Magnetic Tape – Used for backup.</p>
+
+<p><b>Associative Memory:</b></p>
+<p>Accessed by content rather than address.</p>
+
+<p><b>Cache Memory:</b></p>
+<p>Small fast memory between CPU and RAM.</p>
+
+<p><b>Virtual Memory:</b></p>
+<p>Uses disk space as extension of RAM.</p>
+
+<p><b>Memory Management Hardware:</b></p>
+<p>Includes MMU (Memory Management Unit).</p>
+
+<p><b>Read and Write Operation:</b></p>
+<p>Read – Data transfer from memory to CPU.</p>
+<p>Write – Data transfer from CPU to memory.</p>
+
+<p><b>I/O ORGANISATION</b></p>
+
+<p><b>BIOS (Basic Input Output System):</b></p>
+<p>Firmware stored in ROM.</p>
+<p>Functions:</p>
+<p>1) System testing (POST).</p>
+<p>2) Hardware initialization.</p>
+<p>3) Load operating system.</p>
+
+<p><b>Modes of Data Transfer:</b></p>
+<p>Programmed I/O</p>
+<p>Interrupt initiated I/O</p>
+<p>DMA (Direct Memory Access)</p>
+
+<p><b>Programmed I/O:</b></p>
+<p>CPU controls data transfer.</p>
+
+<p><b>Synchronous:</b> Data transfer with clock signal.</p>
+<p><b>Asynchronous:</b> No common clock.</p>
+
+<p><b>Interrupt Initiated:</b></p>
+<p>Device sends interrupt signal to CPU.</p>
+
+<p><b>DMA:</b></p>
+<p>Data transferred directly between memory and device without CPU.</p>
+
+<p><b>ARCHITECTURE OF MULTIPROCESSOR SYSTEMS</b></p>
+
+<p><b>Parallel Processing:</b></p>
+<p>Multiple processors work simultaneously.</p>
+
+<p><b>Pipelining:</b></p>
+<p>Execution of multiple instruction stages in parallel.</p>
+
+<p><b>Characteristics:</b></p>
+<p>High speed, shared memory, multiple CPUs.</p>
+
+<p><b>General Purpose Multiprocessors:</b></p>
+<p>Used for common computing tasks.</p>
+
+<p><b>Interconnection Networks:</b></p>
+<p>Time Shared Common Bus</p>
+<p>Multi-port Memory</p>
+<p>Crossbar Switch</p>
+<p>Multistage Switching Network</p>
+<p>Hypercube Structure</p>
+
+<p><b>I/O INTERFACE</b></p>
+
+<p><b>I/O Interface:</b></p>
+<p>Hardware that connects I/O devices with CPU.</p>
+
+<p><b>Synchronous Data Transfer:</b></p>
+<p>Uses common clock signal.</p>
+
+<p><b>Asynchronous Data Transfer:</b></p>
+<p>No common clock; uses control signals.</p>
+
+<p><b>Strobe Control:</b></p>
+<p>Single control signal for data transfer.</p>
+
+<p><b>Handshaking:</b></p>
+<p>Two control signals to ensure safe transfer.</p>
+
+<p><b>Asynchronous Serial Transfer:</b></p>
+<p>Data sent bit by bit with start and stop bits.</p>
+
+    `;
+}
+
+if(subject === "ds_c"){
+    subjectTitle.innerText = "Data Structures using C";
+    notesContent.innerHTML = `
+        <p><b>FUNDAMENTAL NOTATIONS</b></p>
+
+<p><b>Problem Solving in C:</b></p>
+<p>Problem solving means understanding a problem and writing step-by-step instructions (algorithm) to solve it using C language.</p>
+
+<p><b>Top-Down Design:</b></p>
+<p>Main problem is divided into smaller modules.</p>
+
+<p><b>Bottom-Up Design:</b></p>
+<p>Small modules are created first and combined later.</p>
+
+<p><b>Structured Programming:</b></p>
+<p>Program is divided into functions using sequence, selection and iteration.</p>
+
+<p><b>Data Types:</b></p>
+<p>int, float, char, double.</p>
+
+<p><b>Variables:</b></p>
+<p>Used to store data values.</p>
+
+<p><b>Constants:</b></p>
+<p>Fixed values that do not change.</p>
+
+<p><b>Pointer Variables:</b></p>
+<p>Store address of another variable.</p>
+
+<p><b>Arrays and Linked Lists</b></p>
+
+<p><b>Array:</b></p>
+<p>Collection of same type elements stored in continuous memory.</p>
+
+<p><b>Multi-Dimensional Array:</b></p>
+<p>Stored in row-major order in memory.</p>
+
+<p><b>Operations on Arrays:</b></p>
+<p>Searching – Find element (Linear, Binary).</p>
+<p>Traversing – Visit each element.</p>
+<p>Insertion – Add element at position.</p>
+<p>Deletion – Remove element.</p>
+
+<p><b>Linked List:</b></p>
+<p>Collection of nodes connected by pointers.</p>
+
+<p><b>Representation:</b></p>
+<p>Each node contains data and address of next node.</p>
+
+<p><b>Operations:</b></p>
+<p>Insertion – Add node.</p>
+<p>Deletion – Remove node.</p>
+<p>Traversal – Visit nodes.</p>
+
+<p><b>Applications:</b></p>
+<p>Dynamic memory management, implementing stacks and queues.</p>
+
+<p><b>Doubly Linked List:</b></p>
+<p>Each node has two pointers (next and previous).</p>
+
+<p><b>Stacks, Queues and Recursion</b></p>
+
+<p><b>Stack:</b></p>
+<p>Follows LIFO (Last In First Out).</p>
+
+<p><b>Representation:</b></p>
+<p>Using array or linked list.</p>
+
+<p><b>Applications:</b></p>
+<p>Expression evaluation, function calls.</p>
+
+<p><b>Queue:</b></p>
+<p>Follows FIFO (First In First Out).</p>
+
+<p><b>Implementation:</b></p>
+<p>Using array or linked list.</p>
+
+<p><b>Circular Queue:</b></p>
+<p>Last position connected to first position.</p>
+
+<p><b>De-queue:</b></p>
+<p>Insertion and deletion from both ends.</p>
+
+<p><b>Recursion:</b></p>
+<p>Function calling itself.</p>
+
+<p><b>TREES</b></p>
+
+<p><b>Tree:</b></p>
+<p>Hierarchical data structure with nodes.</p>
+
+<p><b>Binary Tree:</b></p>
+<p>Each node has at most two children.</p>
+
+<p><b>Traversal:</b></p>
+<p>Preorder – Root, Left, Right.</p>
+<p>Inorder – Left, Root, Right.</p>
+<p>Postorder – Left, Right, Root.</p>
+
+<p><b>Binary Search Tree:</b></p>
+<p>Left child smaller, right child larger.</p>
+
+<p><b>Heap:</b></p>
+<p>Complete binary tree used for priority queues.</p>
+
+<p><b>SORTING AND SEARCHING</b></p>
+
+<p><b>Searching:</b></p>
+<p>Linear Search – Check each element.</p>
+<p>Binary Search – Divide and search (sorted array).</p>
+
+<p><b>Sorting:</b></p>
+<p>Bubble Sort – Compare adjacent elements.</p>
+<p>Insertion Sort – Insert element at correct position.</p>
+<p>Selection Sort – Select minimum each time.</p>
+<p>Quick Sort – Divide and conquer method.</p>
+<p>Merge Sort – Divide list and merge sorted parts.</p>
+<p>Heap Sort – Uses heap data structure.</p>
+
+    `;
+}
+
+if(subject === "java"){
+    subjectTitle.innerText = "Object Oriented Programming using Java";
+    notesContent.innerHTML = `
+        <p><b>INTRODUCTION AND FEATURES (OOP & JAVA)</b></p>
+
+<p><b>Object Oriented Programming (OOP):</b></p>
+<p>OOP is a programming approach based on objects and classes.</p>
+
+<p><b>Procedure Oriented Programming (POP) vs OOP:</b></p>
+<p><b>POP:</b> Focus on functions and procedures. Data is less secure.</p>
+<p><b>OOP:</b> Focus on objects and data. Provides data security and reusability.</p>
+
+<p><b>OOP Concepts:</b></p>
+<p><b>Class:</b> Blueprint of an object.</p>
+<p><b>Object:</b> Instance of a class.</p>
+<p><b>Object Reference:</b> Variable that refers to an object.</p>
+<p><b>Abstraction:</b> Hiding internal details.</p>
+<p><b>Encapsulation:</b> Wrapping data and methods together.</p>
+<p><b>Inheritance:</b> One class acquires properties of another.</p>
+<p><b>Polymorphism:</b> One method behaves differently in different situations.</p>
+
+<p><b>Introduction to Eclipse IDE:</b></p>
+<p>Eclipse is an Integrated Development Environment used to write, compile and run Java programs.</p>
+
+<p><b>LANGUAGE CONSTRUCTS, CLASSES AND OBJECTS</b></p>
+
+<p><b>Basic Constructs of C used in Java:</b></p>
+<p>Variables and data types (int, float, char, boolean).</p>
+<p>Increment (++) and decrement (--).</p>
+<p>Relational operators (&gt;, &lt;, ==).</p>
+<p>Logical operators (&&, ||).</p>
+<p>if-else statements.</p>
+<p>Conditional (?:) operator.</p>
+<p>Loops (for, while, do-while).</p>
+<p>switch-case.</p>
+<p>Arrays.</p>
+<p>Methods.</p>
+
+<p><b>Input and Output:</b></p>
+<p>Scanner class for input.</p>
+<p>System.out.println() for output.</p>
+
+<p><b>Class Member Access:</b></p>
+<p>Access using object reference.</p>
+
+<p><b>INHERITANCE AND POLYMORPHISM</b></p>
+
+<p><b>Inheritance:</b></p>
+<p>Process where one class inherits properties from another.</p>
+
+<p><b>Access Modifiers:</b></p>
+<p>private – Accessible only within class.</p>
+<p>protected – Accessible within package and subclass.</p>
+<p>public – Accessible everywhere.</p>
+
+<p><b>Constructor Chaining:</b></p>
+<p>Calling one constructor from another using super().</p>
+
+<p><b>Types of Inheritance:</b></p>
+<p>Single</p>
+<p>Multilevel</p>
+<p>Hierarchical</p>
+<p>Hybrid (through interfaces in Java).</p>
+
+<p><b>Method Overloading:</b></p>
+<p>Same method name with different parameters.</p>
+
+<p><b>Method Overriding:</b></p>
+<p>Subclass provides its own implementation of method.</p>
+
+<p><b>Upcasting:</b></p>
+<p>Subclass object referred by parent class reference.</p>
+
+<p><b>Downcasting:</b></p>
+<p>Parent reference cast to subclass type.</p>
+
+<p><b>ABSTRACT CLASS AND INTERFACE</b></p>
+
+<p><b>Abstract Class:</b></p>
+<p>Cannot be instantiated. May contain abstract and concrete methods.</p>
+
+<p><b>Interface:</b></p>
+<p>Contains abstract methods (fully abstraction).</p>
+
+<p><b>Difference:</b></p>
+<p>Abstract class can have constructors.</p>
+<p>Interface cannot have constructors.</p>
+
+<p><b>Multiple Inheritance:</b></p>
+<p>Implemented in Java using interfaces.</p>
+
+<p><b>EXCEPTION HANDLING</b></p>
+
+<p><b>Exception Handling:</b></p>
+<p>Process of handling runtime errors.</p>
+
+<p><b>Keywords:</b></p>
+<p>try – Code that may cause exception.</p>
+<p>catch – Handles exception.</p>
+<p>finally – Executes always.</p>
+<p>throw – Used to throw exception.</p>
+<p>throws – Declares exception.</p>
+
+<p><b>Importance:</b></p>
+<p>Prevents program crash and ensures smooth execution in real-life projects.</p>
+
+    `;
+}
+/* -------- SEMESTER 5 -------- */
+
+if(subject === "web"){
+    subjectTitle.innerText = "Web Technologies";
+    notesContent.innerHTML = `
+       <p><b>DEVELOPING PORTALS USING HTML</b></p>
+
+<p><b>Introduction to HTML5 and CSS3:</b></p>
+<p>HTML5 is used to create structure of web pages.</p>
+<p>CSS3 is used for styling and designing web pages.</p>
+
+<p><b>Basic Structure of HTML:</b></p>
+<p>&lt;html&gt;, &lt;head&gt;, &lt;title&gt;, &lt;body&gt;</p>
+
+<p><b>Designing a Web Page:</b></p>
+<p>Use headings, paragraphs, images, links and styles.</p>
+
+<p><b>Inserting Links and Images:</b></p>
+<p>&lt;a href="url"&gt;Link&lt;/a&gt;</p>
+<p>&lt;img src="image.jpg"&gt;</p>
+
+<p><b>Horizontal Rule:</b></p>
+<p>&lt;hr&gt; – Draws a horizontal line.</p>
+
+<p><b>Comments:</b></p>
+<p>&lt;!-- Comment --&gt;</p>
+
+<p><b>Formatting Text:</b></p>
+<p>&lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;font&gt;, colors and sizes.</p>
+
+<p><b>Tables and Forms:</b></p>
+<p>&lt;table&gt;, &lt;tr&gt;, &lt;td&gt;</p>
+<p>&lt;form&gt;, &lt;input&gt;, &lt;textarea&gt;, &lt;button&gt;</p>
+
+<p><b>Image Maps:</b></p>
+<p>Clickable areas on image using &lt;map&gt; and &lt;area&gt;.</p>
+
+<p><b>Frames and Floating:</b></p>
+<p>Frames divide webpage into sections.</p>
+<p>CSS float property used to align elements.</p>
+
+<p><b>PHP</b></p>
+
+<p><b>Introduction to PHP:</b></p>
+<p>PHP is a server-side scripting language.</p>
+
+<p><b>How PHP Works:</b></p>
+<p>PHP code runs on server and sends output to browser.</p>
+
+<p><b>php.ini File:</b></p>
+<p>Configuration file of PHP.</p>
+
+<p><b>Basic PHP Syntax:</b></p>
+<p>&lt;?php echo "Hello"; ?&gt;</p>
+
+<p><b>Variables:</b></p>
+<p>$name = "Ram";</p>
+
+<p><b>Control Statements:</b></p>
+<p>if-else, switch.</p>
+
+<p><b>Loops:</b></p>
+<p>for, while, do-while.</p>
+
+<p><b>Arrays and Strings:</b></p>
+<p>Used to store multiple values.</p>
+
+<p><b>Forms (GET and POST):</b></p>
+<p>GET – Data visible in URL.</p>
+<p>POST – Data hidden.</p>
+
+<p><b>Functions:</b></p>
+<p>Reusable block of code.</p>
+
+<p><b>Cookies:</b></p>
+<p>Stored at client side to remember user information.</p>
+
+<p><b>Sessions:</b></p>
+<p>Stored at server side.</p>
+<p>Used for login systems.</p>
+
+<p><b>Timeout:</b></p>
+<p>Session expires after fixed time.</p>
+
+<p><b>Event Management:</b></p>
+<p>Handling user actions like click, submit.</p>
+
+<p><b>Content Management Systems (CMS):</b></p>
+<p>Software used to manage website content (Example: Joomla).</p>
+
+<p><b>MySQL</b></p>
+
+<p><b>Introduction:</b></p>
+<p>MySQL is a database management system.</p>
+
+<p><b>Connecting to MySQL:</b></p>
+<p>Using PHP mysqli or PDO.</p>
+
+<p><b>Database Operations:</b></p>
+<p>Create database.</p>
+<p>Insert data.</p>
+<p>Delete data.</p>
+<p>Retrieve data.</p>
+
+<p><b>JOOMLA BASICS AND ADMIN</b></p>
+
+<p><b>Installing Wamp Server:</b></p>
+<p>Used to run PHP and MySQL locally.</p>
+
+<p><b>Installing Joomla:</b></p>
+<p>Upload files and configure database.</p>
+
+<p><b>Joomla Managers:</b></p>
+<p>Article Manager</p>
+<p>Category Manager</p>
+<p>Menu Manager</p>
+<p>Module Manager</p>
+<p>Plugin Manager</p>
+<p>Template Manager</p>
+
+<p><b>Installing New Module/Template/Plugin:</b></p>
+<p>Upload file in Extensions Manager.</p>
+
+<p><b>Joomla Positions:</b></p>
+<p>Predefined areas where modules are placed.</p>
+
+<p><b>JOOMLA FRONTEND</b></p>
+
+<p><b>Joomla Template:</b></p>
+<p>Controls website design.</p>
+
+<p><b>Customizing Template:</b></p>
+<p>Edit CSS and layout files.</p>
+
+<p><b>Templatedetails.xml:</b></p>
+<p>File that defines template details.</p>
+
+<p><b>Linking CSS and JavaScript:</b></p>
+<p>Use &lt;link&gt; and &lt;script&gt; tags.</p>
+
+<p><b>Include:</b></p>
+<p>Used to include files in PHP.</p>
+
+<p><b>Creating Template Package:</b></p>
+<p>Zip template files for installation.</p>
+
+<p><b>Custom Forms:</b></p>
+<p>Create forms using HTML and style with CSS.</p>
+
+    `;
+}
+
+if(subject === "python"){
+    subjectTitle.innerText = "Python Programming";
+    notesContent.innerHTML = `
+       <p><b>THE WAY OF THE PROGRAM (PYTHON BASICS)</b></p>
+
+<p><b>Python Programming Language:</b></p>
+<p>Python is a simple, powerful and easy-to-learn programming language.</p>
+
+<p><b>What is a Program?</b></p>
+<p>A program is a set of instructions that tells the computer what to do.</p>
+
+<p><b>Debugging:</b></p>
+<p>Process of finding and fixing errors.</p>
+<p>Syntax Error – Wrong grammar.</p>
+<p>Runtime Error – Error during execution.</p>
+<p>Semantic Error – Program runs but gives wrong result.</p>
+<p>Experimental Debugging – Testing and checking outputs.</p>
+
+<p><b>VARIABLES, EXPRESSIONS AND STATEMENTS</b></p>
+
+<p>Values and Data Types: int, float, string, boolean.</p>
+<p>Variables: Used to store values.</p>
+<p>Statements: Instructions in program.</p>
+<p>Operators: +, -, *, /, %, etc.</p>
+<p>Type Conversion: int(), float(), str()</p>
+<p>Order of Operations: PEMDAS rule.</p>
+<p>Modulus Operator (%): Gives remainder.</p>
+
+<p><b>CONDITIONALS</b></p>
+
+<p>Boolean Values: True or False.</p>
+<p>Logical Operators: and, or, not.</p>
+<p>if, elif, else statements.</p>
+<p>Nested and chained conditionals.</p>
+<p>Return statement: Sends value back from function.</p>
+
+<p><b>ITERATION</b></p>
+
+<p>Assignment and updating variables.</p>
+<p>for loop and while loop.</p>
+<p>Collatz sequence (3n + 1 problem).</p>
+<p>Nested loops for 2D tables and paired data.</p>
+
+<p><b>STRINGS</b></p>
+
+<p>Strings are sequence of characters.</p>
+<p>Length: len()</p>
+<p>Slicing: str[0:3]</p>
+<p>Strings are immutable.</p>
+<p>in and not in operators.</p>
+<p>find(), split(), format() methods.</p>
+
+<p><b>TUPLES</b></p>
+
+<p>Used to group data.</p>
+<p>Immutable.</p>
+<p>Can return multiple values from function.</p>
+
+<p><b>LISTS</b></p>
+
+<p>Lists are mutable collection of items.</p>
+<p>Access elements using index.</p>
+<p>List methods: append(), remove(), sort().</p>
+<p>Aliasing and cloning lists.</p>
+<p>Nested lists and matrices.</p>
+
+<p><b>FUNCTIONS</b></p>
+
+<p>Reusable blocks of code.</p>
+<p>Can take arguments and return values.</p>
+
+<p><b>MODULES</b></p>
+
+<p>Random module – random numbers.</p>
+<p>Time module – time functions.</p>
+<p>Math module – mathematical operations.</p>
+<p>Namespaces and scope rules.</p>
+
+<p><b>FILES</b></p>
+
+<p>Opening and reading files.</p>
+<p>Writing to files.</p>
+<p>Reading line by line.</p>
+<p>Binary files.</p>
+<p>Working with directories.</p>
+
+<p><b>LIST ALGORITHMS</b></p>
+
+<p>Linear Search – Check each element.</p>
+<p>Binary Search – Divide and search (sorted list).</p>
+<p>Merging two sorted lists.</p>
+
+<p><b>OBJECT ORIENTED PROGRAMMING</b></p>
+
+<p>Class – Blueprint.</p>
+<p>Object – Instance of class.</p>
+<p>Attributes and methods.</p>
+<p>Objects are mutable.</p>
+<p>Copying objects.</p>
+
+<p><b>EXCEPTIONS</b></p>
+
+<p>try, except, finally blocks.</p>
+<p>Raising custom exceptions.</p>
+
+<p><b>INHERITANCE</b></p>
+
+<p>One class inherits from another.</p>
+<p>Polymorphism and generalization.</p>
+
+<p><b>GUI (Tkinter)</b></p>
+
+<p>Create graphical applications.</p>
+<p>Widgets: Button, Label, Entry.</p>
+<p>Model-View-Controller concept.</p>
+
+<p><b>DATABASES</b></p>
+
+<p>Create and populate tables.</p>
+<p>Retrieve, update and delete data.</p>
+<p>Use NULL for missing data.</p>
+<p>Joins to combine tables.</p>
+<p>Keys and constraints.</p>
+
+    `;
+}
+
+if(subject === "cn"){
+    subjectTitle.innerText = "Computer Networks";
+    notesContent.innerHTML = `
+       <p><b>NETWORK BASICS</b></p>
+
+<p><b>Concept of Network:</b></p>
+<p>A network is a group of connected computers that share data and resources.</p>
+
+<p><b>Models of Network Computing:</b></p>
+<p>Centralized computing</p>
+<p>Distributed computing</p>
+
+<p><b>Networking Models:</b></p>
+<p>Peer-to-Peer Model</p>
+<p>Client-Server Model</p>
+
+<p><b>Peer-to-Peer Network:</b></p>
+<p>All computers are equal and share resources directly.</p>
+
+<p><b>Client-Server Network:</b></p>
+<p>Clients request services from a central server.</p>
+
+<p><b>LAN, MAN, WAN:</b></p>
+<p>LAN – Small area (school, office).</p>
+<p>MAN – City level network.</p>
+<p>WAN – Large area (Internet).</p>
+
+<p><b>Network Services:</b></p>
+<p>File sharing, printing, email, web services.</p>
+
+<p><b>Topologies:</b></p>
+<p>Bus, Star, Ring, Mesh, Tree.</p>
+
+<p><b>Switching Techniques:</b></p>
+<p>Circuit Switching</p>
+<p>Packet Switching</p>
+<p>Message Switching</p>
+
+<p><b>NETWORKING MODELS</b></p>
+
+<p><b>OSI Model:</b></p>
+<p>7 Layer model – Physical, Data Link, Network, Transport, Session, Presentation, Application.</p>
+
+<p><b>TCP/IP Model:</b></p>
+<p>4 Layers – Network Access, Internet, Transport, Application.</p>
+
+<p><b>Comparison:</b></p>
+<p>OSI has 7 layers, TCP/IP has 4 layers.</p>
+<p>TCP/IP is practical model used in Internet.</p>
+
+<p><b>TCP/IP ADDRESSING</b></p>
+
+<p><b>Physical Address:</b> MAC address.</p>
+<p><b>Logical Address:</b> IP address.</p>
+
+<p><b>IPv4:</b></p>
+<p>32-bit address, written in dotted decimal.</p>
+
+<p><b>Classful Addressing:</b></p>
+<p>Class A, B, C, D, E.</p>
+<p>Net ID and Host ID.</p>
+
+<p><b>Classless Addressing:</b></p>
+<p>CIDR notation (e.g., 192.168.1.0/24).</p>
+
+<p><b>Special IP Addresses:</b></p>
+<p>Loopback (127.0.0.1), Broadcast, Private IP.</p>
+
+<p><b>Subnetting:</b></p>
+<p>Dividing network into smaller networks.</p>
+
+<p><b>Supernetting:</b></p>
+<p>Combining small networks.</p>
+
+<p><b>NAT:</b></p>
+<p>Network Address Translation converts private IP to public IP.</p>
+
+<p><b>IPv4 vs IPv6:</b></p>
+<p>IPv4 – 32 bit.</p>
+<p>IPv6 – 128 bit, larger address space.</p>
+
+<p><b>NETWORK ARCHITECTURE</b></p>
+
+<p><b>Ethernet Standards:</b></p>
+<p>10 Mbps – Traditional Ethernet</p>
+<p>100 Mbps – Fast Ethernet</p>
+<p>1000 Mbps – Gigabit Ethernet</p>
+
+<p><b>NETWORK CONNECTIVITY</b></p>
+
+<p><b>Devices:</b></p>
+<p>NIC – Network Interface Card.</p>
+<p>Hub – Broadcast device.</p>
+<p>Switch – Intelligent forwarding.</p>
+<p>Router – Connects networks.</p>
+<p>Repeater – Amplifies signal.</p>
+<p>Modem – Modulates and demodulates.</p>
+<p>Gateway – Connects different networks.</p>
+
+<p><b>NETWORK ADMINISTRATION</b></p>
+
+<p><b>Security Principles:</b></p>
+<p>Confidentiality, Integrity, Availability.</p>
+
+<p><b>Cryptography:</b></p>
+<p>Encryption and decryption of data.</p>
+
+<p><b>Troubleshooting Tools:</b></p>
+<p>PING – Check connectivity.</p>
+<p>IPCONFIG / IFCONFIG – IP details.</p>
+<p>NETSTAT – Network connections.</p>
+<p>TRACEROUTE – Path tracking.</p>
+<p>Wireshark – Packet analyzer.</p>
+<p>Nmap – Network scanning.</p>
+<p>TCPDUMP – Packet capture.</p>
+<p>ROUTEPRINT – Routing table.</p>
+
+<p><b>DHCP Server:</b></p>
+<p>Automatically assigns IP addresses.</p>
+
+<p><b>Workgroup/Domain:</b></p>
+<p>Workgroup – Peer based network.</p>
+<p>Domain – Centralized server control.</p>
+
+<p><b>INTRODUCTION TO WIRELESS NETWORKS</b></p>
+
+<p><b>Wireless LAN (IEEE 802.11):</b></p>
+<p>WiFi technology.</p>
+
+<p><b>WiMax:</b></p>
+<p>Long distance wireless communication.</p>
+
+<p><b>Li-Fi:</b></p>
+<p>Uses light for data transmission.</p>
+
+<p><b>Bluetooth:</b></p>
+<p>Short range wireless communication.</p>
+
+<p><b>Bluetooth vs WiFi:</b></p>
+<p>Bluetooth – Short range, low power.</p>
+<p>WiFi – Longer range, higher speed.</p>
+
+<p><b>CLOUD COMPUTING</b></p>
+
+<p><b>Definition:</b></p>
+<p>Cloud computing provides computing services over the internet.</p>
+
+<p><b>Advantages:</b></p>
+<p>Cost saving, scalability, accessibility.</p>
+
+<p><b>Service Models:</b></p>
+<p>SaaS – Software as a Service.</p>
+<p>PaaS – Platform as a Service.</p>
+<p>IaaS – Infrastructure as a Service.</p>
+
+<p><b>Deployment Models:</b></p>
+<p>Private Cloud</p>
+<p>Public Cloud</p>
+<p>Hybrid Cloud</p>
+<p>Community Cloud</p>
+
+    `;
+}
+
+if(subject === "elective1"){
+    subjectTitle.innerText = "Programme Elective - I";
+    notesContent.innerHTML = `
+       <p><b>INTRODUCTION TO CLOUD COMPUTING</b></p>
+
+<p><b>Evolution of Cloud Computing:</b></p>
+<p>Cloud computing evolved from distributed computing, grid computing and virtualization.</p>
+<p>It allows users to access computing resources over the internet.</p>
+
+<p><b>Cloud Computing Overview:</b></p>
+<p>Cloud computing provides services like storage, servers and software through internet.</p>
+
+<p><b>Characteristics:</b></p>
+<p>1) On-demand self-service</p>
+<p>2) Broad network access</p>
+<p>3) Resource pooling</p>
+<p>4) Rapid elasticity</p>
+<p>5) Measured service</p>
+
+<p><b>Applications:</b></p>
+<p>Online storage, web hosting, online meetings, data backup.</p>
+
+<p><b>Benefits:</b></p>
+<p>Cost saving, scalability, flexibility, easy access.</p>
+
+<p><b>Challenges:</b></p>
+<p>Security issues, data privacy, internet dependency.</p>
+
+<p><b>Major Cloud Vendors:</b></p>
+<p>Amazon Web Services (AWS), Microsoft Azure, Google Cloud Platform (GCP), IBM Cloud.</p>
+
+<p><b>SERVICE AND DEPLOYMENT MODELS</b></p>
+
+<p><b>Service Models:</b></p>
+<p>IaaS – Provides virtual machines and storage.</p>
+<p>PaaS – Provides platform to develop applications.</p>
+<p>SaaS – Provides software over internet.</p>
+
+<p><b>Deployment Models:</b></p>
+<p>Private Cloud – Used by single organization.</p>
+<p>Public Cloud – Open to public.</p>
+<p>Hybrid Cloud – Combination of private and public cloud.</p>
+<p>Community Cloud – Shared by organizations with similar needs.</p>
+
+<p><b>SERVICE LEVEL AGREEMENT (SLA)</b></p>
+
+<p><b>Overview:</b></p>
+<p>SLA is a contract between service provider and customer.</p>
+
+<p><b>Types of SLA:</b></p>
+<p>Customer-based SLA</p>
+<p>Service-based SLA</p>
+<p>Multi-level SLA</p>
+
+<p><b>SLA Life Cycle:</b></p>
+<p>1) Define requirements</p>
+<p>2) Agreement</p>
+<p>3) Monitoring</p>
+<p>4) Review and improvement</p>
+
+<p><b>SLA Management Process:</b></p>
+<p>Ensures service quality and performance.</p>
+
+<p><b>VIRTUALIZATION CONCEPTS</b></p>
+
+<p><b>Overview:</b></p>
+<p>Virtualization creates virtual version of hardware or software.</p>
+
+<p><b>Types:</b></p>
+<p>Server virtualization</p>
+<p>Storage virtualization</p>
+<p>Network virtualization</p>
+<p>Desktop virtualization</p>
+
+<p><b>Benefits:</b></p>
+<p>Better resource utilization, cost reduction, flexibility.</p>
+
+<p><b>Hypervisor:</b></p>
+<p>Software that creates and manages virtual machines.</p>
+
+<p><b>Types of Hypervisors:</b></p>
+<p>Type 1 (Bare Metal)</p>
+<p>Type 2 (Hosted)</p>
+
+<p><b>CLOUD STORAGE & SECURITY</b></p>
+
+<p><b>Storage as a Service:</b></p>
+<p>Cloud-based storage solution provided over internet.</p>
+
+<p><b>Benefits:</b></p>
+<p>Scalability, backup, easy access.</p>
+
+<p><b>Challenges:</b></p>
+<p>Security risks, data privacy.</p>
+
+<p><b>Storage Area Network (SAN):</b></p>
+<p>High-speed network for connecting storage devices.</p>
+
+<p><b>Infrastructure Security:</b></p>
+<p>Protection of hardware and software resources.</p>
+
+<p><b>Network Level Security:</b></p>
+<p>Firewalls, intrusion detection systems.</p>
+
+<p><b>Data Security & Privacy:</b></p>
+<p>Encryption and access control.</p>
+
+<p><b>Legal Issues:</b></p>
+<p>Data ownership, compliance and regulations.</p>
+
+    `;
+}
+
+/* -------- SEMESTER 6 -------- */
+
+if(subject === "webapp"){
+    subjectTitle.innerText = "Application Development using Web Framework";
+    notesContent.innerHTML = `
+        <p>Web frameworks (Django/Node), MVC architecture, REST APIs, Deployment.</p>
+    `;
+}
+
+if(subject === "edm"){
+    subjectTitle.innerText = "Entrepreneurship Development & Management";
+    notesContent.innerHTML = `
+        <p>Business models, Startup planning, Marketing, Financial management.</p>
+    `;
+}
+
+if(subject === "se"){
+    subjectTitle.innerText = "Software Engineering";
+    notesContent.innerHTML = `
+        <p>SDLC, Agile Model, Requirement Analysis, Testing, Project Management.</p>
+    `;
+}
+
+if(subject === "elective2"){
+    subjectTitle.innerText = "Programme Elective - II";
+    notesContent.innerHTML = `
+        <p>Subject depends on selected elective course.</p>
+    `;
+}
+
+
+}
+
+
+
+
+
+
+
+function toggleSubjects(){
+
+    const panel = document.getElementById("subjectPanel");
+    const btn = document.getElementById("toggleBtn");
+
+    panel.classList.toggle("collapsed");
+
+    if(panel.classList.contains("collapsed")){
+        btn.innerText = "Expand Panel";
+    } else {
+        btn.innerText = "Collapse Panel";
+    }
+}
+
+</script>
+
+</body>
+</html>
